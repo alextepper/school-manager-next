@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Head from "next/head";
 import { subDays, subHours } from "date-fns";
 import ArrowDownOnSquareIcon from "@heroicons/react/24/solid/ArrowDownOnSquareIcon";
@@ -10,57 +10,33 @@ import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
 import { CustomersTable } from "src/sections/customer/customers-table";
 import { CustomersSearch } from "src/sections/customer/customers-search";
 import { applyPagination } from "src/utils/apply-pagination";
-
-const now = new Date();
-
-const data = [
-  {
-    id: "5e887ac47eed253091be10cb",
-    address: {
-      city: "Cleveland",
-      country: "USA",
-      state: "Ohio",
-      street: "2849 Fulton Street",
-    },
-    avatar: "/assets/avatars/avatar-carson-darrin.png",
-    createdAt: subDays(subHours(now, 7), 1).getTime(),
-    email: "carson.darrin@devias.io",
-    name: "Carson Darrin",
-    phone: "304-428-3097",
-  },
-  {
-    id: "5e887b209c28ac3dd97f6db5",
-    address: {
-      city: "Atlanta",
-      country: "USA",
-      state: "Georgia",
-      street: "1865  Pleasant Hill Road",
-    },
-    avatar: "/assets/avatars/avatar-fran-perez.png",
-    createdAt: subDays(subHours(now, 1), 2).getTime(),
-    email: "fran.perez@devias.io",
-    name: "Fran Perez",
-    phone: "712-351-5711",
-  },
-];
-
-const useCustomers = (page, rowsPerPage) => {
-  return useMemo(() => {
-    return applyPagination(data, page, rowsPerPage);
-  }, [page, rowsPerPage]);
-};
-
-const useCustomerIds = (customers) => {
-  return useMemo(() => {
-    return customers.map((customer) => customer.id);
-  }, [customers]);
-};
+import axios from "axios";
+import { StudentTable } from "src/sections/student/student-table";
 
 const Page = () => {
+  const [data, setData] = useState([]); // State for storing fetched data
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-  const customers = useCustomers(page, rowsPerPage);
-  const customersIds = useCustomerIds(customers);
+  const [rowsPerPage, setRowsPerPage] = useState(15);
+
+  useEffect(() => {
+    const fetchStudentList = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8000/student-profiles`);
+        setData(response.data); // Set fetched data to state
+      } catch (err) {
+        console.error("Error fetching student profiles:", err);
+        // Handle error appropriately
+      }
+    };
+
+    fetchStudentList();
+  }, []);
+
+  const customers = useMemo(
+    () => applyPagination(data, page, rowsPerPage),
+    [data, page, rowsPerPage]
+  );
+  const customersIds = useMemo(() => customers.map((customer) => customer.id), [customers]);
   const customersSelection = useSelection(customersIds);
 
   const handlePageChange = useCallback((event, value) => {
@@ -74,21 +50,20 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>Customers | Devias Kit</title>
+        <title>Students | Devias Kit</title>
       </Head>
       <Box
         component="main"
         sx={{
           flexGrow: 1,
-          py: 8,
         }}
       >
         <Container maxWidth="xl">
           <Stack spacing={3}>
             <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">Customers</Typography>
-                <Stack alignItems="center" direction="row" spacing={1}>
+                <Typography variant="h4">Students</Typography>
+                {/* <Stack alignItems="center" direction="row" spacing={1}>
                   <Button
                     color="inherit"
                     startIcon={
@@ -109,9 +84,9 @@ const Page = () => {
                   >
                     Export
                   </Button>
-                </Stack>
+                </Stack> */}
               </Stack>
-              <div>
+              {/* <div>
                 <Button
                   startIcon={
                     <SvgIcon fontSize="small">
@@ -122,10 +97,10 @@ const Page = () => {
                 >
                   Add
                 </Button>
-              </div>
+              </div> */}
             </Stack>
             <CustomersSearch />
-            <CustomersTable
+            <StudentTable
               count={data.length}
               items={customers}
               onDeselectAll={customersSelection.handleDeselectAll}

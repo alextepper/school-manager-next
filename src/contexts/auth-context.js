@@ -1,16 +1,17 @@
-import { createContext, useContext, useEffect, useReducer, useRef } from 'react';
-import PropTypes from 'prop-types';
+import { createContext, useContext, useEffect, useReducer, useRef } from "react";
+import PropTypes from "prop-types";
+import axios from "axios";
 
 const HANDLERS = {
-  INITIALIZE: 'INITIALIZE',
-  SIGN_IN: 'SIGN_IN',
-  SIGN_OUT: 'SIGN_OUT'
+  INITIALIZE: "INITIALIZE",
+  SIGN_IN: "SIGN_IN",
+  SIGN_OUT: "SIGN_OUT",
 };
 
 const initialState = {
   isAuthenticated: false,
   isLoading: true,
-  user: null
+  user: null,
 };
 
 const handlers = {
@@ -19,18 +20,16 @@ const handlers = {
 
     return {
       ...state,
-      ...(
-        // if payload (user) is provided, then is authenticated
-        user
-          ? ({
+      ...// if payload (user) is provided, then is authenticated
+      (user
+        ? {
             isAuthenticated: true,
             isLoading: false,
-            user
-          })
-          : ({
-            isLoading: false
-          })
-      )
+            user,
+          }
+        : {
+            isLoading: false,
+          }),
     };
   },
   [HANDLERS.SIGN_IN]: (state, action) => {
@@ -39,21 +38,20 @@ const handlers = {
     return {
       ...state,
       isAuthenticated: true,
-      user
+      user,
     };
   },
   [HANDLERS.SIGN_OUT]: (state) => {
     return {
       ...state,
       isAuthenticated: false,
-      user: null
+      user: null,
     };
-  }
+  },
 };
 
-const reducer = (state, action) => (
-  handlers[action.type] ? handlers[action.type](state, action) : state
-);
+const reducer = (state, action) =>
+  handlers[action.type] ? handlers[action.type](state, action) : state;
 
 // The role of this context is to propagate authentication state through the App tree.
 
@@ -72,30 +70,20 @@ export const AuthProvider = (props) => {
 
     initialized.current = true;
 
-    let isAuthenticated = false;
-
     try {
-      isAuthenticated = window.sessionStorage.getItem('authenticated') === 'true';
+      const user = localStorage.getItem("user");
+      if (user) {
+        dispatch({
+          type: HANDLERS.INITIALIZE,
+          payload: user,
+        });
+      } else {
+        dispatch({
+          type: HANDLERS.INITIALIZE,
+        });
+      }
     } catch (err) {
       console.error(err);
-    }
-
-    if (isAuthenticated) {
-      const user = {
-        id: '5e86809283e28b96d2d38537',
-        avatar: '/assets/avatars/avatar-anika-visser.png',
-        name: 'Anika Visser',
-        email: 'anika.visser@devias.io'
-      };
-
-      dispatch({
-        type: HANDLERS.INITIALIZE,
-        payload: user
-      });
-    } else {
-      dispatch({
-        type: HANDLERS.INITIALIZE
-      });
     }
   };
 
@@ -109,56 +97,101 @@ export const AuthProvider = (props) => {
 
   const skip = () => {
     try {
-      window.sessionStorage.setItem('authenticated', 'true');
+      window.sessionStorage.setItem("authenticated", "true");
     } catch (err) {
       console.error(err);
     }
 
     const user = {
-      id: '5e86809283e28b96d2d38537',
-      avatar: '/assets/avatars/avatar-anika-visser.png',
-      name: 'Anika Visser',
-      email: 'anika.visser@devias.io'
+      id: "5e86809283e28b96d2d38537",
+      avatar: "/assets/avatars/avatar-anika-visser.png",
+      name: "Anika Visser",
+      email: "anika.visser@devias.io",
     };
 
     dispatch({
       type: HANDLERS.SIGN_IN,
-      payload: user
+      payload: user,
     });
   };
 
   const signIn = async (email, password) => {
-    if (email !== 'demo@devias.io' || password !== 'Password123!') {
-      throw new Error('Please check your email and password');
+    try {
+      const endpoint = "http://localhost:8000/login/";
+
+      const response = await axios.post(endpoint, {
+        email,
+        password,
+      });
+      // Assuming the backend returns a token
+      const user = JSON.stringify(response.data);
+
+      // Store the token in localStorage or context for later use
+      localStorage.setItem("user", user);
+      dispatch({
+        type: HANDLERS.SIGN_IN,
+        payload: response.data,
+      });
+    } catch (err) {
+      console.log(err);
     }
 
     try {
-      window.sessionStorage.setItem('authenticated', 'true');
+      window.sessionStorage.setItem("authenticated", "true");
     } catch (err) {
       console.error(err);
     }
-
-    const user = {
-      id: '5e86809283e28b96d2d38537',
-      avatar: '/assets/avatars/avatar-anika-visser.png',
-      name: 'Anika Visser',
-      email: 'anika.visser@devias.io'
-    };
-
-    dispatch({
-      type: HANDLERS.SIGN_IN,
-      payload: user
-    });
   };
 
   const signUp = async (email, name, password) => {
-    throw new Error('Sign up is not implemented');
+    try {
+      const endpoint = "http://localhost:8000/register/";
+
+      const response = await axios.post(endpoint, {
+        email,
+        password,
+        username: name,
+      });
+      // Assuming the backend returns a token
+      const user = JSON.stringify(response.data);
+
+      // Store the token in localStorage or context for later use
+      localStorage.setItem("user", user);
+      dispatch({
+        type: HANDLERS.SIGN_IN,
+        payload: response.data,
+      });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-  const signOut = () => {
-    dispatch({
-      type: HANDLERS.SIGN_OUT
-    });
+  const signOut = async () => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const refreshToken = user.tokens.refresh;
+
+    if (refreshToken) {
+      try {
+        await axios.post("http://localhost:8000/logout/", {
+          headers: {
+            Authorization: `Bearer ${user.tokens.access}`,
+          },
+          refresh: refreshToken,
+        });
+
+        // Clear tokens from storage and update state after successful logout
+        localStorage.removeItem("user");
+
+        dispatch({
+          type: HANDLERS.SIGN_OUT,
+        });
+      } catch (err) {
+        console.error("Error during logout:", err);
+        // Optionally handle errors (e.g., show a message to the user)
+      }
+    } else {
+      console.error("No refresh token found");
+    }
   };
 
   return (
@@ -168,7 +201,7 @@ export const AuthProvider = (props) => {
         skip,
         signIn,
         signUp,
-        signOut
+        signOut,
       }}
     >
       {children}
@@ -177,7 +210,7 @@ export const AuthProvider = (props) => {
 };
 
 AuthProvider.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
 };
 
 export const AuthConsumer = AuthContext.Consumer;

@@ -1,69 +1,59 @@
+import React, { useState } from "react";
 import {
-  Avatar,
-  Box,
-  Button,
   Card,
-  CardActions,
   CardContent,
+  Box,
+  Avatar,
+  Typography,
   Divider,
-  Typography
-} from '@mui/material';
+  CardActions,
+  Button,
+  Badge,
+} from "@mui/material";
+import { getInitials } from "src/utils/get-initials";
 
-const user = {
-  avatar: '/assets/avatars/avatar-anika-visser.png',
-  city: 'Los Angeles',
-  country: 'USA',
-  jobTitle: 'Senior Developer',
-  name: 'Anika Visser',
-  timezone: 'GTM-7'
-};
-
-export const AccountProfile = () => (
-  <Card>
-    <CardContent>
-      <Box
-        sx={{
-          alignItems: 'center',
-          display: 'flex',
-          flexDirection: 'column'
-        }}
-      >
-        <Avatar
-          src={user.avatar}
+export const AccountProfile = ({ user }) => {
+  return (
+    <Card>
+      <CardContent>
+        <Box
           sx={{
-            height: 80,
-            mb: 2,
-            width: 80
+            alignItems: "center",
+            display: "flex",
+            flexDirection: "column",
           }}
-        />
-        <Typography
-          gutterBottom
-          variant="h5"
         >
-          {user.name}
-        </Typography>
-        <Typography
-          color="text.secondary"
-          variant="body2"
-        >
-          {user.city} {user.country}
-        </Typography>
-        <Typography
-          color="text.secondary"
-          variant="body2"
-        >
-          {user.timezone}
-        </Typography>
-      </Box>
-    </CardContent>
-    <Divider />
-    <CardActions>
-      <Button
-        fullWidth
-        variant="text"
-      >
-        Upload picture
-      </Button>
-    </CardActions>
-  </Card>
-);
+          <Badge color="success" badgeContent={user.overall_score} max={999}>
+            <Avatar
+              src={user.avatar} // Assuming 'avatar' is part of the user profile data
+              sx={{
+                height: 80,
+                mb: 2,
+                width: 80,
+              }}
+              alt={getInitials(`${user.first_name} ${user.last_name}`)}
+            >
+              {getInitials(`${user.first_name} ${user.last_name}`)}
+            </Avatar>
+          </Badge>
+
+          <Typography gutterBottom variant="h5">
+            {user.first_name} {user.last_name}
+          </Typography>
+          <Typography color="text.secondary" variant="body2">
+            {user.phone_number || "phone"}
+          </Typography>
+          <Typography color="text.secondary" variant="body2">
+            {user.team?.name}
+          </Typography>
+        </Box>
+      </CardContent>
+      <Divider />
+      <CardActions>
+        <Button fullWidth variant="text">
+          Upload picture
+        </Button>
+      </CardActions>
+    </Card>
+  );
+};
