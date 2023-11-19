@@ -4,21 +4,21 @@ import axios from "axios";
 import Head from "next/head";
 import { Box, Container, Stack, Typography, Unstable_Grid2 as Grid } from "@mui/material";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
-import { AccountProfile } from "src/sections/account/account-profile";
-import { AccountProfileDetails } from "src/sections/account/account-profile-details";
+import { TeamProfile } from "src/sections/team/team-profile";
+import { TeamProfileDetails } from "src/sections/team/team-profile-details";
 
 const Page = () => {
   const router = useRouter();
-  const { profileId } = router.query;
+  const { teamId } = router.query;
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (profileId) {
+    if (teamId) {
       const fetchProfile = async () => {
         setLoading(true);
         try {
-          const response = await axios.get(`http://localhost:8000/student-profile/${profileId}`);
+          const response = await axios.get(`http://localhost:8000/team/${teamId}`);
           setProfile(response.data);
         } catch (err) {
           console.error("Error fetching profile:", err);
@@ -30,7 +30,7 @@ const Page = () => {
 
       fetchProfile();
     }
-  }, [profileId]);
+  }, [teamId]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -43,9 +43,7 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>
-          Student | {profile.first_name} {profile.last_name}
-        </title>
+        <title>Account | Devias Kit</title>
       </Head>
       <Box
         component="main"
@@ -60,10 +58,10 @@ const Page = () => {
                 {profile && (
                   <>
                     <Grid item xs={12} md={6} lg={4}>
-                      <AccountProfile user={profile} />
+                      <TeamProfile team={profile} />
                     </Grid>
                     <Grid item xs={12} md={6} lg={8}>
-                      <AccountProfileDetails user={profile} />
+                      <TeamProfileDetails team={profile} />
                     </Grid>
                   </>
                 )}

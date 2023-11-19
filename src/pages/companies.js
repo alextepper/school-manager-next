@@ -15,6 +15,8 @@ import {
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
 import { CompanyCard } from "src/sections/companies/company-card";
 import { CompaniesSearch } from "src/sections/companies/companies-search";
+import axios from "axios";
+import { useEffect } from "react";
 
 const companies = [
   {
@@ -71,88 +73,98 @@ const companies = [
   },
 ];
 
-const Page = () => (
-  <>
-    <Head>
-      <title>Companies | Devias Kit</title>
-    </Head>
-    <Box
-      component="main"
-      sx={{
-        flexGrow: 1,
-        py: 8,
-      }}
-    >
-      <Container maxWidth="xl">
-        <Stack spacing={3}>
-          <Stack direction="row" justifyContent="space-between" spacing={4}>
-            <Stack spacing={1}>
-              <Typography variant="h4">Companies</Typography>
-              <Stack alignItems="center" direction="row" spacing={1}>
-                <Button
-                  color="inherit"
-                  startIcon={
-                    <SvgIcon fontSize="small">
-                      <ArrowUpOnSquareIcon />
-                    </SvgIcon>
-                  }
-                >
-                  Import
-                </Button>
-                <Button
-                  color="inherit"
-                  startIcon={
-                    <SvgIcon fontSize="small">
-                      <ArrowDownOnSquareIcon />
-                    </SvgIcon>
-                  }
-                >
-                  Export
-                </Button>
+const Page = () => {
+  const [data, setData] = useState([]); // State for storing fetched data
+
+  useEffect(() => {
+    const fetchStudentList = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8000/student-profiles`);
+        setData(response.data); // Set fetched data to state
+      } catch (err) {
+        console.error("Error fetching student profiles:", err);
+        // Handle error appropriately
+      }
+    };
+
+    fetchStudentList();
+  }, []);
+
+  return (
+    <>
+      <Head>
+        <title>Companies | Devias Kit</title>
+      </Head>
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          py: 8,
+        }}
+      >
+        <Container maxWidth="xl">
+          <Stack spacing={3}>
+            <Stack direction="row" justifyContent="space-between" spacing={4}>
+              <Stack spacing={1}>
+                <Typography variant="h4">Companies</Typography>
+                <Stack alignItems="center" direction="row" spacing={1}>
+                  <Button
+                    color="inherit"
+                    startIcon={
+                      <SvgIcon fontSize="small">
+                        <ArrowUpOnSquareIcon />
+                      </SvgIcon>
+                    }
+                  >
+                    Import
+                  </Button>
+                  <Button
+                    color="inherit"
+                    startIcon={
+                      <SvgIcon fontSize="small">
+                        <ArrowDownOnSquareIcon />
+                      </SvgIcon>
+                    }
+                  >
+                    Export
+                  </Button>
+                </Stack>
               </Stack>
+              <div>
+                <Button
+                  startIcon={
+                    <SvgIcon fontSize="small">
+                      <PlusIcon />
+                    </SvgIcon>
+                  }
+                  variant="contained"
+                >
+                  Add
+                </Button>
+              </div>
             </Stack>
-            <div>
-              <Button
-                startIcon={
-                  <SvgIcon fontSize="small">
-                    <PlusIcon />
-                  </SvgIcon>
-                }
-                variant="contained"
-              >
-                Add
-              </Button>
-            </div>
+            <CompaniesSearch />
+            <Grid container spacing={3}>
+              {companies.map((company) => (
+                <Grid xs={12} md={6} lg={4} key={company.id}>
+                  <CompanyCard company={company} />
+                </Grid>
+              ))}
+            </Grid>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <Pagination count={3} size="small" />
+            </Box>
           </Stack>
-          <CompaniesSearch />
-          {/* <Grid
-            container
-            spacing={3}
-          >
-            {companies.map((company) => (
-              <Grid
-                xs={12}
-                md={6}
-                lg={4}
-                key={company.id}
-              >
-                <CompanyCard company={company} />
-              </Grid>
-            ))}
-          </Grid> */}
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            <Pagination count={3} size="small" />
-          </Box>
-        </Stack>
-      </Container>
-    </Box>
-  </>
-);
+        </Container>
+      </Box>
+    </>
+  );
+};
 
 Page.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 

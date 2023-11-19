@@ -9,10 +9,40 @@ import {
   CardActions,
   Button,
   Badge,
+  FormControlLabel,
+  Switch,
 } from "@mui/material";
 import { getInitials } from "src/utils/get-initials";
+import { useRouter } from "next/router";
+import axios from "axios";
+import { Stack } from "@mui/system";
 
 export const AccountProfile = ({ user }) => {
+  const [profile, setProfile] = useState(user);
+  const router = useRouter();
+  const getTheTeam = (teamId) => {
+    router.push("/team/" + teamId);
+  };
+
+  const switchAttendance = async (currentProfile) => {
+    try {
+      const updatedProfile = {
+        ...currentProfile,
+        is_in_school: !currentProfile.is_in_school,
+      };
+
+      await axios.put(
+        `http://localhost:8000/student-profile/${currentProfile.id}/`,
+        updatedProfile
+      );
+      setProfile({ ...currentProfile, is_in_school: !currentProfile.is_in_school });
+      // Handle successful update (e.g., update state or show a message)
+    } catch (error) {
+      console.error("Error updating student profile:", error);
+      // Handle error appropriately
+    }
+  };
+
   return (
     <Card>
       <CardContent>
@@ -23,7 +53,7 @@ export const AccountProfile = ({ user }) => {
             flexDirection: "column",
           }}
         >
-          <Badge color="success" badgeContent={user.overall_score} max={999}>
+          <Badge color="success" badgeContent={profile.overall_score} max={999}>
             <Avatar
               src={user.avatar} // Assuming 'avatar' is part of the user profile data
               sx={{
@@ -31,27 +61,39 @@ export const AccountProfile = ({ user }) => {
                 mb: 2,
                 width: 80,
               }}
-              alt={getInitials(`${user.first_name} ${user.last_name}`)}
+              alt={getInitials(`${profile.first_name} ${profile.last_name}`)}
             >
-              {getInitials(`${user.first_name} ${user.last_name}`)}
+              {getInitials(`${profile.first_name} ${profile.last_name}`)}
             </Avatar>
           </Badge>
+          <Stack sx={{ alignItems: "center", mb: 2 }}>
+            <Typography gutterBottom variant="h5">
+              {profile.first_name} {profile.last_name}
+            </Typography>
+            <Button variant="contained" onClick={() => getTheTeam(profile.team.id)} size="small">
+              {profile.team?.name}
+            </Button>
+          </Stack>
 
-          <Typography gutterBottom variant="h5">
-            {user.first_name} {user.last_name}
-          </Typography>
-          <Typography color="text.secondary" variant="body2">
-            {user.phone_number || "phone"}
-          </Typography>
-          <Typography color="text.secondary" variant="body2">
-            {user.team?.name}
-          </Typography>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={profile.is_in_school}
+                onChange={() => {
+                  switchAttendance(profile);
+                }}
+                name="jason"
+              />
+            }
+            label={profile.is_in_school ? "Is in School" : "Isn't in School"}
+            labelPlacement="top"
+          />
         </Box>
       </CardContent>
       <Divider />
       <CardActions>
         <Button fullWidth variant="text">
-          Upload picture
+          Call
         </Button>
       </CardActions>
     </Card>

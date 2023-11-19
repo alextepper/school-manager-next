@@ -36,14 +36,10 @@ const Page = () => {
         component="main"
         sx={{
           flexGrow: 1,
-          py: 8,
         }}
       >
         <Container maxWidth="lg">
           <Stack spacing={3}>
-            <div>
-              <Typography variant="h4">Account</Typography>
-            </div>
             <div>
               <Grid container spacing={3}>
                 {user && (

@@ -1,11 +1,11 @@
 import PropTypes from "prop-types";
-import { Avatar, Badge, FormControlLabel, Switch } from "@mui/material";
+import { Avatar, Badge } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { getInitials } from "src/utils/get-initials";
 import { deepOrange, deepPurple } from "@mui/material/colors";
 import { useRouter } from "next/router";
 
-export const StudentTable = (props) => {
+export const TeamStudentTable = (props) => {
   const router = useRouter();
   const getTheProfile = (userId) => {
     router.push("/profile/" + userId);
@@ -40,7 +40,6 @@ export const StudentTable = (props) => {
         );
       },
     },
-
     {
       field: "fullName",
       headerName: "Full name",
@@ -48,20 +47,11 @@ export const StudentTable = (props) => {
       flex: 1,
       valueGetter: (params) => `${params.row.first_name || ""} ${params.row.last_name || ""}`,
     },
-    {
-      field: "teams",
-      headerName: "Team",
-      minWidth: 90,
-      flex: 1,
-      valueGetter: (params) => `${params.row.team ? params.row.team.name : ""}`,
-    },
-    { field: "grade", headerName: "Grade", flex: 1, minWidth: 60 },
   ];
 
   return (
     <div style={{ height: "100%", width: "100%" }}>
       <DataGrid
-        disableColumnMenu
         onRowClick={(params) => getTheProfile(params.row.id)}
         rows={props.items}
         columns={columns}
@@ -73,14 +63,15 @@ export const StudentTable = (props) => {
             sortModel: [{ field: "overall_score", sort: "desc" }],
           },
         }}
-        pageSizeOptions={[5, 10, 15]}
+        pageSizeOptions={[5, 10]}
         checkboxSelection
       />
     </div>
   );
 };
 
-StudentTable.propTypes = {
+TeamStudentTable.propTypes = {
+  count: PropTypes.number,
   items: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
@@ -96,4 +87,8 @@ StudentTable.propTypes = {
       is_in_school: PropTypes.bool,
     })
   ),
+  onPageChange: PropTypes.func,
+  onRowsPerPageChange: PropTypes.func,
+  page: PropTypes.number,
+  rowsPerPage: PropTypes.number,
 };
