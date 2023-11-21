@@ -12,7 +12,7 @@ import {
   Typography,
 } from "@mui/material";
 
-export const AccountProfileDetails = (user) => {
+export const StaffProfileDetails = (user) => {
   const [values, setValues] = useState({
     first_name: "",
     last_name: "",

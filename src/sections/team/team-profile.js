@@ -48,15 +48,8 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 export const TeamProfile = ({ team }) => {
   return (
     <Card>
-      <CardHeader title={team.name} />
-      <CardContent>
-        <Box
-          sx={{
-            alignItems: "center",
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
+      <CardHeader
+        avatar={
           <Badge color="success" badgeContent={team.overall_score || 0} max={999}>
             <Avatar
               src={team.avatar} // Assuming 'avatar' is part of the user profile data
@@ -70,6 +63,21 @@ export const TeamProfile = ({ team }) => {
               {getInitials(team.name)}
             </Avatar>
           </Badge>
+        }
+        title={
+          <Typography gutterBottom variant="h6">
+            {team.name}
+          </Typography>
+        }
+      />
+      <CardContent>
+        <Box
+          sx={{
+            alignItems: "center",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
           <Stack direction="row" spacing={2}>
             {team.staff.map((staff) => {
               return (

@@ -1,6 +1,4 @@
 import Head from "next/head";
-import ArrowUpOnSquareIcon from "@heroicons/react/24/solid/ArrowUpOnSquareIcon";
-import ArrowDownOnSquareIcon from "@heroicons/react/24/solid/ArrowDownOnSquareIcon";
 import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
 import {
   Box,
@@ -13,8 +11,6 @@ import {
   Unstable_Grid2 as Grid,
 } from "@mui/material";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
-import { CompanyCard } from "src/sections/companies/company-card";
-import { CompaniesSearch } from "src/sections/companies/companies-search";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { TeamCard } from "src/sections/team/team-card";

@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useReducer, useRef } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
+import api from "src/utils/api";
 
 const HANDLERS = {
   INITIALIZE: "INITIALIZE",
@@ -172,10 +173,7 @@ export const AuthProvider = (props) => {
 
     if (refreshToken) {
       try {
-        await axios.post("http://localhost:8000/logout/", {
-          headers: {
-            Authorization: `Bearer ${user.tokens.access}`,
-          },
+        await api.post("/logout/", {
           refresh: refreshToken,
         });
 
