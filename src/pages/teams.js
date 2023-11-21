@@ -11,9 +11,9 @@ import {
   Unstable_Grid2 as Grid,
 } from "@mui/material";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { TeamCard } from "src/sections/team/team-card";
+import api from "src/utils/api";
 
 const Page = () => {
   const [data, setData] = useState([]); // State for storing fetched data
@@ -21,8 +21,8 @@ const Page = () => {
   useEffect(() => {
     const fetchStudentList = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/teams`);
-        setData(response.data); // Set fetched data to state
+        const response = await api.get(`/teams/`);
+        setData(response.data.results);
       } catch (err) {
         console.error("Error fetching student profiles:", err);
         // Handle error appropriately
@@ -64,7 +64,7 @@ const Page = () => {
             </Stack>
             <Grid container spacing={3}>
               {data.map((team) => (
-                <Grid xs={6} md={4} lg={3} key={team.id}>
+                <Grid xs={12} sm={4} md={3} key={team.id}>
                   <TeamCard team={team} />
                 </Grid>
               ))}

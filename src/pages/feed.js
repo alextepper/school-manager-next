@@ -5,6 +5,7 @@ import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
 import { CustomersSearch } from "src/sections/customer/customers-search";
 import { StudentTable } from "src/sections/student/student-table";
 import api from "src/utils/api";
+import { EventList } from "src/sections/event/event-list";
 
 const Page = () => {
   const [data, setData] = useState([]); // State for storing fetched data
@@ -26,7 +27,7 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>Students | Devias Kit</title>
+        <title>Feed | Devias Kit</title>
       </Head>
       <Box
         component="main"
@@ -38,12 +39,11 @@ const Page = () => {
           <Stack spacing={3}>
             <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">Students</Typography>
+                <Typography variant="h4">Feed</Typography>
               </Stack>
             </Stack>
-            <CustomersSearch />
             <Card>
-              <StudentTable items={data} />
+              <EventList />
             </Card>
           </Stack>
         </Container>

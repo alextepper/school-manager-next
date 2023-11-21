@@ -1,11 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import axios from "axios";
 import Head from "next/head";
-import { Box, Container, Stack, Typography, Unstable_Grid2 as Grid } from "@mui/material";
+import {
+  Box,
+  Container,
+  Stack,
+  Typography,
+  Unstable_Grid2 as Grid,
+  Card,
+  CardContent,
+} from "@mui/material";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
-import { AccountProfile } from "src/sections/account/account-profile";
-import { AccountProfileDetails } from "src/sections/account/account-profile-details";
+import api from "src/utils/api";
+import { StudentProfile } from "src/sections/student/student-profile";
+import { StudentEventCreation } from "src/sections/student/student-event-creation";
+import { EventList } from "src/sections/event/event-list";
 
 const Page = () => {
   const router = useRouter();
@@ -18,7 +27,7 @@ const Page = () => {
       const fetchProfile = async () => {
         setLoading(true);
         try {
-          const response = await axios.get(`http://localhost:8000/student-profile/${profileId}`);
+          const response = await api.get(`student-profile/${profileId}`);
           setProfile(response.data);
         } catch (err) {
           console.error("Error fetching profile:", err);
@@ -59,11 +68,14 @@ const Page = () => {
               <Grid container spacing={3}>
                 {profile && (
                   <>
-                    <Grid item xs={12} md={6} lg={4}>
-                      <AccountProfile user={profile} />
+                    <Grid item xs={12} md={5} lg={4}>
+                      <StudentProfile user={profile} />
                     </Grid>
-                    <Grid item xs={12} md={6} lg={8}>
-                      <AccountProfileDetails user={profile} />
+                    <Grid item xs={12} md={7} lg={8}>
+                      <StudentEventCreation user={profile} />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <EventList user={profile} />
                     </Grid>
                   </>
                 )}

@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import axios from "axios";
 import Head from "next/head";
 import { Box, Container, Stack, Typography, Unstable_Grid2 as Grid } from "@mui/material";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
-import { AccountProfile } from "src/sections/account/account-profile";
-import { AccountProfileDetails } from "src/sections/account/account-profile-details";
 import { StaffProfile } from "src/sections/staff/staff-profile";
 import { StaffProfileDetails } from "src/sections/staff/staff-profile-details";
 import api from "src/utils/api";

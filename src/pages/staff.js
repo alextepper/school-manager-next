@@ -5,6 +5,7 @@ import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
 import { CustomersSearch } from "src/sections/customer/customers-search";
 import { StudentTable } from "src/sections/student/student-table";
 import api from "src/utils/api";
+import { StaffTable } from "src/sections/staff/staff-table";
 
 const Page = () => {
   const [data, setData] = useState([]); // State for storing fetched data
@@ -12,7 +13,7 @@ const Page = () => {
   useEffect(() => {
     const fetchStudentList = async () => {
       try {
-        const response = await api.get(`/student-profiles`);
+        const response = await api.get(`/staff-list/`);
         setData(response.data.results); // Set fetched data to state
       } catch (err) {
         console.error("Error fetching student profiles:", err);
@@ -38,12 +39,12 @@ const Page = () => {
           <Stack spacing={3}>
             <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">Students</Typography>
+                <Typography variant="h4">Staff</Typography>
               </Stack>
             </Stack>
             <CustomersSearch />
             <Card>
-              <StudentTable items={data} />
+              <StaffTable items={data} />
             </Card>
           </Stack>
         </Container>

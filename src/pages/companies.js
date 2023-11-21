@@ -16,7 +16,7 @@ import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
 import { CompanyCard } from "src/sections/companies/company-card";
 import { CompaniesSearch } from "src/sections/companies/companies-search";
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const companies = [
   {

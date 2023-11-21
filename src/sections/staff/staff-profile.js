@@ -72,12 +72,7 @@ export const StaffProfile = ({ user }) => {
           <Stack sx={{ alignItems: "center", mb: 2 }}>
             {profile.team.map((team) => {
               return (
-                <Button
-                  variant="contained"
-                  onClick={() => getThePage("/team/" + team.id)}
-                  key={team.id}
-                  size="small"
-                >
+                <Button onClick={() => getThePage("/team/" + team.id)} key={team.id} size="small">
                   {team.name}
                 </Button>
               );

@@ -38,7 +38,6 @@ const Page = () => {
       console.log(values);
       try {
         await auth.signIn(values.email, values.password);
-        console.log(auth);
         router.push("/students");
       } catch (err) {
         helpers.setStatus({ success: false });

@@ -23,7 +23,7 @@ import { StyledBadge } from "src/utils/styledBadge";
 import api from "src/utils/api";
 import { useRouter } from "next/router";
 
-export const AccountProfile = ({ user }) => {
+export const StudentProfile = ({ user }) => {
   const loggedUserProfile = JSON.parse(localStorage.getItem("user")).profile;
   const [profile, setProfile] = useState(user);
   const [likes, setLikes] = useState(profile.likes.length);
@@ -135,7 +135,7 @@ export const AccountProfile = ({ user }) => {
           />
         }
       />
-      <CardContent>
+      <CardContent sx={{ p: 1 }}>
         <Box
           sx={{
             alignItems: "center",
@@ -146,18 +146,21 @@ export const AccountProfile = ({ user }) => {
           <Stack direction="row" spacing={2}>
             {profile.team.staff.map((staff) => {
               return (
-                <div onClick={() => getThePage("/staff/" + staff.id)} sx={{ cursor: "pointer" }}>
+                <div
+                  onClick={() => getThePage("/staff/" + staff.id)}
+                  sx={{ cursor: "pointer" }}
+                  key={staff.id}
+                >
                   <StyledBadge
                     overlap="circular"
                     anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
                     variant="dot"
                     invisible={!staff.is_on_shift}
-                    key={staff.id}
                   >
                     <Avatar
                       alt={staff.first_name}
                       src={staff.avatar}
-                      sx={{ width: 56, height: 56 }}
+                      sx={{ width: 35, height: 35 }}
                     />
                   </StyledBadge>
                 </div>
