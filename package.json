@@ -14,6 +14,8 @@
     "lint-fix": "next lint --fix"
   },
   "dependencies": {
+    "@cloudinary/react": "^1.11.2",
+    "@cloudinary/url-gen": "^1.13.0",
     "@emotion/cache": "11.10.5",
     "@emotion/react": "11.10.6",
     "@emotion/server": "11.10.0",
@@ -24,10 +26,11 @@
     "@mui/material": "5.11.10",
     "@mui/system": "5.11.9",
     "@mui/x-data-grid": "^6.18.1",
-    "@mui/x-date-pickers": "5.0.19",
+    "@mui/x-date-pickers": "^6.18.2",
     "apexcharts": "3.37.0",
     "axios": "^1.6.2",
     "date-fns": "^2.29.3",
+    "dayjs": "^1.11.10",
     "formik": "2.2.9",
     "next": "13.1.6",
     "nprogress": "0.2.0",

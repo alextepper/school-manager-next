@@ -92,6 +92,24 @@ export const StaffProfileDetails = (user) => {
                   value={values.phone}
                 />
               </Grid>
+              <Grid xs={12} md={6}>
+                <TextField
+                  fullWidth
+                  label="Phone Number"
+                  name="phone"
+                  onChange={handleChange}
+                  value={values.phone}
+                />
+              </Grid>
+              <Grid xs={12} md={6}>
+                <TextField
+                  fullWidth
+                  label="Phone Number"
+                  name="phone"
+                  onChange={handleChange}
+                  value={values.phone}
+                />
+              </Grid>
             </Grid>
           </Box>
         </CardContent>

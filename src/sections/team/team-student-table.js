@@ -13,11 +13,11 @@ export const TeamStudentTable = (props) => {
 
   const columns = [
     {
-      field: "overall_score",
+      field: "events",
       headerName: "",
       maxWidth: 40,
       renderCell: (params) => {
-        return <Avatar sx={{ bgcolor: deepOrange[500] }}>{params.row.overall_score || 0}</Avatar>;
+        return <Avatar sx={{ bgcolor: deepOrange[500] }}>{params.row.events || 0}</Avatar>;
       },
     },
     {
@@ -60,7 +60,7 @@ export const TeamStudentTable = (props) => {
             paginationModel: { page: 0, pageSize: 15 },
           },
           sorting: {
-            sortModel: [{ field: "overall_score", sort: "desc" }],
+            sortModel: [{ field: "events", sort: "desc" }],
           },
         }}
         pageSizeOptions={[5, 10, 15]}

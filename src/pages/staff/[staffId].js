@@ -8,6 +8,7 @@ import { StaffProfileDetails } from "src/sections/staff/staff-profile-details";
 import api from "src/utils/api";
 
 const Page = () => {
+  const loggedUserProfile = JSON.parse(localStorage.getItem("user")).profile;
   const router = useRouter();
   const { staffId } = router.query;
   const [profile, setProfile] = useState(null);
@@ -59,7 +60,7 @@ const Page = () => {
                 {profile && (
                   <>
                     <Grid item xs={12} md={6} lg={4}>
-                      <StaffProfile user={profile} />
+                      <StaffProfile user={profile} loggedUserProfile={loggedUserProfile} />
                     </Grid>
                     <Grid item xs={12} md={6} lg={8}>
                       <StaffProfileDetails user={profile} />

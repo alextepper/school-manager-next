@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { Avatar, Badge, FormControlLabel, Switch } from "@mui/material";
+import { Avatar, Badge } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { getInitials } from "src/utils/get-initials";
 import { deepOrange, deepPurple } from "@mui/material/colors";
@@ -13,11 +13,11 @@ export const StudentTable = (props) => {
 
   const columns = [
     {
-      field: "overall_score",
+      field: "events",
       headerName: "",
       maxWidth: 40,
       renderCell: (params) => {
-        return <Avatar sx={{ bgcolor: deepOrange[500] }}>{params.row.overall_score || 0}</Avatar>;
+        return <Avatar sx={{ bgcolor: deepOrange[500] }}>{params.row.events || 0}</Avatar>;
       },
     },
     {
@@ -28,7 +28,15 @@ export const StudentTable = (props) => {
       maxWidth: 60,
       renderCell: (params) => {
         return (
-          <Badge color="success" variant="dot" invisible={!params.row.is_in_school}>
+          <Badge
+            color="success"
+            variant="dot"
+            invisible={!params.row.is_in_school}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "right",
+            }}
+          >
             <Avatar
               sx={{ bgcolor: deepPurple[500] }}
               src={params.row.avatar}
@@ -70,7 +78,7 @@ export const StudentTable = (props) => {
             paginationModel: { page: 0, pageSize: 15 },
           },
           sorting: {
-            sortModel: [{ field: "overall_score", sort: "desc" }],
+            sortModel: [{ field: "events", sort: "desc" }],
           },
         }}
         pageSizeOptions={[5, 10, 15]}

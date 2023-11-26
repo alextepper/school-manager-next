@@ -42,7 +42,6 @@ const Page = () => {
                 <Typography variant="h4">Staff</Typography>
               </Stack>
             </Stack>
-            <CustomersSearch />
             <Card>
               <StaffTable items={data} />
             </Card>

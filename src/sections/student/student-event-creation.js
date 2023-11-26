@@ -3,10 +3,8 @@ import {
   Box,
   Button,
   Card,
-  CardActions,
   CardContent,
   CardHeader,
-  Divider,
   TextField,
   Unstable_Grid2 as Grid,
   FormControl,
@@ -16,17 +14,32 @@ import {
 } from "@mui/material";
 import api from "src/utils/api";
 
-export const StudentEventCreation = ({ user }) => {
-  const loggedUserProfile = JSON.parse(localStorage.getItem("user")).profile;
+const initialEventData = {
+  giver: "",
+  receiver: "",
+  description: "",
+  score: "",
+  area: "",
+};
+
+export const StudentEventCreation = ({ user, loggedUserProfile }) => {
+  const [error, setError] = useState("");
   const [eventData, setEventData] = useState({
+    ...initialEventData,
     giver: loggedUserProfile.id,
     receiver: user.id,
-    description: "",
-    score: "",
-    area: "",
   });
 
   const createEvent = async (eventData) => {
+    if (
+      eventData.description === initialEventData.description &&
+      eventData.score === initialEventData.score &&
+      eventData.area === initialEventData.area
+    ) {
+      alert("Please fill in the event details before submitting."); // or use a more sophisticated method to show the error
+      return;
+    }
+
     try {
       const response = await api.post("/create-event/", eventData, {
         headers: {
@@ -84,8 +97,9 @@ export const StudentEventCreation = ({ user }) => {
                   value={eventData.area}
                   onChange={handleChange}
                 >
-                  <MenuItem value="Area 1">Area 1</MenuItem>
-                  <MenuItem value="Area 2">Area 2</MenuItem>
+                  <MenuItem value="Discipline">Discipline</MenuItem>
+                  <MenuItem value="Social">Social</MenuItem>
+                  <MenuItem value="Study">Study</MenuItem>
                   {/* Add more areas as needed */}
                 </Select>
               </FormControl>

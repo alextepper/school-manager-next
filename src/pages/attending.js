@@ -5,6 +5,7 @@ import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
 import { CustomersSearch } from "src/sections/customer/customers-search";
 import axios from "axios";
 import { StudentTable } from "src/sections/student/student-table";
+import api from "src/utils/api";
 
 const Page = () => {
   const [data, setData] = useState([]); // State for storing fetched data
@@ -12,10 +13,8 @@ const Page = () => {
   useEffect(() => {
     const fetchStudentList = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8000/student-profiles?is_in_school=True`
-        );
-        setData(response.data); // Set fetched data to state
+        const response = await api.get(`/student-profiles?is_in_school=True`);
+        setData(response.data.results); // Set fetched data to state
       } catch (err) {
         console.error("Error fetching student profiles:", err);
         // Handle error appropriately

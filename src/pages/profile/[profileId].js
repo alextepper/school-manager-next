@@ -1,22 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import {
-  Box,
-  Container,
-  Stack,
-  Typography,
-  Unstable_Grid2 as Grid,
-  Card,
-  CardContent,
-} from "@mui/material";
+import { Box, Container, Stack, Unstable_Grid2 as Grid } from "@mui/material";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
 import api from "src/utils/api";
 import { StudentProfile } from "src/sections/student/student-profile";
 import { StudentEventCreation } from "src/sections/student/student-event-creation";
 import { EventList } from "src/sections/event/event-list";
+import { StudentProfileDetails } from "src/sections/student/student-profile-details";
 
 const Page = () => {
+  const loggedUserProfile = JSON.parse(localStorage.getItem("user")).profile;
   const router = useRouter();
   const { profileId } = router.query;
   const [profile, setProfile] = useState(null);
@@ -68,12 +62,20 @@ const Page = () => {
               <Grid container spacing={3}>
                 {profile && (
                   <>
-                    <Grid item xs={12} md={5} lg={4}>
-                      <StudentProfile user={profile} />
+                    <Grid item xs={12}>
+                      <StudentProfile user={profile} loggedUserProfile={loggedUserProfile} />
                     </Grid>
-                    <Grid item xs={12} md={7} lg={8}>
-                      <StudentEventCreation user={profile} />
-                    </Grid>
+
+                    {loggedUserProfile.role == "staff" ? (
+                      <Grid item xs={12}>
+                        <StudentEventCreation
+                          user={profile}
+                          loggedUserProfile={loggedUserProfile}
+                        />
+                      </Grid>
+                    ) : (
+                      ""
+                    )}
                     <Grid item xs={12}>
                       <EventList user={profile} />
                     </Grid>

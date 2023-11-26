@@ -58,6 +58,15 @@ export const items = [
     ),
   },
   {
+    title: "Activities",
+    path: "/activities",
+    icon: (
+      <SvgIcon fontSize="small">
+        <EngineeringIcon />
+      </SvgIcon>
+    ),
+  },
+  {
     title: "Attending",
     path: "/attending",
     icon: (

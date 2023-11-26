@@ -5,21 +5,20 @@ import {
   Box,
   Avatar,
   Typography,
-  Divider,
-  CardActions,
-  Button,
   FormControlLabel,
   Switch,
   CardHeader,
 } from "@mui/material";
 import { getInitials } from "src/utils/get-initials";
 import { useRouter } from "next/router";
-import axios from "axios";
 import { Stack } from "@mui/system";
 import { StyledBadge } from "src/utils/styledBadge";
+import api from "src/utils/api";
+import { cloudinaryUploadStaff } from "src/utils/cloudinary-upload";
 
-export const StaffProfile = ({ user }) => {
+export const StaffProfile = ({ user, loggedUserProfile }) => {
   const [profile, setProfile] = useState(user);
+  const [avatar, setAvatar] = useState(profile.avatar);
   const router = useRouter();
   const getThePage = (url) => {
     router.push(url);
@@ -32,12 +31,24 @@ export const StaffProfile = ({ user }) => {
         is_on_shift: !currentProfile.is_on_shift,
       };
 
-      await axios.put(`http://localhost:8000/staff-profile/${currentProfile.id}/`, updatedProfile);
+      await api.put(`/staff-profile/${currentProfile.id}/`, updatedProfile);
       setProfile({ ...currentProfile, is_on_shift: !currentProfile.is_on_shift });
     } catch (error) {
       console.error("Error updating student profile:", error);
       // Handle error appropriately
     }
+  };
+
+  const handleAvatarClick = async () => {
+    const fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.accept = "image/*";
+    fileInput.onchange = async (e) => {
+      const file = e.target.files[0];
+      const uploadedUrl = await cloudinaryUploadStaff(file, profile);
+      setAvatar(uploadedUrl); // Update avatar URL
+    };
+    fileInput.click();
   };
 
   return (
@@ -52,7 +63,12 @@ export const StaffProfile = ({ user }) => {
             key={user.id}
           >
             <Avatar
-              src={user.avatar} // Assuming 'avatar' is part of the user profile data
+              onClick={
+                loggedUserProfile.id == profile.id
+                  ? handleAvatarClick
+                  : () => console.log("You have no permission")
+              }
+              src={avatar} // Assuming 'avatar' is part of the user profile data
               sx={{
                 height: 80,
                 width: 80,
@@ -68,29 +84,22 @@ export const StaffProfile = ({ user }) => {
             {profile.first_name} {profile.last_name}
           </Typography>
         }
-        subheader={
-          <Stack sx={{ alignItems: "center", mb: 2 }}>
-            {profile.team.map((team) => {
-              return (
-                <Button onClick={() => getThePage("/team/" + team.id)} key={team.id} size="small">
-                  {team.name}
-                </Button>
-              );
-            })}
-          </Stack>
-        }
         action={
-          <FormControlLabel
-            control={
-              <Switch
-                color="success"
-                checked={profile.is_on_shift}
-                onChange={() => {
-                  switchAttendance(profile);
-                }}
-              />
-            }
-          />
+          loggedUserProfile.id == profile.id ? (
+            <FormControlLabel
+              control={
+                <Switch
+                  color="success"
+                  checked={profile.is_on_shift}
+                  onChange={() => {
+                    switchAttendance(profile);
+                  }}
+                />
+              }
+            />
+          ) : (
+            ""
+          )
         }
       />
       <CardContent>
@@ -100,14 +109,31 @@ export const StaffProfile = ({ user }) => {
             display: "flex",
             flexDirection: "column",
           }}
-        ></Box>
+        >
+          <Stack direction="row" spacing={2}>
+            {profile.team.map((team) => {
+              return (
+                <Stack
+                  key={team.id}
+                  sx={{
+                    alignItems: "center",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  <Avatar
+                    onClick={() => getThePage("/team/" + team.id)}
+                    alt={team.name}
+                    src={team.avatar}
+                    sx={{ width: 45, height: 45, cursor: "pointer" }}
+                  />
+                  <p>{team.name}</p>
+                </Stack>
+              );
+            })}
+          </Stack>
+        </Box>
       </CardContent>
-      <Divider />
-      <CardActions>
-        <Button fullWidth variant="text">
-          Call
-        </Button>
-      </CardActions>
     </Card>
   );
 };

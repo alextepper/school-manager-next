@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardContent,
@@ -15,6 +15,8 @@ import {
 import { getInitials } from "src/utils/get-initials";
 import { styled } from "@mui/material/styles";
 import { Stack } from "@mui/system";
+import { useRouter } from "next/router";
+import { cloudinaryUploadTeam } from "src/utils/cloudinary-upload";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -45,14 +47,38 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
   },
 }));
 
-export const TeamProfile = ({ team }) => {
+export const TeamProfile = ({ team, loggedUserProfile }) => {
+  const [profile, setProfile] = useState(team);
+  const [avatar, setAvatar] = useState(profile.avatar);
+  const router = useRouter();
+  const getThePage = (url) => {
+    router.push(url);
+  };
+
+  const handleAvatarClick = async () => {
+    const fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.accept = "image/*";
+    fileInput.onchange = async (e) => {
+      const file = e.target.files[0];
+      const uploadedUrl = await cloudinaryUploadTeam(file, profile);
+      setAvatar(uploadedUrl); // Update avatar URL
+    };
+    fileInput.click();
+  };
+
   return (
     <Card>
       <CardHeader
         avatar={
           <Badge color="success" badgeContent={team.overall_score || 0} max={999}>
             <Avatar
-              src={team.avatar} // Assuming 'avatar' is part of the user profile data
+              onClick={
+                loggedUserProfile.role == "staff"
+                  ? handleAvatarClick
+                  : () => console.log("You have no permission")
+              }
+              src={avatar} // Assuming 'avatar' is part of the user profile data
               sx={{
                 height: 80,
                 mb: 2,
@@ -69,6 +95,7 @@ export const TeamProfile = ({ team }) => {
             {team.name}
           </Typography>
         }
+        subheader={team.grade}
       />
       <CardContent>
         <Box
@@ -81,25 +108,35 @@ export const TeamProfile = ({ team }) => {
           <Stack direction="row" spacing={2}>
             {team.staff.map((staff) => {
               return (
-                <StyledBadge
-                  overlap="circular"
-                  anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-                  variant="dot"
-                  invisible={!staff.is_on_shift}
+                <Stack
                   key={staff.id}
+                  sx={{
+                    alignItems: "center",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
                 >
-                  <Avatar
-                    alt={staff.first_name}
-                    src={staff.avatar}
-                    sx={{ width: 56, height: 56 }}
-                  />
-                </StyledBadge>
+                  <StyledBadge
+                    overlap="circular"
+                    anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                    variant="dot"
+                    invisible={!staff.is_on_shift}
+                    key={staff.id}
+                  >
+                    <Avatar
+                      onClick={() => getThePage("/staff/" + staff.id)}
+                      alt={staff.first_name}
+                      src={staff.avatar}
+                      sx={{ width: 45, height: 45, cursor: "pointer" }}
+                    />
+                  </StyledBadge>
+                  <p>{staff.first_name}</p>
+                </Stack>
               );
             })}
           </Stack>
         </Box>
       </CardContent>
-      <Divider />
       <CardActions>
         <Button fullWidth variant="text">
           Call

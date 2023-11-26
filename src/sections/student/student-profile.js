@@ -13,7 +13,10 @@ import {
   Switch,
   CardHeader,
   Fab,
+  Collapse,
+  IconButton,
 } from "@mui/material";
+
 import { red } from "@mui/material/colors";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -22,12 +25,28 @@ import { Stack } from "@mui/system";
 import { StyledBadge } from "src/utils/styledBadge";
 import api from "src/utils/api";
 import { useRouter } from "next/router";
+import { cloudinaryUpload } from "src/utils/cloudinary-upload";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import styled from "@emotion/styled";
+import { StudentProfileDetails } from "./student-profile-details";
 
-export const StudentProfile = ({ user }) => {
-  const loggedUserProfile = JSON.parse(localStorage.getItem("user")).profile;
+const ExpandMore = styled((props) => {
+  const { expand, ...other } = props;
+  return <IconButton {...other} />;
+})(({ theme, expand }) => ({
+  transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
+  marginLeft: "auto",
+  transition: theme.transitions.create("transform", {
+    duration: theme.transitions.duration.shortest,
+  }),
+}));
+
+export const StudentProfile = ({ user, loggedUserProfile }) => {
   const [profile, setProfile] = useState(user);
+  const [avatar, setAvatar] = useState(profile.avatar);
   const [likes, setLikes] = useState(profile.likes.length);
   const [liked, setLiked] = useState(profile.likes.includes(loggedUserProfile.id));
+  const [expanded, setExpanded] = useState(false);
   const router = useRouter();
   const getThePage = (url) => {
     router.push(url);
@@ -46,6 +65,18 @@ export const StudentProfile = ({ user }) => {
       console.error("Error updating student profile:", error);
       // Handle error appropriately
     }
+  };
+
+  const handleAvatarClick = async () => {
+    const fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.accept = "image/*";
+    fileInput.onchange = async (e) => {
+      const file = e.target.files[0];
+      const uploadedUrl = await cloudinaryUpload(file, profile);
+      setAvatar(uploadedUrl); // Update avatar URL
+    };
+    fileInput.click();
   };
 
   const like = async (receiver) => {
@@ -69,7 +100,7 @@ export const StudentProfile = ({ user }) => {
       <CardHeader
         avatar={
           <>
-            <Badge color="success" badgeContent={profile.overall_score} max={999}>
+            <Badge color="success" badgeContent={profile.events} max={999}>
               <Box
                 sx={{
                   alignItems: "center",
@@ -78,11 +109,16 @@ export const StudentProfile = ({ user }) => {
                 }}
               >
                 <Avatar
-                  src={user.avatar} // Assuming 'avatar' is part of the user profile data
+                  src={avatar} // Assuming 'avatar' is part of the user profile data
                   sx={{
                     height: 80,
                     width: 80,
                   }}
+                  onClick={
+                    loggedUserProfile.role == "staff"
+                      ? handleAvatarClick
+                      : () => console.log("You have no permission")
+                  }
                   alt={getInitials(`${profile.first_name} ${profile.last_name}`)}
                 >
                   {getInitials(`${profile.first_name} ${profile.last_name}`)}
@@ -112,27 +148,36 @@ export const StudentProfile = ({ user }) => {
           </>
         }
         title={
-          <Typography gutterBottom variant="h6">
-            {profile.first_name} {profile.last_name}
-          </Typography>
+          <>
+            <Typography gutterBottom variant="h6">
+              {profile.first_name} {profile.last_name}
+              <Button onClick={() => getThePage("/team/" + profile.team.id)} size="small">
+                {profile.team?.name}
+              </Button>
+            </Typography>
+          </>
         }
         subheader={
-          <Button onClick={() => getThePage("/team/" + profile.team.id)} size="small">
-            {profile.team?.name}
-          </Button>
+          loggedUserProfile.role == "staff" && profile.room
+            ? `Building: ${profile.room.building.name}(${profile.room.number})`
+            : ""
         }
         action={
-          <FormControlLabel
-            control={
-              <Switch
-                checked={profile.is_in_school}
-                onChange={() => {
-                  switchAttendance(profile);
-                }}
-                name="jason"
-              />
-            }
-          />
+          loggedUserProfile.role == "staff" ? (
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={profile.is_in_school}
+                  onChange={() => {
+                    switchAttendance(profile);
+                  }}
+                  name="jason"
+                />
+              }
+            />
+          ) : (
+            ""
+          )
         }
       />
       <CardContent sx={{ p: 1 }}>
@@ -171,10 +216,33 @@ export const StudentProfile = ({ user }) => {
       </CardContent>
       <Divider />
       <CardActions>
-        <Button fullWidth variant="text">
-          Call
-        </Button>
+        {loggedUserProfile.role == "staff" ? (
+          <>
+            <Button fullWidth variant="text">
+              Call
+            </Button>
+            <ExpandMore
+              expand={expanded}
+              onClick={() => setExpanded(!expanded)}
+              aria-expanded={expanded}
+              aria-label="show more"
+            >
+              <ExpandMoreIcon />
+            </ExpandMore>
+          </>
+        ) : (
+          ""
+        )}
       </CardActions>
+      {loggedUserProfile.role == "staff" ? (
+        <Collapse in={expanded} timeout="auto" unmountOnExit>
+          <CardContent>
+            <StudentProfileDetails user={profile} loggedUserProfile={loggedUserProfile} />
+          </CardContent>
+        </Collapse>
+      ) : (
+        ""
+      )}
     </Card>
   );
 };

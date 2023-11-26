@@ -67,7 +67,7 @@ export const StaffTable = (props) => {
             paginationModel: { page: 0, pageSize: 15 },
           },
           sorting: {
-            sortModel: [{ field: "overall_score", sort: "desc" }],
+            sortModel: [{ field: "is_on_shift", sort: "desc" }],
           },
         }}
         pageSizeOptions={[5, 10, 15]}
