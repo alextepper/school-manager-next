@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Head from "next/head";
-import { Box, Card, Container, Stack, SvgIcon, Typography } from "@mui/material";
+import { Box, Card, CardContent, Container, Stack, SvgIcon, Typography } from "@mui/material";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
 import { CustomersSearch } from "src/sections/customer/customers-search";
 import axios from "axios";
@@ -39,12 +39,13 @@ const Page = () => {
           <Stack spacing={3}>
             <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">Students</Typography>
+                <Typography variant="h4">Attending</Typography>
               </Stack>
             </Stack>
-            <CustomersSearch />
             <Card>
-              <StudentTable items={data} />
+              <CardContent sx={{ p: 1 }}>
+                <StudentTable items={data} />
+              </CardContent>
             </Card>
           </Stack>
         </Container>

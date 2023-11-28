@@ -189,28 +189,30 @@ export const StudentProfile = ({ user, loggedUserProfile }) => {
           }}
         >
           <Stack direction="row" spacing={2}>
-            {profile.team.staff.map((staff) => {
-              return (
-                <div
-                  onClick={() => getThePage("/staff/" + staff.id)}
-                  sx={{ cursor: "pointer" }}
-                  key={staff.id}
-                >
-                  <StyledBadge
-                    overlap="circular"
-                    anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-                    variant="dot"
-                    invisible={!staff.is_on_shift}
-                  >
-                    <Avatar
-                      alt={staff.first_name}
-                      src={staff.avatar}
-                      sx={{ width: 35, height: 35 }}
-                    />
-                  </StyledBadge>
-                </div>
-              );
-            })}
+            {profile.team
+              ? profile.team.staff.map((staff) => {
+                  return (
+                    <div
+                      onClick={() => getThePage("/staff/" + staff.id)}
+                      sx={{ cursor: "pointer" }}
+                      key={staff.id}
+                    >
+                      <StyledBadge
+                        overlap="circular"
+                        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                        variant="dot"
+                        invisible={!staff.is_on_shift}
+                      >
+                        <Avatar
+                          alt={staff.first_name}
+                          src={staff.avatar}
+                          sx={{ width: 35, height: 35 }}
+                        />
+                      </StyledBadge>
+                    </div>
+                  );
+                })
+              : ""}
           </Stack>
         </Box>
       </CardContent>

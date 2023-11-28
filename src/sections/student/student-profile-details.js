@@ -22,7 +22,7 @@ export const StudentProfileDetails = ({ user, loggedUserProfile }) => {
   const [buildingList, setBuildingList] = useState([]);
   const [roomList, setRoomList] = useState([]);
   const [building, setBuilding] = useState(profile.room ? profile.room.building : {});
-  const [room, setRoom] = useState(profile.room);
+  const [teams, setTeams] = useState([]);
   const validBirthday = profile.birthday ? dayjs(profile.birthday).toDate() : null;
 
   const handleDateChange = (date) => {
@@ -35,8 +35,6 @@ export const StudentProfileDetails = ({ user, loggedUserProfile }) => {
 
     setProfile({ ...profile, [name]: value });
     setProfileUpdate({ ...profileUpdate, [name]: value });
-
-    console.log(profileUpdate);
   };
 
   const handleBuildingChange = async (event) => {
@@ -48,8 +46,10 @@ export const StudentProfileDetails = ({ user, loggedUserProfile }) => {
   const toggleEditMode = async () => {
     if (buildingList.length == 0) {
       try {
-        const response = await api.get("/buildings/");
-        setBuildingList(response.data.results);
+        const buildings = await api.get("/buildings/");
+        const teams = await api.get("/teams/");
+        setBuildingList(buildings.data.results);
+        setTeams(teams.data.results);
       } catch (err) {
         console.log(err);
       }
@@ -110,6 +110,28 @@ export const StudentProfileDetails = ({ user, loggedUserProfile }) => {
                   readOnly: !isEditMode,
                 }}
               />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Select
+                fullWidth
+                labelId="Team"
+                id="team"
+                value={profile.team || ""}
+                label="Team"
+                name="team"
+                onChange={handleProfileChange}
+                inputProps={{
+                  readOnly: !isEditMode,
+                }}
+              >
+                {teams.map((team) => {
+                  return (
+                    <MenuItem value={team.id} key={team.id}>
+                      {team.name}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
             </Grid>
             <Grid item xs={12} md={6}>
               <Select

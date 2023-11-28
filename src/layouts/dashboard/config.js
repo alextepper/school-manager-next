@@ -20,21 +20,30 @@ export const items = [
   //     </SvgIcon>
   //   ),
   // },
-  {
-    title: "Feed",
-    path: "/feed",
-    icon: (
-      <SvgIcon fontSize="small">
-        <FeedIcon />
-      </SvgIcon>
-    ),
-  },
+  // {
+  //   title: "Feed",
+  //   path: "/feed",
+  //   icon: (
+  //     <SvgIcon fontSize="small">
+  //       <FeedIcon />
+  //     </SvgIcon>
+  //   ),
+  // },
   {
     title: "Students",
     path: "/students",
     icon: (
       <SvgIcon fontSize="small">
         <UsersIcon />
+      </SvgIcon>
+    ),
+  },
+  {
+    title: "Attending",
+    path: "/attending",
+    icon: (
+      <SvgIcon fontSize="small">
+        <UserPlusIcon />
       </SvgIcon>
     ),
   },
@@ -57,24 +66,16 @@ export const items = [
       </SvgIcon>
     ),
   },
-  {
-    title: "Activities",
-    path: "/activities",
-    icon: (
-      <SvgIcon fontSize="small">
-        <EngineeringIcon />
-      </SvgIcon>
-    ),
-  },
-  {
-    title: "Attending",
-    path: "/attending",
-    icon: (
-      <SvgIcon fontSize="small">
-        <UserPlusIcon />
-      </SvgIcon>
-    ),
-  },
+  // {
+  //   title: "Activities",
+  //   path: "/activities",
+  //   icon: (
+  //     <SvgIcon fontSize="small">
+  //       <EngineeringIcon />
+  //     </SvgIcon>
+  //   ),
+  // },
+
   {
     title: "Settings",
     path: "/settings",

@@ -9,14 +9,21 @@ import {
   SvgIcon,
   Typography,
   Unstable_Grid2 as Grid,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
 import { useEffect, useState } from "react";
 import { TeamCard } from "src/sections/team/team-card";
 import api from "src/utils/api";
+import TeamCreationForm from "src/sections/team/team-creation-form";
+import { Close } from "@mui/icons-material";
 
 const Page = () => {
   const [data, setData] = useState([]); // State for storing fetched data
+  const [openDialog, setOpenDialog] = useState(false);
 
   useEffect(() => {
     const fetchStudentList = async () => {
@@ -57,10 +64,16 @@ const Page = () => {
                     </SvgIcon>
                   }
                   variant="contained"
+                  onClick={() => setOpenDialog(true)}
                 >
                   Add
                 </Button>
               </div>
+              <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+                <DialogContent>
+                  <TeamCreationForm />
+                </DialogContent>
+              </Dialog>
             </Stack>
             <Grid container spacing={3}>
               {data.map((team) => (

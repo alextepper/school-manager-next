@@ -18,16 +18,20 @@ import {
 } from "@mui/material";
 import { useAuth } from "src/hooks/use-auth";
 import { Layout as AuthLayout } from "src/layouts/auth/layout";
+import api from "src/utils/api";
 
 const Page = () => {
   const router = useRouter();
+  const [showPasswordReset, setShowPasswordReset] = useState(false);
+  const [resetEmail, setResetEmail] = useState("");
+  const [resetMessage, setResetMessage] = useState("");
 
   const auth = useAuth();
   const [method, setMethod] = useState("email");
   const formik = useFormik({
     initialValues: {
       email: "mark@mark.com",
-      password: "asdasdasd",
+      password: "asdasdasd12",
       submit: null,
     },
     validationSchema: Yup.object({
@@ -47,14 +51,20 @@ const Page = () => {
     },
   });
 
-  const handleMethodChange = useCallback((event, value) => {
-    setMethod(value);
-  }, []);
+  const handlePasswordResetSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await api.post("/api/password_reset/", { email: resetEmail });
+      setResetMessage("Check your email for the reset link.");
+      // Optionally, hide the form after successful submission
+    } catch (error) {
+      setResetMessage("Error sending email.");
+    }
+  };
 
-  const handleSkip = useCallback(() => {
-    auth.skip();
-    router.push("/");
-  }, [auth, router]);
+  const handleMethodChange = useCallback((event, value) => {
+    setShowPasswordReset(value);
+  }, []);
 
   return (
     <>
@@ -82,22 +92,14 @@ const Page = () => {
             <Stack spacing={1} sx={{ mb: 3 }}>
               <Typography variant="h4">Login</Typography>
               <Typography color="text.secondary" variant="body2">
-                Don&apos;t have an account? &nbsp;
-                <Link
-                  component={NextLink}
-                  href="/auth/register"
-                  underline="hover"
-                  variant="subtitle2"
-                >
-                  Register
-                </Link>
+                Don&apos;t have an account? Constact your Instructor.
               </Typography>
             </Stack>
-            <Tabs onChange={handleMethodChange} sx={{ mb: 3 }} value={method}>
-              <Tab label="Email" value="email" />
-              <Tab label="Phone Number" value="phoneNumber" />
+            <Tabs onChange={handleMethodChange} sx={{ mb: 3 }} value={showPasswordReset}>
+              <Tab label="Email" value={false} />
+              <Tab label="Forgot password" value={true} />
             </Tabs>
-            {method === "email" && (
+            {!showPasswordReset && (
               <form noValidate onSubmit={formik.handleSubmit}>
                 <Stack spacing={3}>
                   <TextField
@@ -123,7 +125,6 @@ const Page = () => {
                     value={formik.values.password}
                   />
                 </Stack>
-                <FormHelperText sx={{ mt: 1 }}>Optionally you can skip.</FormHelperText>
                 {formik.errors.submit && (
                   <Typography color="error" sx={{ mt: 3 }} variant="body2">
                     {formik.errors.submit}
@@ -132,25 +133,28 @@ const Page = () => {
                 <Button fullWidth size="large" sx={{ mt: 3 }} type="submit" variant="contained">
                   Continue
                 </Button>
-                <Button fullWidth size="large" sx={{ mt: 3 }} onClick={handleSkip}>
-                  Skip authentication
-                </Button>
-                <Alert color="primary" severity="info" sx={{ mt: 3 }}>
-                  <div>
-                    You can use <b>demo@devias.io</b> and password <b>Password123!</b>
-                  </div>
-                </Alert>
               </form>
             )}
-            {method === "phoneNumber" && (
-              <div>
-                <Typography sx={{ mb: 1 }} variant="h6">
-                  Not available in the demo
-                </Typography>
-                <Typography color="text.secondary">
-                  To prevent unnecessary costs we disabled this feature in the demo.
-                </Typography>
-              </div>
+            {showPasswordReset && (
+              <form noValidate onSubmit={handlePasswordResetSubmit}>
+                <TextField
+                  fullWidth
+                  label="Email Address"
+                  name="resetEmail"
+                  value={resetEmail}
+                  onChange={(e) => setResetEmail(e.target.value)}
+                  type="email"
+                  sx={{ mt: 3 }}
+                />
+                {resetMessage && (
+                  <Typography color="text.secondary" sx={{ mt: 2 }}>
+                    {resetMessage}
+                  </Typography>
+                )}
+                <Button fullWidth size="large" sx={{ mt: 3 }} type="submit" variant="contained">
+                  Reset Password
+                </Button>
+              </form>
             )}
           </div>
         </Box>

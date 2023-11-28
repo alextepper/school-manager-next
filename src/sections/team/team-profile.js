@@ -137,11 +137,11 @@ export const TeamProfile = ({ team, loggedUserProfile }) => {
           </Stack>
         </Box>
       </CardContent>
-      <CardActions>
+      {/* <CardActions>
         <Button fullWidth variant="text">
           Call
         </Button>
-      </CardActions>
+      </CardActions> */}
     </Card>
   );
 };

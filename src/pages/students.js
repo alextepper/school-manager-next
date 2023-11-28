@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Head from "next/head";
-import { Box, Card, Container, Stack, SvgIcon, Typography } from "@mui/material";
+import { Box, Card, CardContent, Container, Stack, SvgIcon, Typography } from "@mui/material";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
 import { CustomersSearch } from "src/sections/customer/customers-search";
 import { StudentTable } from "src/sections/student/student-table";
@@ -41,9 +41,10 @@ const Page = () => {
                 <Typography variant="h4">Students</Typography>
               </Stack>
             </Stack>
-            <CustomersSearch />
             <Card>
-              <StudentTable items={data} />
+              <CardContent sx={{ p: 1 }}>
+                <StudentTable items={data} />
+              </CardContent>
             </Card>
           </Stack>
         </Container>
