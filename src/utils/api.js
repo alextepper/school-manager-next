@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:8000/", // Your Django REST server URL
+  baseURL: process.env.NEXT_PUBLIC_DOMAIN_URL, // Your Django REST server URL
 });
 
 const attachTokenToHeader = (config) => {
@@ -23,7 +23,7 @@ const refreshToken = async () => {
   }
 
   try {
-    const response = await axios.post("http://localhost:8000/token/refresh/", {
+    const response = await axios.post(process.env.NEXT_PUBLIC_DOMAIN_URL + "/token/refresh/", {
       refresh: user.tokens.refresh,
     });
 

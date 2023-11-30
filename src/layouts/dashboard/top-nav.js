@@ -8,6 +8,7 @@ import {
   Badge,
   Box,
   IconButton,
+  Link,
   Stack,
   SvgIcon,
   Tooltip,
@@ -24,7 +25,7 @@ const TOP_NAV_HEIGHT = 64;
 
 export const TopNav = (props) => {
   const [loggedUserProfile, setLoggedUserProfile] = useState(
-    JSON.parse(localStorage.getItem("user")).profile
+    JSON.parse(localStorage.getItem("user")).profile || {}
   );
   const { onNavOpen } = props;
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
@@ -66,16 +67,16 @@ export const TopNav = (props) => {
                 </SvgIcon>
               </IconButton>
             )}
-            <Tooltip title="Search">
+            {/* <Tooltip title="Search">
               <IconButton>
                 <SvgIcon fontSize="small">
                   <MagnifyingGlassIcon />
                 </SvgIcon>
               </IconButton>
-            </Tooltip>
+            </Tooltip> */}
           </Stack>
           <Stack alignItems="center" direction="row" spacing={2}>
-            <Tooltip title="Contacts">
+            {/* <Tooltip title="Contacts">
               <IconButton>
                 <SvgIcon fontSize="small">
                   <UsersIcon />
@@ -90,7 +91,7 @@ export const TopNav = (props) => {
                   </SvgIcon>
                 </Badge>
               </IconButton>
-            </Tooltip>
+            </Tooltip> */}
             <Avatar
               onClick={accountPopover.handleOpen}
               ref={accountPopover.anchorRef}
@@ -110,7 +111,17 @@ export const TopNav = (props) => {
         anchorEl={accountPopover.anchorRef.current}
         open={accountPopover.open}
         onClose={accountPopover.handleClose}
-        user={loggedUserProfile.first_name + " " + loggedUserProfile.last_name}
+        user={
+          <Link
+            href={
+              (loggedUserProfile.role == "student" ? "/profile/" : `/${loggedUserProfile.role}/`) +
+              loggedUserProfile.id
+            }
+            underline="none"
+          >
+            {loggedUserProfile.first_name} {loggedUserProfile.last_name}
+          </Link>
+        }
       />
     </>
   );

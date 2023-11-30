@@ -7,6 +7,7 @@ import * as Yup from "yup";
 import { Box, Button, Link, Stack, TextField, Typography } from "@mui/material";
 import { useAuth } from "src/hooks/use-auth";
 import { Layout as AuthLayout } from "src/layouts/auth/layout";
+import api from "src/utils/api";
 
 const Page = () => {
   const router = useRouter();
@@ -25,9 +26,9 @@ const Page = () => {
     }),
     onSubmit: async (values, helpers) => {
       try {
-        const endpoint = "http://localhost:8000/register/";
+        const endpoint = "/register/";
 
-        const response = await axios.post(endpoint, {
+        const response = await api.post(endpoint, {
           email: values.email,
           password: values.password,
           username: values.name,

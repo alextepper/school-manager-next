@@ -15,8 +15,8 @@ import {
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
 import { CompanyCard } from "src/sections/companies/company-card";
 import { CompaniesSearch } from "src/sections/companies/companies-search";
-import axios from "axios";
 import { useEffect, useState } from "react";
+import api from "src/utils/api";
 
 const companies = [
   {
@@ -79,7 +79,7 @@ const Page = () => {
   useEffect(() => {
     const fetchStudentList = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/student-profiles`);
+        const response = await api.get(`/student-profiles`);
         setData(response.data); // Set fetched data to state
       } catch (err) {
         console.error("Error fetching student profiles:", err);

@@ -118,9 +118,9 @@ export const AuthProvider = (props) => {
 
   const signIn = async (email, password) => {
     try {
-      const endpoint = "http://localhost:8000/login/";
+      const endpoint = "/login/";
 
-      const response = await axios.post(endpoint, {
+      const response = await api.post(endpoint, {
         email,
         password,
       });
@@ -146,9 +146,9 @@ export const AuthProvider = (props) => {
 
   const signUp = async (email, name, password) => {
     try {
-      const endpoint = "http://localhost:8000/register/";
+      const endpoint = "/register/";
 
-      const response = await axios.post(endpoint, {
+      const response = await api.post(endpoint, {
         email,
         password,
         username: name,
@@ -178,11 +178,11 @@ export const AuthProvider = (props) => {
         });
 
         // Clear tokens from storage and update state after successful logout
-        localStorage.removeItem("user");
 
         dispatch({
           type: HANDLERS.SIGN_OUT,
         });
+        localStorage.removeItem("user");
       } catch (err) {
         console.error("Error during logout:", err);
         // Optionally handle errors (e.g., show a message to the user)

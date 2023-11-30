@@ -8,17 +8,37 @@ import {
   FormControlLabel,
   Switch,
   CardHeader,
+  Divider,
+  CardActions,
+  Button,
+  Collapse,
+  IconButton,
 } from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { getInitials } from "src/utils/get-initials";
 import { useRouter } from "next/router";
 import { Stack } from "@mui/system";
 import { StyledBadge } from "src/utils/styledBadge";
 import api from "src/utils/api";
-import { cloudinaryUploadStaff } from "src/utils/cloudinary-upload";
+import { cloudinaryUpload } from "src/utils/cloudinary-upload";
+import styled from "@emotion/styled";
+import { StaffProfileDetails } from "./staff-profile-details";
+
+const ExpandMore = styled((props) => {
+  const { expand, ...other } = props;
+  return <IconButton {...other} />;
+})(({ theme, expand }) => ({
+  transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
+  marginLeft: "auto",
+  transition: theme.transitions.create("transform", {
+    duration: theme.transitions.duration.shortest,
+  }),
+}));
 
 export const StaffProfile = ({ user, loggedUserProfile }) => {
   const [profile, setProfile] = useState(user);
   const [avatar, setAvatar] = useState(profile.avatar);
+  const [expanded, setExpanded] = useState(false);
   const router = useRouter();
   const getThePage = (url) => {
     router.push(url);
@@ -45,7 +65,7 @@ export const StaffProfile = ({ user, loggedUserProfile }) => {
     fileInput.accept = "image/*";
     fileInput.onchange = async (e) => {
       const file = e.target.files[0];
-      const uploadedUrl = await cloudinaryUploadStaff(file, profile);
+      const uploadedUrl = await cloudinaryUpload(file, profile);
       setAvatar(uploadedUrl); // Update avatar URL
     };
     fileInput.click();
@@ -123,17 +143,46 @@ export const StaffProfile = ({ user, loggedUserProfile }) => {
                 >
                   <Avatar
                     onClick={() => getThePage("/team/" + team.id)}
-                    alt={team.name}
+                    alt={team.teamName}
                     src={team.avatar}
                     sx={{ width: 45, height: 45, cursor: "pointer" }}
                   />
-                  <p>{team.name}</p>
+                  <p>{team.teamName}</p>
                 </Stack>
               );
             })}
           </Stack>
         </Box>
       </CardContent>
+      <Divider />
+      <CardActions>
+        {loggedUserProfile.role == "staff" ? (
+          <>
+            <Button fullWidth variant="text">
+              Call
+            </Button>
+            <ExpandMore
+              expand={expanded}
+              onClick={() => setExpanded(!expanded)}
+              aria-expanded={expanded}
+              aria-label="show more"
+            >
+              <ExpandMoreIcon />
+            </ExpandMore>
+          </>
+        ) : (
+          ""
+        )}
+      </CardActions>
+      {loggedUserProfile.role == "staff" ? (
+        <Collapse in={expanded} timeout="auto" unmountOnExit>
+          <CardContent>
+            <StaffProfileDetails user={profile} loggedUserProfile={loggedUserProfile} />
+          </CardContent>
+        </Collapse>
+      ) : (
+        ""
+      )}
     </Card>
   );
 };

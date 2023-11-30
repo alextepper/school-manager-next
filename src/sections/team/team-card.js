@@ -56,13 +56,13 @@ export const TeamCard = (props) => {
           }}
         >
           <div onClick={() => getTheTeam(team.id)}>
-            <Avatar src={team.avatar} alt={team.name} sx={{ width: 80, height: 80 }}>
-              {team.name}
+            <Avatar src={team.avatar} alt={team.teamName} sx={{ width: 80, height: 80 }}>
+              {team.teamName}
             </Avatar>
           </div>
         </Box>
         <Typography align="center" gutterBottom variant="h5">
-          {team.name}
+          {team.teamName}
         </Typography>
         <Typography align="center">({team.attendance_counter})</Typography>
       </CardContent>

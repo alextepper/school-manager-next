@@ -127,7 +127,7 @@ export const StudentProfileDetails = ({ user, loggedUserProfile }) => {
                 {teams.map((team) => {
                   return (
                     <MenuItem value={team.id} key={team.id}>
-                      {team.name}
+                      {team.teamName}
                     </MenuItem>
                   );
                 })}
@@ -191,11 +191,11 @@ export const StudentProfileDetails = ({ user, loggedUserProfile }) => {
               readOnly: !isEditMode,
             }}
           >
-            <MenuItem value={building}>{building.name}</MenuItem>
+            <MenuItem value={building}>{building.buildingName}</MenuItem>
             {buildingList.map((building) => {
               return (
                 <MenuItem value={building} key={building.id}>
-                  {building.name}
+                  {building.buildingName}
                 </MenuItem>
               );
             })}

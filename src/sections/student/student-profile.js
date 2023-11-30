@@ -47,6 +47,7 @@ export const StudentProfile = ({ user, loggedUserProfile }) => {
   const [likes, setLikes] = useState(profile.likes.length);
   const [liked, setLiked] = useState(profile.likes.includes(loggedUserProfile.id));
   const [expanded, setExpanded] = useState(false);
+  const [expandedMovements, setExpandedMovements] = useState(false);
   const router = useRouter();
   const getThePage = (url) => {
     router.push(url);
@@ -159,7 +160,7 @@ export const StudentProfile = ({ user, loggedUserProfile }) => {
         }
         subheader={
           loggedUserProfile.role == "staff" && profile.room
-            ? `Building: ${profile.room.building.name}(${profile.room.number})`
+            ? `Building: ${profile.room.building.buildingName}(${profile.room.number})`
             : ""
         }
         action={
@@ -216,32 +217,28 @@ export const StudentProfile = ({ user, loggedUserProfile }) => {
           </Stack>
         </Box>
       </CardContent>
-      <Divider />
-      <CardActions>
-        {loggedUserProfile.role == "staff" ? (
-          <>
-            <Button fullWidth variant="text">
-              Call
-            </Button>
-            <ExpandMore
-              expand={expanded}
-              onClick={() => setExpanded(!expanded)}
-              aria-expanded={expanded}
-              aria-label="show more"
-            >
+      {loggedUserProfile.role == "staff" ? (
+        <>
+          <Divider />
+          <CardActions onClick={() => setExpanded(!expanded)} sx={{ px: 3 }}>
+            <Typography variant="h6">Info</Typography>
+            <ExpandMore expand={expanded} aria-expanded={expanded} aria-label="show more">
               <ExpandMoreIcon />
             </ExpandMore>
-          </>
-        ) : (
-          ""
-        )}
-      </CardActions>
-      {loggedUserProfile.role == "staff" ? (
-        <Collapse in={expanded} timeout="auto" unmountOnExit>
-          <CardContent>
-            <StudentProfileDetails user={profile} loggedUserProfile={loggedUserProfile} />
-          </CardContent>
-        </Collapse>
+          </CardActions>
+          <Collapse in={expanded} timeout="auto" unmountOnExit>
+            <CardContent>
+              <StudentProfileDetails user={profile} loggedUserProfile={loggedUserProfile} />
+            </CardContent>
+          </Collapse>
+          <Divider />
+          <CardActions onClick={() => setExpandedMovements(!expandedMovements)} sx={{ px: 3 }}>
+            <Typography variant="h6">Movements</Typography>
+            <ExpandMore expand={expandedMovements} aria-expanded={expanded} aria-label="show more">
+              <ExpandMoreIcon />
+            </ExpandMore>
+          </CardActions>
+        </>
       ) : (
         ""
       )}

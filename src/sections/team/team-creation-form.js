@@ -11,7 +11,7 @@ const TeamCreationForm = () => {
 
     try {
       const response = await api.post("/teams/create/", {
-        name: teamName,
+        teamName: teamName,
         grade: teamGrade,
       });
 

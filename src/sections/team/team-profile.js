@@ -16,7 +16,7 @@ import { getInitials } from "src/utils/get-initials";
 import { styled } from "@mui/material/styles";
 import { Stack } from "@mui/system";
 import { useRouter } from "next/router";
-import { cloudinaryUploadTeam } from "src/utils/cloudinary-upload";
+import { cloudinaryUpload } from "src/utils/cloudinary-upload";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -61,7 +61,7 @@ export const TeamProfile = ({ team, loggedUserProfile }) => {
     fileInput.accept = "image/*";
     fileInput.onchange = async (e) => {
       const file = e.target.files[0];
-      const uploadedUrl = await cloudinaryUploadTeam(file, profile);
+      const uploadedUrl = await cloudinaryUpload(file, profile);
       setAvatar(uploadedUrl); // Update avatar URL
     };
     fileInput.click();
@@ -84,15 +84,15 @@ export const TeamProfile = ({ team, loggedUserProfile }) => {
                 mb: 2,
                 width: 80,
               }}
-              alt={getInitials(team.name)}
+              alt={getInitials(team.teamName)}
             >
-              {getInitials(team.name)}
+              {getInitials(team.teamName)}
             </Avatar>
           </Badge>
         }
         title={
           <Typography gutterBottom variant="h6">
-            {team.name}
+            {team.teamName}
           </Typography>
         }
         subheader={team.grade}

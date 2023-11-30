@@ -66,13 +66,17 @@ export const ActivityCard = (props) => {
           }}
         >
           <div onClick={() => getTheTeam(activity.id)}>
-            <Avatar src={activity.avatar} alt={activity.name} sx={{ width: 80, height: 80 }}>
-              {activity.name}
+            <Avatar
+              src={activity.avatar}
+              alt={activity.activityName}
+              sx={{ width: 80, height: 80 }}
+            >
+              {activity.activityName}
             </Avatar>
           </div>
         </Box>
         <Typography align="center" gutterBottom variant="h5">
-          {activity.name}
+          {activity.activityName}
         </Typography>
         <Typography align="center">({activity.students.length})</Typography>
       </CardContent>

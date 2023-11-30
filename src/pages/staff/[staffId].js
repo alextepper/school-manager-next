@@ -59,11 +59,8 @@ const Page = () => {
               <Grid container spacing={3}>
                 {profile && (
                   <>
-                    <Grid item xs={12} md={6} lg={4}>
+                    <Grid item xs={12}>
                       <StaffProfile user={profile} loggedUserProfile={loggedUserProfile} />
-                    </Grid>
-                    <Grid item xs={12} md={6} lg={8}>
-                      <StaffProfileDetails user={profile} />
                     </Grid>
                   </>
                 )}

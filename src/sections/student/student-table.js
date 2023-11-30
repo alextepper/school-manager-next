@@ -61,14 +61,14 @@ export const StudentTable = (props) => {
       headerName: "Team",
       minWidth: 90,
       flex: 1,
-      valueGetter: (params) => `${params.row.team ? params.row.team.name : ""}`,
+      valueGetter: (params) => `${params.row.team ? params.row.team.teamName : ""}`,
     },
     {
       field: "building",
       headerName: "Building",
       minWidth: 60,
       flex: 1,
-      valueGetter: (params) => `${params.row.room ? params.row.room.building.name : ""}`,
+      valueGetter: (params) => `${params.row.room ? params.row.room.building.buildingName : ""}`,
     },
     { field: "grade", headerName: "Grade", flex: 1, minWidth: 60 },
   ];

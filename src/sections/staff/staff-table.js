@@ -51,7 +51,7 @@ export const StaffTable = (props) => {
       headerName: "Team",
       minWidth: 90,
       flex: 1,
-      valueGetter: (params) => params.row.team.map((team) => `${team ? team.name : ""}`),
+      valueGetter: (params) => params.row.team.map((team) => `${team ? team.teamName : ""}`),
     },
   ];
 
