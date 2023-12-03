@@ -97,9 +97,9 @@ export const StudentEventCreation = ({ user, loggedUserProfile }) => {
                   value={eventData.area}
                   onChange={handleChange}
                 >
-                  <MenuItem value="Discipline">Discipline</MenuItem>
-                  <MenuItem value="Social">Social</MenuItem>
-                  <MenuItem value="Study">Study</MenuItem>
+                  <MenuItem value="discipline">Discipline</MenuItem>
+                  <MenuItem value="social">Social</MenuItem>
+                  <MenuItem value="study">Study</MenuItem>
                   {/* Add more areas as needed */}
                 </Select>
               </FormControl>

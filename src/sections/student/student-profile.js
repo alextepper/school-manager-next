@@ -29,6 +29,7 @@ import { cloudinaryUpload } from "src/utils/cloudinary-upload";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import styled from "@emotion/styled";
 import { StudentProfileDetails } from "./student-profile-details";
+import { MovementList } from "../movement/movement-list";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -232,12 +233,17 @@ export const StudentProfile = ({ user, loggedUserProfile }) => {
             </CardContent>
           </Collapse>
           <Divider />
-          <CardActions onClick={() => setExpandedMovements(!expandedMovements)} sx={{ px: 3 }}>
+          {/* <CardActions onClick={() => setExpandedMovements(!expandedMovements)} sx={{ px: 3 }}>
             <Typography variant="h6">Movements</Typography>
             <ExpandMore expand={expandedMovements} aria-expanded={expanded} aria-label="show more">
               <ExpandMoreIcon />
             </ExpandMore>
           </CardActions>
+          <Collapse in={expandedMovements} timeout="auto" unmountOnExit>
+            <CardContent>
+              <MovementList user={profile} />
+            </CardContent>
+          </Collapse> */}
         </>
       ) : (
         ""
