@@ -92,7 +92,7 @@ const Page = () => {
             <Stack spacing={1} sx={{ mb: 3 }}>
               <Typography variant="h4">Login</Typography>
               <Typography color="text.secondary" variant="body2">
-                Don&apos;t have an account? Constact your Instructor.
+                Don&apos;t have an account? Contact your Instructor.
               </Typography>
             </Stack>
             <Tabs onChange={handleMethodChange} sx={{ mb: 3 }} value={showPasswordReset}>
