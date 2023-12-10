@@ -28,7 +28,7 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>{t("students")}</title>
+        <title>{t("Students")}</title>
       </Head>
       <Box
         component="main"

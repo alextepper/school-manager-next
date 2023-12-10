@@ -14,8 +14,6 @@ import api from "src/utils/api";
 import { StudentProfile } from "src/sections/student/student-profile";
 import { StudentEventCreation } from "src/sections/student/student-event-creation";
 import { EventList } from "src/sections/event/event-list";
-import { StudentProfileDetails } from "src/sections/student/student-profile-details";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 const Page = () => {
   const loggedUserProfile = JSON.parse(localStorage.getItem("user")).profile;
@@ -109,11 +107,3 @@ const Page = () => {
 Page.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default Page;
-
-export async function getStaticProps({ locale }) {
-  return {
-    props: {
-      ...(await serverSideTranslations(locale, ["common"])),
-    },
-  };
-}

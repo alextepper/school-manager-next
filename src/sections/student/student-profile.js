@@ -31,6 +31,7 @@ import styled from "@emotion/styled";
 import { StudentProfileDetails } from "./student-profile-details";
 import { MovementList } from "../movement/movement-list";
 import { useTranslation } from "react-i18next";
+import { PhoneEnabled } from "@mui/icons-material";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -153,18 +154,23 @@ export const StudentProfile = ({ user, loggedUserProfile }) => {
         }
         title={
           <>
-            <Typography gutterBottom variant="h6">
+            <Typography gutterBottom variant="h6" sx={{ mr: 2 }}>
               {profile.first_name} {profile.last_name}
-              <Button onClick={() => getThePage("/team/" + profile.team.id)} size="small">
-                {profile.team?.name}
-              </Button>
+              <IconButton href={`tel: ${profile ? profile.phone_number : ""}`}>
+                <PhoneEnabled color="success" />
+              </IconButton>
             </Typography>
           </>
         }
         subheader={
-          loggedUserProfile.role == "staff" && profile.room
-            ? `Building: ${profile.room.building.buildingName}(${profile.room.number})`
-            : ""
+          <>
+            <Button onClick={() => getThePage("/team/" + profile.team.id)} size="small">
+              {profile.team?.teamName}
+            </Button>
+            {loggedUserProfile.role == "staff" && profile.room
+              ? `Building: ${profile.room.building.buildingName}(${profile.room.number})`
+              : ""}
+          </>
         }
         action={
           loggedUserProfile.role == "staff" ? (

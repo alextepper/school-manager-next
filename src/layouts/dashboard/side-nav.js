@@ -7,8 +7,10 @@ import { Scrollbar } from "src/components/scrollbar";
 import { useSidebarItems } from "./config";
 import { SideNavItem } from "./side-nav-item";
 import { useTheme } from "@emotion/react";
+import { useTranslation } from "react-i18next";
 
 export const SideNav = (props) => {
+  const { t } = useTranslation("common");
   const theme = useTheme();
   const { open, onClose } = props;
   const pathname = usePathname();
@@ -163,7 +165,7 @@ SideNav.propTypes = {
 export async function getStaticProps({ locale }) {
   return {
     props: {
-      ...(await serverSideTranslations(locale, ["common"])),
+      ...(await serverSideTranslations(locale, ["common"])), // Make sure to use your appropriate namespace
     },
   };
 }

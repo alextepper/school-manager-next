@@ -69,7 +69,7 @@ const Page = () => {
                   variant="contained"
                   onClick={() => setOpenDialog(true)}
                 >
-                  Add
+                  {t("Add")}
                 </Button>
               </div>
               <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
