@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import Head from "next/head";
 import { Box, Card, Container, Stack, SvgIcon, Typography } from "@mui/material";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
-import { CustomersSearch } from "src/sections/customer/customers-search";
-import { StudentTable } from "src/sections/student/student-table";
 import api from "src/utils/api";
 import { StaffTable } from "src/sections/staff/staff-table";
+import { useTranslation } from "react-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 const Page = () => {
   const [data, setData] = useState([]); // State for storing fetched data
+  const { t } = useTranslation("common");
 
   useEffect(() => {
     const fetchStudentList = async () => {
@@ -27,7 +28,7 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>Students | Devias Kit</title>
+        <title>{t("Staff")}</title>
       </Head>
       <Box
         component="main"
@@ -39,7 +40,7 @@ const Page = () => {
           <Stack spacing={3}>
             <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">Staff</Typography>
+                <Typography variant="h4">{t("Staff")}</Typography>
               </Stack>
             </Stack>
             <Card>
@@ -55,3 +56,11 @@ const Page = () => {
 Page.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default Page;
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
+  };
+}

@@ -30,7 +30,7 @@ const Page = () => {
   const [method, setMethod] = useState("email");
   const formik = useFormik({
     initialValues: {
-      email: "mark@mark.com",
+      email: "marka@mark.com",
       password: "asdasdasd12",
       submit: null,
     },
@@ -55,6 +55,7 @@ const Page = () => {
     e.preventDefault();
     try {
       const response = await api.post("/api/password_reset/", { email: resetEmail });
+      console.log(resetEmail);
       setResetMessage("Check your email for the reset link.");
       // Optionally, hide the form after successful submission
     } catch (error) {

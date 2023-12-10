@@ -20,8 +20,11 @@ import { TeamCard } from "src/sections/team/team-card";
 import api from "src/utils/api";
 import TeamCreationForm from "src/sections/team/team-creation-form";
 import { Close } from "@mui/icons-material";
+import { useTranslation } from "react-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 const Page = () => {
+  const { t } = useTranslation();
   const [data, setData] = useState([]); // State for storing fetched data
   const [openDialog, setOpenDialog] = useState(false);
 
@@ -42,7 +45,7 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>Teams | Devias Kit</title>
+        <title>{t("Teams")} | Devias Kit</title>
       </Head>
       <Box
         component="main"
@@ -54,7 +57,7 @@ const Page = () => {
           <Stack spacing={3}>
             <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">Teams</Typography>
+                <Typography variant="h4">{t("Teams")}</Typography>
               </Stack>
               <div>
                 <Button
@@ -100,3 +103,11 @@ const Page = () => {
 Page.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default Page;
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
+  };
+}

@@ -4,12 +4,14 @@ import { DataGrid, GridToolbar, GridToolbarQuickFilter } from "@mui/x-data-grid"
 import { getInitials } from "src/utils/get-initials";
 import { deepOrange, deepPurple } from "@mui/material/colors";
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
 
 export const StudentTable = (props) => {
   const router = useRouter();
   const getTheProfile = (userId) => {
     router.push("/profile/" + userId);
   };
+  const { t } = useTranslation("common");
 
   const columns = [
     // {
@@ -51,26 +53,26 @@ export const StudentTable = (props) => {
 
     {
       field: "fullName",
-      headerName: "Full name",
+      headerName: t("Full Name"),
       minWidth: 160,
       flex: 1,
       valueGetter: (params) => `${params.row.first_name || ""} ${params.row.last_name || ""}`,
     },
     {
       field: "teams",
-      headerName: "Team",
+      headerName: t("Team"),
       minWidth: 90,
       flex: 1,
       valueGetter: (params) => `${params.row.team ? params.row.team.teamName : ""}`,
     },
     {
       field: "building",
-      headerName: "Building",
+      headerName: t("Building"),
       minWidth: 60,
       flex: 1,
       valueGetter: (params) => `${params.row.room ? params.row.room.building.buildingName : ""}`,
     },
-    { field: "grade", headerName: "Grade", flex: 1, minWidth: 60 },
+    { field: "grade", headerName: t("Grade"), flex: 1, minWidth: 60 },
   ];
 
   return (

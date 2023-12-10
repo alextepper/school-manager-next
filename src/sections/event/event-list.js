@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import api from "src/utils/api";
 import EventCard from "./event-card";
+import { CircularProgress } from "@mui/material";
 
 export const EventList = ({ user }) => {
   const [events, setEvents] = useState([]);
@@ -41,7 +42,7 @@ export const EventList = ({ user }) => {
       {events.map((event) => (
         <EventCard event={event} key={event.id} />
       ))}
-      {loading && <p>Loading...</p>}
+      {loading && <CircularProgress sx={{ m: "auto" }} />}
     </div>
   );
 };

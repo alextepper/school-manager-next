@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import { Box, Container, Stack, Typography, Unstable_Grid2 as Grid } from "@mui/material";
+import {
+  Box,
+  Container,
+  Stack,
+  Typography,
+  Unstable_Grid2 as Grid,
+  Backdrop,
+  CircularProgress,
+} from "@mui/material";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
 import { StaffProfile } from "src/sections/staff/staff-profile";
 import { StaffProfileDetails } from "src/sections/staff/staff-profile-details";
@@ -33,42 +41,43 @@ const Page = () => {
     }
   }, [staffId]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!profile) {
+  if (!profile && !loading) {
     return <div>No profile data found.</div>;
   }
   return (
     <>
       <Head>
         <title>
-          Student | {profile.first_name} {profile.last_name}
+          {profile ? profile.first_name : ""} {profile ? profile.last_name : ""} | Staff
         </title>
       </Head>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-        }}
-      >
-        <Container maxWidth="lg">
-          <Stack spacing={3}>
-            <div>
-              <Grid container spacing={3}>
-                {profile && (
-                  <>
-                    <Grid item xs={12}>
-                      <StaffProfile user={profile} loggedUserProfile={loggedUserProfile} />
-                    </Grid>
-                  </>
-                )}
-              </Grid>
-            </div>
-          </Stack>
-        </Container>
-      </Box>
+      <Backdrop sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
+      {!loading && (
+        <Box
+          component="main"
+          sx={{
+            flexGrow: 1,
+          }}
+        >
+          <Container maxWidth="lg">
+            <Stack spacing={3}>
+              <div>
+                <Grid container spacing={3}>
+                  {profile && (
+                    <>
+                      <Grid item xs={12}>
+                        <StaffProfile user={profile} loggedUserProfile={loggedUserProfile} />
+                      </Grid>
+                    </>
+                  )}
+                </Grid>
+              </div>
+            </Stack>
+          </Container>
+        </Box>
+      )}
     </>
   );
 };

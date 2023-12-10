@@ -14,8 +14,10 @@ import EditIcon from "@mui/icons-material/Edit";
 import api from "src/utils/api";
 import { DatePicker, DesktopDatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
+import { useTranslation } from "react-i18next";
 
 export const StudentProfileDetails = ({ user, loggedUserProfile }) => {
+  const { t } = useTranslation();
   const [profile, setProfile] = useState(user);
   const [profileUpdate, setProfileUpdate] = useState({ gender: profile.gender });
   const [isEditMode, setIsEditMode] = useState(false);
@@ -78,7 +80,7 @@ export const StudentProfileDetails = ({ user, loggedUserProfile }) => {
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
-                label="First Name"
+                label={t("First Name")}
                 name="first_name"
                 value={profile.first_name || ""}
                 onChange={handleProfileChange}
@@ -90,7 +92,7 @@ export const StudentProfileDetails = ({ user, loggedUserProfile }) => {
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
-                label="Last Name"
+                label={t("Last Name")}
                 name="last_name"
                 value={profile.last_name || ""}
                 onChange={handleProfileChange}
@@ -102,7 +104,7 @@ export const StudentProfileDetails = ({ user, loggedUserProfile }) => {
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
-                label="Phone Number"
+                label={t("Phone Number")}
                 name="phone_number"
                 value={profile.phone_number || ""}
                 onChange={handleProfileChange}
@@ -114,7 +116,7 @@ export const StudentProfileDetails = ({ user, loggedUserProfile }) => {
             <Grid item xs={12} md={6}>
               <Select
                 fullWidth
-                labelId="Team"
+                labelId={t("Team")}
                 id="team"
                 value={profile.team || ""}
                 label="Team"
@@ -136,7 +138,7 @@ export const StudentProfileDetails = ({ user, loggedUserProfile }) => {
             <Grid item xs={12} md={6}>
               <Select
                 fullWidth
-                labelId="Gender"
+                labelId={t("Gender")}
                 id="gender"
                 value={profile.gender || ""}
                 label="Gender"
@@ -158,7 +160,7 @@ export const StudentProfileDetails = ({ user, loggedUserProfile }) => {
         <Grid item xs={12} md={6}>
           <TextField
             fullWidth
-            label="Grade"
+            label={t("Grade")}
             name="grade"
             value={profile.grade || ""}
             inputProps={{
@@ -170,7 +172,7 @@ export const StudentProfileDetails = ({ user, loggedUserProfile }) => {
         <Grid item xs={12} md={6}>
           <DatePicker
             fullWidth
-            label="Birth Date" // Adjust format as needed
+            label={t("Birth Date")} // Adjust format as needed
             name="birthday"
             value={validBirthday}
             onChange={handleDateChange}
@@ -181,7 +183,7 @@ export const StudentProfileDetails = ({ user, loggedUserProfile }) => {
         <Grid item xs={12} md={6}>
           <Select
             fullWidth
-            labelId="Building"
+            labelId={t("Building")}
             id="building"
             value={building ? building : ""}
             label="Building"
@@ -204,7 +206,7 @@ export const StudentProfileDetails = ({ user, loggedUserProfile }) => {
         <Grid item xs={12} md={6}>
           <Select
             fullWidth
-            labelId="Room"
+            labelId={t("Room")}
             id="room"
             value={profile.room || ""}
             name="room"
@@ -238,7 +240,7 @@ export const StudentProfileDetails = ({ user, loggedUserProfile }) => {
         </Button>
         {isEditMode ? (
           <Button variant="contained" onClick={saveProfile}>
-            Save details
+            {t("Save")}
           </Button>
         ) : (
           ""
@@ -247,3 +249,11 @@ export const StudentProfileDetails = ({ user, loggedUserProfile }) => {
     </Box>
   );
 };
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
+  };
+}

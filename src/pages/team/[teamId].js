@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import { Box, Container, Stack, Typography, Unstable_Grid2 as Grid } from "@mui/material";
+import {
+  Box,
+  Container,
+  Stack,
+  Typography,
+  Unstable_Grid2 as Grid,
+  Backdrop,
+  CircularProgress,
+} from "@mui/material";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
 import { TeamProfile } from "src/sections/team/team-profile";
 import { TeamProfileDetails } from "src/sections/team/team-profile-details";
@@ -33,44 +41,45 @@ const Page = () => {
     }
   }, [teamId]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!profile) {
+  if (!profile && !loading) {
     return <div>No profile data found.</div>;
   }
 
   return (
     <>
       <Head>
-        <title>Account | Devias Kit</title>
+        <title>{profile ? profile.teamName : ""} | Team</title>
       </Head>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-        }}
-      >
-        <Container maxWidth="lg">
-          <Stack spacing={3}>
-            <div>
-              <Grid container spacing={3}>
-                {profile && (
-                  <>
-                    <Grid item xs={12} md={6} lg={4}>
-                      <TeamProfile team={profile} loggedUserProfile={loggedUserProfile} />
-                    </Grid>
-                    <Grid item xs={12} md={6} lg={8}>
-                      <TeamProfileDetails team={profile} />
-                    </Grid>
-                  </>
-                )}
-              </Grid>
-            </div>
-          </Stack>
-        </Container>
-      </Box>
+      <Backdrop sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
+      {!loading && (
+        <Box
+          component="main"
+          sx={{
+            flexGrow: 1,
+          }}
+        >
+          <Container maxWidth="lg">
+            <Stack spacing={3}>
+              <div>
+                <Grid container spacing={3}>
+                  {profile && (
+                    <>
+                      <Grid item xs={12} md={6} lg={4}>
+                        <TeamProfile team={profile} loggedUserProfile={loggedUserProfile} />
+                      </Grid>
+                      <Grid item xs={12} md={6} lg={8}>
+                        <TeamProfileDetails team={profile} />
+                      </Grid>
+                    </>
+                  )}
+                </Grid>
+              </div>
+            </Stack>
+          </Container>
+        </Box>
+      )}
     </>
   );
 };

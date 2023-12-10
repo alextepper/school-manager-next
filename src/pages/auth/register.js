@@ -21,7 +21,7 @@ const Page = () => {
     },
     validationSchema: Yup.object({
       email: Yup.string().email("Must be a valid email").max(255).required("Email is required"),
-      name: Yup.string().max(255).required("Name is required"),
+      // name: Yup.string().max(255).required("Name is required"),
       password: Yup.string().max(255).required("Password is required"),
     }),
     onSubmit: async (values, helpers) => {
@@ -84,7 +84,7 @@ const Page = () => {
             </Stack>
             <form noValidate onSubmit={formik.handleSubmit}>
               <Stack spacing={3}>
-                <TextField
+                {/* <TextField
                   error={!!(formik.touched.name && formik.errors.name)}
                   fullWidth
                   helperText={formik.touched.name && formik.errors.name}
@@ -93,7 +93,7 @@ const Page = () => {
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
                   value={formik.values.name}
-                />
+                /> */}
                 <TextField
                   error={!!(formik.touched.email && formik.errors.email)}
                   fullWidth

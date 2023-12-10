@@ -13,6 +13,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import api from "src/utils/api";
+import { useTranslation } from "react-i18next";
 
 const initialEventData = {
   giver: "",
@@ -23,6 +24,7 @@ const initialEventData = {
 };
 
 export const StudentEventCreation = ({ user, loggedUserProfile }) => {
+  const { t } = useTranslation();
   const [error, setError] = useState("");
   const [eventData, setEventData] = useState({
     ...initialEventData,
@@ -70,11 +72,11 @@ export const StudentEventCreation = ({ user, loggedUserProfile }) => {
       <Card>
         <CardHeader
           sx={{ pt: 3, pb: 1 }}
-          title="New Event"
+          title={t("New Event")}
           action={
             <>
               <FormControl size="small" sx={{ m: 1, minWidth: 80 }}>
-                <InputLabel id="score-label">Score</InputLabel>
+                <InputLabel id="score-label">{t("Score")}</InputLabel>
                 <Select
                   labelId="score-label"
                   label="Score"
@@ -89,7 +91,7 @@ export const StudentEventCreation = ({ user, loggedUserProfile }) => {
                 </Select>
               </FormControl>
               <FormControl size="small" sx={{ m: 1, minWidth: 80 }}>
-                <InputLabel id="area-label">Area</InputLabel>
+                <InputLabel id="area-label">{t("Area")}</InputLabel>
                 <Select
                   labelId="area-label"
                   label="Area"
@@ -112,7 +114,7 @@ export const StudentEventCreation = ({ user, loggedUserProfile }) => {
               <Grid item xs={12} md={10}>
                 <TextField
                   fullWidth
-                  label="Description"
+                  label={t("Description")}
                   name="description"
                   variant="outlined"
                   multiline
@@ -123,7 +125,7 @@ export const StudentEventCreation = ({ user, loggedUserProfile }) => {
               </Grid>
               <Grid item xs={12} md={2} sx={{ pt: 1.5, pb: 0, alignContent: "bottom" }}>
                 <Button type="submit" variant="contained" color="primary" fullWidth>
-                  Submit
+                  {t("Save")}
                 </Button>
               </Grid>
             </Grid>
@@ -133,3 +135,11 @@ export const StudentEventCreation = ({ user, loggedUserProfile }) => {
     </form>
   );
 };
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
+  };
+}

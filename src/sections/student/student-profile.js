@@ -30,6 +30,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import styled from "@emotion/styled";
 import { StudentProfileDetails } from "./student-profile-details";
 import { MovementList } from "../movement/movement-list";
+import { useTranslation } from "react-i18next";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -43,6 +44,7 @@ const ExpandMore = styled((props) => {
 }));
 
 export const StudentProfile = ({ user, loggedUserProfile }) => {
+  const { t } = useTranslation();
   const [profile, setProfile] = useState(user);
   const [avatar, setAvatar] = useState(profile.avatar);
   const [likes, setLikes] = useState(profile.likes.length);
@@ -222,7 +224,7 @@ export const StudentProfile = ({ user, loggedUserProfile }) => {
         <>
           <Divider />
           <CardActions onClick={() => setExpanded(!expanded)} sx={{ px: 3 }}>
-            <Typography variant="h6">Info</Typography>
+            <Typography variant="h6">{t("Info")}</Typography>
             <ExpandMore expand={expanded} aria-expanded={expanded} aria-label="show more">
               <ExpandMoreIcon />
             </ExpandMore>
@@ -251,3 +253,11 @@ export const StudentProfile = ({ user, loggedUserProfile }) => {
     </Card>
   );
 };
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
+  };
+}

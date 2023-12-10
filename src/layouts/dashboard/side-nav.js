@@ -1,27 +1,19 @@
 import NextLink from "next/link";
 import { usePathname } from "next/navigation";
 import PropTypes from "prop-types";
-import ArrowTopRightOnSquareIcon from "@heroicons/react/24/solid/ArrowTopRightOnSquareIcon";
-import ChevronUpDownIcon from "@heroicons/react/24/solid/ChevronUpDownIcon";
-import {
-  Box,
-  Button,
-  Divider,
-  Drawer,
-  Stack,
-  SvgIcon,
-  Typography,
-  useMediaQuery,
-} from "@mui/material";
+import { Box, Divider, Drawer, Stack, useMediaQuery } from "@mui/material";
 import { Logo } from "src/components/logo";
 import { Scrollbar } from "src/components/scrollbar";
-import { items } from "./config";
+import { useSidebarItems } from "./config";
 import { SideNavItem } from "./side-nav-item";
+import { useTheme } from "@emotion/react";
 
 export const SideNav = (props) => {
+  const theme = useTheme();
   const { open, onClose } = props;
   const pathname = usePathname();
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
+  const items = useSidebarItems();
 
   const content = (
     <Scrollbar
@@ -168,3 +160,10 @@ SideNav.propTypes = {
   onClose: PropTypes.func,
   open: PropTypes.bool,
 };
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
+  };
+}
