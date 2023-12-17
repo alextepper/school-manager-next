@@ -14,6 +14,7 @@ import api from "src/utils/api";
 import { StudentProfile } from "src/sections/student/student-profile";
 import { StudentEventCreation } from "src/sections/student/student-event-creation";
 import { EventList } from "src/sections/event/event-list";
+import axios from "axios";
 
 const Page = () => {
   const loggedUserProfile = JSON.parse(localStorage.getItem("user")).profile;
@@ -103,6 +104,39 @@ const Page = () => {
     </>
   );
 };
+
+// export async function getStaticPaths() {
+//   // Fetch or compute the list of profile IDs
+//   const response = await axios.get("http://localhost:8000/student-profiles"); // Replace with actual API call
+//   const profiles = response.data;
+
+//   const paths = profiles.map((profile) => ({
+//     params: { profileId: profile.id.toString() },
+//   }));
+
+//   return { paths, fallback: "blocking" };
+// }
+
+// export async function getStaticProps({ params, locale }) {
+//   try {
+//     const response = await axios.get(`http://localhost:8000/student-profile/${params.profileId}`); // Fetch individual profile data
+//     const profile = response.data;
+
+//     return {
+//       props: {
+//         profile,
+//         ...(await serverSideTranslations(locale, ["common"])),
+//       },
+//       revalidate: 10, // Optionally, specify how often to revalidate the data (in seconds)
+//     };
+//   } catch (error) {
+//     // Handle errors or return notFound: true if the profile doesn't exist
+//     console.error(error);
+//     return {
+//       notFound: true,
+//     };
+//   }
+// }
 
 Page.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 

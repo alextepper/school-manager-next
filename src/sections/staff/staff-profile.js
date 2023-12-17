@@ -23,6 +23,7 @@ import api from "src/utils/api";
 import { cloudinaryUpload } from "src/utils/cloudinary-upload";
 import styled from "@emotion/styled";
 import { StaffProfileDetails } from "./staff-profile-details";
+import { PhoneEnabled } from "@mui/icons-material";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -100,9 +101,19 @@ export const StaffProfile = ({ user, loggedUserProfile }) => {
           </StyledBadge>
         }
         title={
-          <Typography gutterBottom variant="h6">
-            {profile.first_name} {profile.last_name}
-          </Typography>
+          <>
+            <Typography gutterBottom variant="h6" sx={{ mr: 2 }}>
+              {profile.first_name} {profile.last_name}
+              <IconButton
+                disabled={
+                  loggedUserProfile.role == "staff" || profile.phone_number == "" || disabled
+                }
+                href={`tel: ${profile ? profile.phone_number : ""}`}
+              >
+                <PhoneEnabled color="success" />
+              </IconButton>
+            </Typography>
+          </>
         }
         action={
           loggedUserProfile.id == profile.id ? (
@@ -158,9 +169,6 @@ export const StaffProfile = ({ user, loggedUserProfile }) => {
       <CardActions>
         {loggedUserProfile.role == "staff" ? (
           <>
-            <Button fullWidth variant="text">
-              Call
-            </Button>
             <ExpandMore
               expand={expanded}
               onClick={() => setExpanded(!expanded)}

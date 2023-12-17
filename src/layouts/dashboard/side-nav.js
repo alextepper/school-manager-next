@@ -1,7 +1,7 @@
 import NextLink from "next/link";
 import { usePathname } from "next/navigation";
 import PropTypes from "prop-types";
-import { Box, Divider, Drawer, Stack, useMediaQuery } from "@mui/material";
+import { Box, Divider, Drawer, Stack, Typography, useMediaQuery } from "@mui/material";
 import { Logo } from "src/components/logo";
 import { Scrollbar } from "src/components/scrollbar";
 import { useSidebarItems } from "./config";
@@ -44,9 +44,12 @@ export const SideNav = (props) => {
               display: "inline-flex",
               height: 32,
               width: 32,
+              textDecoration: "none",
+              color: "white", // Add this line
             }}
           >
-            <Logo />
+            <Typography variant="h4">RKZ</Typography>
+            {/* <Logo /> */}
           </Box>
           {/* <Box
             sx={{
@@ -122,7 +125,7 @@ export const SideNav = (props) => {
   if (lgUp) {
     return (
       <Drawer
-        anchor="left"
+        anchor="right"
         open
         PaperProps={{
           sx: {
@@ -140,7 +143,7 @@ export const SideNav = (props) => {
 
   return (
     <Drawer
-      anchor="left"
+      anchor="right"
       onClose={onClose}
       open={open}
       PaperProps={{

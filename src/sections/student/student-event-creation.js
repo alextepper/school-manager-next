@@ -72,39 +72,37 @@ export const StudentEventCreation = ({ user, loggedUserProfile }) => {
       <Card>
         <CardHeader
           sx={{ pt: 3, pb: 1 }}
-          title={t("New Event")}
+          title="אירוע חדש" //{t("New Event")}
           action={
             <>
-              <FormControl size="small" sx={{ m: 1, minWidth: 80 }}>
-                <InputLabel id="score-label">{t("Score")}</InputLabel>
-                <Select
-                  labelId="score-label"
-                  label="Score"
-                  name="score"
-                  value={eventData.score}
-                  onChange={handleChange}
-                >
-                  <MenuItem value={1}>1</MenuItem>
-                  <MenuItem value={3}>3</MenuItem>
-                  <MenuItem value={5}>5</MenuItem>
-                  {/* Add more areas as needed */}
-                </Select>
-              </FormControl>
-              <FormControl size="small" sx={{ m: 1, minWidth: 80 }}>
-                <InputLabel id="area-label">{t("Area")}</InputLabel>
-                <Select
-                  labelId="area-label"
-                  label="Area"
-                  name="area"
-                  value={eventData.area}
-                  onChange={handleChange}
-                >
-                  <MenuItem value="discipline">Discipline</MenuItem>
-                  <MenuItem value="social">Social</MenuItem>
-                  <MenuItem value="study">Study</MenuItem>
-                  {/* Add more areas as needed */}
-                </Select>
-              </FormControl>
+              <TextField
+                select
+                size="small"
+                sx={{ m: 1, minWidth: 80 }}
+                label="ניקוד" //{t("Score")}
+                name="score"
+                value={eventData.score}
+                onChange={handleChange}
+              >
+                <MenuItem value={1}>1</MenuItem>
+                <MenuItem value={3}>3</MenuItem>
+                <MenuItem value={5}>5</MenuItem>
+                {/* Add more scores as needed */}
+              </TextField>
+              <TextField
+                select
+                size="small"
+                sx={{ m: 1, minWidth: 80 }}
+                label="תחום" //{t("Area")}
+                name="area"
+                value={eventData.area}
+                onChange={handleChange}
+              >
+                <MenuItem value="discipline">משמעת</MenuItem>
+                <MenuItem value="social">חברתי</MenuItem>
+                <MenuItem value="study">לימודים</MenuItem>
+                {/* Add more areas as needed */}
+              </TextField>
             </>
           }
         />
@@ -114,7 +112,7 @@ export const StudentEventCreation = ({ user, loggedUserProfile }) => {
               <Grid item xs={12} md={10}>
                 <TextField
                   fullWidth
-                  label={t("Description")}
+                  label="הערות" //{t("Description")}
                   name="description"
                   variant="outlined"
                   multiline
@@ -125,7 +123,7 @@ export const StudentEventCreation = ({ user, loggedUserProfile }) => {
               </Grid>
               <Grid item xs={12} md={2} sx={{ pt: 1.5, pb: 0, alignContent: "bottom" }}>
                 <Button type="submit" variant="contained" color="primary" fullWidth>
-                  {t("Save")}
+                  שמור{/* {t("Save")} */}
                 </Button>
               </Grid>
             </Grid>

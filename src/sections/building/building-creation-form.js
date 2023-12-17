@@ -2,7 +2,7 @@ import { useState } from "react";
 import { TextField, Button, Box, Typography, Select, MenuItem } from "@mui/material";
 import api from "src/utils/api";
 
-const TeamCreationForm = ({ setOpenDialog }) => {
+const BuildingCreationForm = ({ setOpenDialog }) => {
   const [teamName, setTeamName] = useState("");
   const [teamGrade, setTeamGrade] = useState("");
 
@@ -64,4 +64,4 @@ const TeamCreationForm = ({ setOpenDialog }) => {
   );
 };
 
-export default TeamCreationForm;
+export default BuildingCreationForm;

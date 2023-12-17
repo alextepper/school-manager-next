@@ -22,6 +22,7 @@ import TeamCreationForm from "src/sections/team/team-creation-form";
 import { Close } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { BuildingCard } from "src/sections/building/building-card";
 
 const Page = () => {
   const { t } = useTranslation();
@@ -30,7 +31,7 @@ const Page = () => {
 
   const fetchStudentList = async () => {
     try {
-      const response = await api.get(`/teams/`);
+      const response = await api.get(`/buildings/`);
       setData(response.data.results);
     } catch (err) {
       console.error("Error fetching student profiles:", err);
@@ -48,7 +49,7 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>{t("Teams")} | Devias Kit</title>
+        <title>{t("Buildings")} | Devias Kit</title>
       </Head>
       <Box
         component="main"
@@ -60,9 +61,9 @@ const Page = () => {
           <Stack spacing={3}>
             <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">{t("Teams")}</Typography>
+                <Typography variant="h4">{t("Buildings")}</Typography>
               </Stack>
-              <div>
+              {/* <div>
                 <Button
                   startIcon={
                     <SvgIcon fontSize="small">
@@ -79,12 +80,12 @@ const Page = () => {
                 <DialogContent>
                   <TeamCreationForm setOpenDialog={setOpenDialog} />
                 </DialogContent>
-              </Dialog>
+              </Dialog> */}
             </Stack>
             <Grid container spacing={3}>
-              {data.map((team) => (
-                <Grid xs={12} sm={4} md={3} key={team.id}>
-                  <TeamCard team={team} />
+              {data.map((building) => (
+                <Grid xs={12} sm={4} md={3} key={building.id}>
+                  <BuildingCard building={building} />
                 </Grid>
               ))}
             </Grid>

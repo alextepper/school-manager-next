@@ -1,7 +1,7 @@
 import ChartBarIcon from "@heroicons/react/24/solid/ChartBarIcon";
 import CogIcon from "@heroicons/react/24/solid/CogIcon";
-import LockClosedIcon from "@heroicons/react/24/solid/LockClosedIcon";
-import ShoppingBagIcon from "@heroicons/react/24/solid/ShoppingBagIcon";
+import HomeIcon from "@mui/icons-material/Home";
+import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import UserPlusIcon from "@heroicons/react/24/solid/UserPlusIcon";
 import UsersIcon from "@heroicons/react/24/solid/UsersIcon";
 import XCircleIcon from "@heroicons/react/24/solid/XCircleIcon";
@@ -34,7 +34,8 @@ export const useSidebarItems = () => {
     //   ),
     // },
     {
-      title: t("Students"),
+      // title: t("Students"),
+      title: "חניכים",
       path: "/students",
       icon: (
         <SvgIcon fontSize="small">
@@ -43,7 +44,8 @@ export const useSidebarItems = () => {
       ),
     },
     {
-      title: t("Attending"),
+      // title: t("Attending"),
+      title: "נמצאים בכפר",
       path: "/attending",
       icon: (
         <SvgIcon fontSize="small">
@@ -52,7 +54,18 @@ export const useSidebarItems = () => {
       ),
     },
     {
-      title: t("Teams"),
+      // title: t("Attending"),
+      title: "חסרים",
+      path: "/absent",
+      icon: (
+        <SvgIcon fontSize="small">
+          <PersonRemoveIcon />
+        </SvgIcon>
+      ),
+    },
+    {
+      // title: t("Teams"),
+      title: "קבוצות",
       path: "/teams",
       icon: (
         <SvgIcon fontSize="small">
@@ -60,9 +73,19 @@ export const useSidebarItems = () => {
         </SvgIcon>
       ),
     },
-
     {
-      title: t("Staff"),
+      // title: t("Teams"),
+      title: "מבנים",
+      path: "/buildings",
+      icon: (
+        <SvgIcon fontSize="small">
+          <HomeIcon />
+        </SvgIcon>
+      ),
+    },
+    {
+      // title: t("Staff"),
+      title: "צוות",
       path: "/staff",
       icon: (
         <SvgIcon fontSize="small">
@@ -81,7 +104,8 @@ export const useSidebarItems = () => {
     // },
 
     {
-      title: t("Settings"),
+      // title: t("Settings"),
+      title: "הגדרות",
       path: "/settings",
       icon: (
         <SvgIcon fontSize="small">
@@ -89,15 +113,15 @@ export const useSidebarItems = () => {
         </SvgIcon>
       ),
     },
-    {
-      title: t("Error"),
-      path: "/404",
-      icon: (
-        <SvgIcon fontSize="small">
-          <XCircleIcon />
-        </SvgIcon>
-      ),
-    },
+    // {
+    //   title: t("Error"),
+    //   path: "/404",
+    //   icon: (
+    //     <SvgIcon fontSize="small">
+    //       <XCircleIcon />
+    //     </SvgIcon>
+    //   ),
+    // },
   ];
   return items;
 };

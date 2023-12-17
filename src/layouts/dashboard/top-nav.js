@@ -40,7 +40,7 @@ export const TopNav = (props) => {
           backdropFilter: "blur(6px)",
           backgroundColor: (theme) => alpha(theme.palette.background.default, 0.8),
           position: "sticky",
-          left: {
+          right: {
             lg: `${SIDE_NAV_WIDTH}px`,
           },
           top: 0,
@@ -70,12 +70,12 @@ export const TopNav = (props) => {
             )}
           </Stack>
           <Stack alignItems="center" direction="row" spacing={2}>
-            <IconButton onClick={() => handleLanguageChange("en")} aria-label="Switch to English">
+            {/* <IconButton onClick={() => handleLanguageChange("en")} aria-label="Switch to English">
               EN
             </IconButton>
             <IconButton onClick={() => handleLanguageChange("he")} aria-label="Switch to Hebrew">
               HE
-            </IconButton>
+            </IconButton> */}
 
             <Avatar
               onClick={accountPopover.handleOpen}

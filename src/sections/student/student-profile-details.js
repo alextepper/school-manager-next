@@ -15,6 +15,7 @@ import api from "src/utils/api";
 import { DatePicker, DesktopDatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
+import { Label } from "@mui/icons-material";
 
 export const StudentProfileDetails = ({ user, loggedUserProfile }) => {
   const { t } = useTranslation();
@@ -80,7 +81,7 @@ export const StudentProfileDetails = ({ user, loggedUserProfile }) => {
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
-                label={t("First Name")}
+                label="שם פרטי" //{t("First Name")}
                 name="first_name"
                 value={profile.first_name || ""}
                 onChange={handleProfileChange}
@@ -92,7 +93,7 @@ export const StudentProfileDetails = ({ user, loggedUserProfile }) => {
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
-                label={t("Last Name")}
+                label="שם משפחה" //{t("Last Name")}
                 name="last_name"
                 value={profile.last_name || ""}
                 onChange={handleProfileChange}
@@ -104,7 +105,7 @@ export const StudentProfileDetails = ({ user, loggedUserProfile }) => {
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
-                label={t("Phone Number")}
+                label="מספר טלפון" //{t("Phone Number")}
                 name="phone_number"
                 value={profile.phone_number || ""}
                 onChange={handleProfileChange}
@@ -114,44 +115,42 @@ export const StudentProfileDetails = ({ user, loggedUserProfile }) => {
               />
             </Grid>
             <Grid item xs={12} md={6}>
-              <Select
+              <TextField
+                select
                 fullWidth
-                labelId={t("Team")}
+                label="קבוצה"
                 id="team"
                 value={profile.team || ""}
-                label="Team"
                 name="team"
                 onChange={handleProfileChange}
-                inputProps={{
+                InputProps={{
                   readOnly: !isEditMode,
                 }}
               >
-                {teams.map((team) => {
-                  return (
-                    <MenuItem value={team.id} key={team.id}>
-                      {team.teamName}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
+                {teams.map((team) => (
+                  <MenuItem value={team.id} key={team.id}>
+                    {team.teamName}
+                  </MenuItem>
+                ))}
+              </TextField>
             </Grid>
             <Grid item xs={12} md={6}>
-              <Select
+              <TextField
+                select
                 fullWidth
-                labelId={t("Gender")}
+                label="מין" //{t("Gender")}
                 id="gender"
                 value={profile.gender || ""}
-                label="Gender"
                 name="gender"
                 onChange={handleProfileChange}
-                inputProps={{
+                InputProps={{
                   readOnly: !isEditMode,
                 }}
               >
-                <MenuItem value={"male"}>Male</MenuItem>
-                <MenuItem value={"female"}>Female</MenuItem>
-                <MenuItem value={"other"}>Other</MenuItem>
-              </Select>
+                <MenuItem value={"male"}>בן</MenuItem>
+                <MenuItem value={"female"}>בת</MenuItem>
+                {/* <MenuItem value={"other"}>אחר</MenuItem> */}
+              </TextField>
             </Grid>
           </>
         ) : (
@@ -160,7 +159,7 @@ export const StudentProfileDetails = ({ user, loggedUserProfile }) => {
         <Grid item xs={12} md={6}>
           <TextField
             fullWidth
-            label={t("Grade")}
+            label="שכבה" //{t("Grade")}
             name="grade"
             value={profile.grade || ""}
             inputProps={{
@@ -172,7 +171,7 @@ export const StudentProfileDetails = ({ user, loggedUserProfile }) => {
         <Grid item xs={12} md={6}>
           <DatePicker
             fullWidth
-            label={t("Birth Date")} // Adjust format as needed
+            label="תאריך לידה" // {t("Birth Date")} // Adjust format as needed
             name="birthday"
             value={validBirthday}
             onChange={handleDateChange}
@@ -181,32 +180,30 @@ export const StudentProfileDetails = ({ user, loggedUserProfile }) => {
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <Select
+          <TextField
+            select
             fullWidth
-            labelId={t("Building")}
+            label="מבנה" //{t("Building")}
             id="building"
             value={building ? building : ""}
-            label="Building"
             name="building"
             onChange={handleBuildingChange}
-            inputProps={{
+            InputProps={{
               readOnly: !isEditMode,
             }}
           >
             <MenuItem value={building}>{building.buildingName}</MenuItem>
-            {buildingList.map((building) => {
-              return (
-                <MenuItem value={building} key={building.id}>
-                  {building.buildingName}
-                </MenuItem>
-              );
-            })}
-          </Select>
+            {buildingList.map((building) => (
+              <MenuItem value={building} key={building.id}>
+                {building.buildingName}
+              </MenuItem>
+            ))}
+          </TextField>
         </Grid>
         <Grid item xs={12} md={6}>
           <Select
             fullWidth
-            labelId={t("Room")}
+            labelId="חדר" //{t("Room")}
             id="room"
             value={profile.room || ""}
             name="room"
@@ -240,7 +237,7 @@ export const StudentProfileDetails = ({ user, loggedUserProfile }) => {
         </Button>
         {isEditMode ? (
           <Button variant="contained" onClick={saveProfile}>
-            {t("Save")}
+            שמור{/* {t("Save")} */}
           </Button>
         ) : (
           ""

@@ -90,7 +90,7 @@ export const StudentTable = (props) => {
             sortModel: [{ field: "events", sort: "desc" }],
           },
         }}
-        pageSizeOptions={[5, 10, 15]}
+        pageSizeOptions={[15, 30]}
         checkboxSelection
         slots={{ toolbar: GridToolbarQuickFilter }}
       />

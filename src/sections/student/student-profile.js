@@ -156,7 +156,12 @@ export const StudentProfile = ({ user, loggedUserProfile }) => {
           <>
             <Typography gutterBottom variant="h6" sx={{ mr: 2 }}>
               {profile.first_name} {profile.last_name}
-              <IconButton href={`tel: ${profile ? profile.phone_number : ""}`}>
+              <IconButton
+                disabled={
+                  loggedUserProfile.role == "staff" || profile.phone_number == "" || disabled
+                }
+                href={`tel: ${profile ? profile.phone_number : ""}`}
+              >
                 <PhoneEnabled color="success" />
               </IconButton>
             </Typography>
@@ -230,7 +235,10 @@ export const StudentProfile = ({ user, loggedUserProfile }) => {
         <>
           <Divider />
           <CardActions onClick={() => setExpanded(!expanded)} sx={{ px: 3 }}>
-            <Typography variant="h6">{t("Info")}</Typography>
+            <Typography variant="h6">
+              {/* {t("Info")} */}
+              מידע
+            </Typography>
             <ExpandMore expand={expanded} aria-expanded={expanded} aria-label="show more">
               <ExpandMoreIcon />
             </ExpandMore>

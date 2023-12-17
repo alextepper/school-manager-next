@@ -11,7 +11,7 @@
   "Full Name": "שם מלא",
   "Team": "קבוצה",
   "Phone Number": "מספר טלפון",
-  "Grade": "כיתה",
+  "Grade": "שכבה",
   "Birth Date": "תאריך לידה",
   "Building": "בניין",
   "Room": "חדר",
@@ -23,5 +23,6 @@
   "Descroption": "תיאור",
   "Save": "שמור",
   "Add": "הוסף",
-  "Search": "חפש"
+  "Search": "חפש",
+  "Buildings": "מבנים"
 }

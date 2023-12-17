@@ -23,6 +23,8 @@ const Page = () => {
 
     if (!user) {
       router.push("/auth/login"); // Redirect to login page
+    } else {
+      router.push("/students");
     }
   }, [router]);
 
