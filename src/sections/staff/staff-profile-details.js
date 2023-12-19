@@ -88,69 +88,69 @@ export const StaffProfileDetails = ({ user, loggedUserProfile }) => {
   return (
     <Box>
       <Grid container spacing={3}>
-        {isEditMode ? (
-          <>
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                label="First Name"
-                name="first_name"
-                value={profile.first_name || ""}
-                onChange={handleProfileChange}
-                inputProps={{
-                  readOnly: !isEditMode,
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                label="Last Name"
-                name="last_name"
-                value={profile.last_name || ""}
-                onChange={handleProfileChange}
-                inputProps={{
-                  readOnly: !isEditMode,
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                label="Phone Number"
-                name="phone_number"
-                value={profile.phone_number || ""}
-                onChange={handleProfileChange}
-                inputProps={{
-                  readOnly: !isEditMode,
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Select
-                fullWidth
-                labelId="Team"
-                id="team"
-                multiple
-                value={selectedTeams}
-                onChange={handleTeamChange}
-                input={<OutlinedInput label="Team" />}
-                renderValue={(selected) =>
-                  teams
-                    .filter((t) => selected.includes(t.id))
-                    .map((t) => t.teamName)
-                    .join(", ")
-                }
-              >
-                {teams.map((team) => (
-                  <MenuItem key={team.id} value={team.id}>
-                    <Checkbox checked={selectedTeams.includes(team.id)} />
-                    <ListItemText primary={team.teamName} />
-                  </MenuItem>
-                ))}
-              </Select>
-            </Grid>
-            {/* <Grid item xs={12} md={6}>
+        {/* {isEditMode ? ( */}
+        <>
+          <Grid item xs={12} md={6}>
+            <TextField
+              fullWidth
+              label="First Name"
+              name="first_name"
+              value={profile.first_name || ""}
+              onChange={handleProfileChange}
+              inputProps={{
+                readOnly: !isEditMode,
+              }}
+            />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <TextField
+              fullWidth
+              label="Last Name"
+              name="last_name"
+              value={profile.last_name || ""}
+              onChange={handleProfileChange}
+              inputProps={{
+                readOnly: !isEditMode,
+              }}
+            />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <TextField
+              fullWidth
+              label="Phone Number"
+              name="phone_number"
+              value={profile.phone_number || ""}
+              onChange={handleProfileChange}
+              inputProps={{
+                readOnly: !isEditMode,
+              }}
+            />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Select
+              fullWidth
+              labelId="Team"
+              id="team"
+              multiple
+              value={selectedTeams}
+              onChange={handleTeamChange}
+              input={<OutlinedInput label="Team" />}
+              renderValue={(selected) =>
+                teams
+                  .filter((t) => selected.includes(t.id))
+                  .map((t) => t.teamName)
+                  .join(", ")
+              }
+            >
+              {teams.map((team) => (
+                <MenuItem key={team.id} value={team.id}>
+                  <Checkbox checked={selectedTeams.includes(team.id)} />
+                  <ListItemText primary={team.teamName} />
+                </MenuItem>
+              ))}
+            </Select>
+          </Grid>
+          {/* <Grid item xs={12} md={6}>
               <Select
                 fullWidth
                 labelId="Gender"
@@ -168,11 +168,11 @@ export const StaffProfileDetails = ({ user, loggedUserProfile }) => {
                 <MenuItem value={"other"}>Other</MenuItem>
               </Select>
             </Grid> */}
-          </>
-        ) : (
-          ""
-        )}
-        <Grid item xs={12} md={6}>
+        </>
+        {/* // ) : (
+        //   ""
+        // )} */}
+        {/* <Grid item xs={12} md={6}>
           <DatePicker
             fullWidth
             label="Birth Date" // Adjust format as needed
@@ -181,7 +181,7 @@ export const StaffProfileDetails = ({ user, loggedUserProfile }) => {
             onChange={handleDateChange}
             readOnly={!isEditMode}
           />
-        </Grid>
+        </Grid> */}
 
         {/* <Grid item xs={12} md={6}>
           <Select

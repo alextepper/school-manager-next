@@ -57,7 +57,7 @@ export default function EventCard({ event }) {
             </Badge>
           </div>
         }
-        title={`To ${event.receiver.first_name} from ${event.giver.first_name}`}
+        title={`ל${event.receiver.first_name} מ${event.giver.first_name}`}
         subheader={dateFormatter(event.timestamp)}
         action={<Avatar sx={{ bgcolor: deepPurple[500] }}>{event.score}</Avatar>}
       />
