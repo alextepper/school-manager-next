@@ -1,5 +1,15 @@
 import PropTypes from "prop-types";
-import { Avatar, Badge, Box, Card, CardContent, Divider, Stack, Typography } from "@mui/material";
+import {
+  Avatar,
+  Badge,
+  Box,
+  Card,
+  CardContent,
+  Divider,
+  Link,
+  Stack,
+  Typography,
+} from "@mui/material";
 import styled from "@emotion/styled";
 import { useRouter } from "next/router";
 
@@ -77,15 +87,29 @@ export const TeamCard = (props) => {
       >
         {team.staff.map((staff) => {
           return (
-            <StyledBadge
-              overlap="circular"
-              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-              variant="dot"
-              invisible={!staff.is_on_shift}
-              key={staff.id}
+            <Link
+              href={`/staff/${staff.id}`}
+              sx={{
+                textDecoration: "none",
+                color: "#333",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
             >
-              <Avatar alt={staff.first_name} src={staff.avatar} sx={{ width: 40, height: 40 }} />
-            </StyledBadge>
+              <StyledBadge
+                overlap="circular"
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                variant="dot"
+                invisible={!staff.is_on_shift}
+                key={staff.id}
+              >
+                <Avatar alt={staff.first_name} src={staff.avatar} sx={{ width: 40, height: 40 }} />
+              </StyledBadge>
+              <Typography variant="body1" sx={{ textAlign: "center" }}>
+                {staff.first_name}
+              </Typography>
+            </Link>
           );
         })}
       </Stack>

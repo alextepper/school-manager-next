@@ -63,8 +63,8 @@ export const TeamStudentTable = (props) => {
             sortModel: [{ field: "events", sort: "desc" }],
           },
         }}
-        pageSizeOptions={[15, 30]}
-        checkboxSelection
+        // pageSizeOptions={[15, 30]}
+        // checkboxSelection
         slots={{ toolbar: GridToolbarQuickFilter }}
       />
     </div>

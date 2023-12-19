@@ -157,25 +157,27 @@ export const StudentProfile = ({ user, loggedUserProfile }) => {
             <Typography gutterBottom variant="h6" sx={{ mr: 2 }}>
               {profile.first_name} {profile.last_name}
               <IconButton
-                disabled={
-                  loggedUserProfile.role == "staff" || profile.phone_number == "" || disabled
-                }
+                disabled={!(loggedUserProfile.role === "staff" && profile.phone_number !== "")}
                 href={`tel: ${profile ? profile.phone_number : ""}`}
               >
-                <PhoneEnabled color="success" />
+                {profile.phone_number !== "" ? (
+                  <PhoneEnabled color="success" />
+                ) : (
+                  <PhoneDisabledIcon color="disabled" />
+                )}
               </IconButton>
             </Typography>
           </>
         }
         subheader={
-          <>
+          <Box display="block">
             <Button onClick={() => getThePage("/team/" + profile.team.id)} size="small">
               {profile.team?.teamName}
             </Button>
             {loggedUserProfile.role == "staff" && profile.room
-              ? `Building: ${profile.room.building.buildingName}(${profile.room.number})`
+              ? `${profile.room.building.buildingName}(${profile.room.number})`
               : ""}
-          </>
+          </Box>
         }
         action={
           loggedUserProfile.role == "staff" ? (

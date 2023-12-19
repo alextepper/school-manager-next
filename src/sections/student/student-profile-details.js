@@ -156,8 +156,10 @@ export const StudentProfileDetails = ({ user, loggedUserProfile }) => {
         ) : (
           ""
         )}
+
         <Grid item xs={12} md={6}>
           <TextField
+            select
             fullWidth
             label="שכבה" //{t("Grade")}
             name="grade"
@@ -166,7 +168,14 @@ export const StudentProfileDetails = ({ user, loggedUserProfile }) => {
               readOnly: !isEditMode,
             }}
             onChange={handleProfileChange}
-          />
+          >
+            <MenuItem value="ז">ז</MenuItem>
+            <MenuItem value="ח">ח</MenuItem>
+            <MenuItem value="ט">ט</MenuItem>
+            <MenuItem value="י">י</MenuItem>
+            <MenuItem value="יא">יא</MenuItem>
+            <MenuItem value="יב">יב</MenuItem>
+          </TextField>
         </Grid>
         <Grid item xs={12} md={6}>
           <DatePicker

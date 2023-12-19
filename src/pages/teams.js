@@ -63,15 +63,7 @@ const Page = () => {
                 <Typography variant="h4">{t("Teams")}</Typography>
               </Stack>
               <div>
-                <Button
-                  startIcon={
-                    <SvgIcon fontSize="small">
-                      <PlusIcon />
-                    </SvgIcon>
-                  }
-                  variant="contained"
-                  onClick={() => setOpenDialog(true)}
-                >
+                <Button variant="contained" onClick={() => setOpenDialog(true)}>
                   {t("Add")}
                 </Button>
               </div>

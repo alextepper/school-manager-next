@@ -45,7 +45,7 @@ const Page = () => {
             </Stack>
             <Card>
               <CardContent sx={{ p: 1 }}>
-                <StudentTable items={data} />
+                <StudentTable search={"absent"} />
               </CardContent>
             </Card>
           </Stack>

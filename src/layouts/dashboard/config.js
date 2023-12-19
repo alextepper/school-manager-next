@@ -13,8 +13,9 @@ import { useTranslation } from "react-i18next";
 
 export const useSidebarItems = () => {
   const { t } = useTranslation();
+  const loggedUserProfile = JSON.parse(localStorage.getItem("user")).profile;
 
-  const items = [
+  let items = [
     // {
     //   title: "Overview",
     //   path: "/",
@@ -123,5 +124,11 @@ export const useSidebarItems = () => {
     //   ),
     // },
   ];
+
+  if (loggedUserProfile.role === "student") {
+    items = items.filter(
+      (item) => item.path !== "/settings" && item.path !== "/attending" && item.path !== "/absent"
+    );
+  }
   return items;
 };

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Avatar, Badge } from "@mui/material";
 import { DataGrid, GridToolbar, GridToolbarQuickFilter } from "@mui/x-data-grid";
@@ -5,14 +6,15 @@ import { getInitials } from "src/utils/get-initials";
 import { deepOrange, deepPurple } from "@mui/material/colors";
 import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
+import api from "src/utils/api";
+import { set } from "nprogress";
 
-export const StudentTable = (props) => {
+export const StudentTable = ({ search }) => {
   const router = useRouter();
   const getTheProfile = (userId) => {
     router.push("/profile/" + userId);
   };
   const { t } = useTranslation("common");
-
   const columns = [
     // {
     //   field: "events",
@@ -74,26 +76,80 @@ export const StudentTable = (props) => {
     },
     { field: "grade", headerName: t("Grade"), flex: 1, minWidth: 60 },
   ];
+  const [rows, setRows] = useState([]);
+  const [paginationModel, setPaginationModel] = useState({
+    pageSize: 35,
+    page: 0,
+  });
+  const [rowCount, setRowCount] = useState(0);
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    let active = true;
+    const is_in_school = search === "attending" ? "True" : "False";
+    const url = search ? `student-profiles?is_in_school=${is_in_school}&` : "student-profiles?";
+
+    (async () => {
+      setLoading(true);
+      const response = await api.get(
+        `${url}limit=${paginationModel.pageSize}&offset=${
+          paginationModel.page * paginationModel.pageSize
+        }`
+      );
+
+      if (!active) {
+        return;
+      }
+
+      setRows(response.data.results);
+      setRowCount(response.data.count);
+      setLoading(false);
+    })();
+
+    return () => {
+      active = false;
+    };
+  }, [paginationModel]);
 
   return (
     <div style={{ height: "100%", width: "100%" }}>
       <DataGrid
         disableColumnMenu
         onRowClick={(params) => getTheProfile(params.row.id)}
-        rows={props.items}
         columns={columns}
-        initialState={{
-          pagination: {
-            paginationModel: { page: 0, pageSize: 15 },
-          },
-          sorting: {
-            sortModel: [{ field: "events", sort: "desc" }],
-          },
-        }}
-        pageSizeOptions={[15, 30]}
-        checkboxSelection
+        rows={rows}
+        loading={loading}
+        rowCount={rowCount}
+        pageSizeOptions={[15, 35, 50]}
+        paginationMode="server"
+        paginationModel={paginationModel}
+        onPaginationModelChange={setPaginationModel}
         slots={{ toolbar: GridToolbarQuickFilter }}
+        // checkboxSelection
       />
+      {/* <DataGrid
+        // disableColumnMenu
+        // onRowClick={(params) => getTheProfile(params.row.id)}
+        rows={items}
+        columns={columns}
+        // initialState={{
+        //   sorting: {
+        //     sortModel: [{ field: "events", sort: "desc" }],
+        //   },
+        // }}
+        pageSizeOptions={[5, 30]}
+        // slots={{ toolbar: GridToolbarQuickFilter }}
+        // checkboxSelection
+
+        pageSize={15}
+        rowCount={count}
+        // pagination
+        paginationMode="server"
+        // onPageChange={handlePageChange}
+        // page={page - 1}
+      /> */}
+      {/* <button onClick={() => sendSelectedIDsToServer(selectedIDs)}>
+        Send selected IDs to server
+      </button> */}
     </div>
   );
 };

@@ -9,21 +9,19 @@ import api from "src/utils/api";
 
 const Page = () => {
   const [data, setData] = useState([]); // State for storing fetched data
+  const [page, setPage] = useState(1);
+  const [rowCount, setRowCount] = useState(0);
   const { t } = useTranslation("common");
 
   useEffect(() => {
     const fetchStudentList = async () => {
-      try {
-        const response = await api.get(`/student-profiles`);
-        setData(response.data.results); // Set fetched data to state
-      } catch (err) {
-        console.error("Error fetching student profiles:", err);
-        // Handle error appropriately
-      }
+      const response = await api.get(`/student-profiles?limit=15&page=${page}`);
+      setData(response.data.results);
+      setRowCount(response.data.count);
     };
 
     fetchStudentList();
-  }, []);
+  }, [page]);
 
   return (
     <>
@@ -45,7 +43,7 @@ const Page = () => {
             </Stack>
             <Card>
               <CardContent sx={{ p: 1 }}>
-                <StudentTable items={data} />
+                <StudentTable />
               </CardContent>
             </Card>
           </Stack>
