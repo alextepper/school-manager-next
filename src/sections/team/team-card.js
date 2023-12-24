@@ -88,6 +88,7 @@ export const TeamCard = (props) => {
         {team.staff.map((staff) => {
           return (
             <Link
+              key={staff.id}
               href={`/staff/${staff.id}`}
               sx={{
                 textDecoration: "none",
@@ -102,7 +103,6 @@ export const TeamCard = (props) => {
                 anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
                 variant="dot"
                 invisible={!staff.is_on_shift}
-                key={staff.id}
               >
                 <Avatar alt={staff.first_name} src={staff.avatar} sx={{ width: 40, height: 40 }} />
               </StyledBadge>

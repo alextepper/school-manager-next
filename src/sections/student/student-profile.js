@@ -31,7 +31,7 @@ import styled from "@emotion/styled";
 import { StudentProfileDetails } from "./student-profile-details";
 import { MovementList } from "../movement/movement-list";
 import { useTranslation } from "react-i18next";
-import { PhoneEnabled } from "@mui/icons-material";
+import { PhoneEnabled, PhoneDisabledIcon } from "@mui/icons-material";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
