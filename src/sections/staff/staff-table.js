@@ -71,7 +71,7 @@ export const StaffTable = (props) => {
           },
         }}
         pageSizeOptions={[5, 10, 15]}
-        checkboxSelection
+        // checkboxSelection
       />
     </div>
   );

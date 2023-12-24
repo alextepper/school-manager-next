@@ -11,6 +11,7 @@ import {
   Badge,
   CardHeader,
   AvatarGroup,
+  CardMedia,
 } from "@mui/material";
 import { getInitials } from "src/utils/get-initials";
 import { styled } from "@mui/material/styles";
@@ -47,8 +48,8 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
   },
 }));
 
-export const BuildingProfile = ({ team, loggedUserProfile }) => {
-  const [profile, setProfile] = useState(team);
+export const BuildingProfile = ({ building, loggedUserProfile }) => {
+  const [profile, setProfile] = useState(building);
   const [avatar, setAvatar] = useState(profile.avatar);
   const router = useRouter();
   const getThePage = (url) => {
@@ -69,35 +70,28 @@ export const BuildingProfile = ({ team, loggedUserProfile }) => {
 
   return (
     <Card>
+      <div>
+        <CardMedia sx={{ height: 240 }} image={profile.avatar} />
+      </div>
+
       <CardHeader
-        avatar={
-          <Badge color="success" badgeContent={team.overall_score || 0} max={999}>
-            <Avatar
-              onClick={
-                loggedUserProfile.role == "staff"
-                  ? handleAvatarClick
-                  : () => console.log("You have no permission")
-              }
-              src={avatar} // Assuming 'avatar' is part of the user profile data
-              sx={{
-                height: 80,
-                mb: 2,
-                width: 80,
-              }}
-              alt={getInitials(team.teamName)}
-            >
-              {getInitials(team.teamName)}
-            </Avatar>
-          </Badge>
-        }
+        sx={{ pt: 1 }}
         title={
-          <Typography gutterBottom variant="h6">
-            {team.teamName}
-          </Typography>
+          <>
+            <Typography gutterBottom variant="h4">
+              {profile.buildingName}
+            </Typography>
+          </>
         }
-        subheader={team.grade}
+        subheader={
+          building.teams ? (
+            <Typography variant="h6">{building.teams.map((team) => team).join(", ")}</Typography>
+          ) : (
+            ""
+          )
+        }
       />
-      <CardContent>
+      {/* <CardContent>
         <Box
           sx={{
             alignItems: "center",
@@ -136,7 +130,7 @@ export const BuildingProfile = ({ team, loggedUserProfile }) => {
             })}
           </Stack>
         </Box>
-      </CardContent>
+      </CardContent> */}
       {/* <CardActions>
         <Button fullWidth variant="text">
           Call

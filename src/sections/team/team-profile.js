@@ -82,6 +82,7 @@ export const TeamProfile = ({ team, loggedUserProfile }) => {
               sx={{
                 height: 80,
                 mb: 2,
+                ml: 2,
                 width: 80,
               }}
               alt={getInitials(team.teamName)}

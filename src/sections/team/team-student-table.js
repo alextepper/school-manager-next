@@ -1,15 +1,18 @@
 import PropTypes from "prop-types";
-import { Avatar, Badge } from "@mui/material";
+import { Avatar, Badge, Button } from "@mui/material";
 import { DataGrid, GridToolbarQuickFilter } from "@mui/x-data-grid";
 import { getInitials } from "src/utils/get-initials";
 import { deepOrange, deepPurple } from "@mui/material/colors";
 import { useRouter } from "next/router";
+import { useState } from "react";
+import api from "src/utils/api";
 
 export const TeamStudentTable = (props) => {
   const router = useRouter();
   const getTheProfile = (userId) => {
     router.push("/profile/" + userId);
   };
+  const [rowSelectionModel, setRowSelectionModel] = useState([]);
 
   const columns = [
     // {
@@ -42,12 +45,40 @@ export const TeamStudentTable = (props) => {
     },
     {
       field: "fullName",
-      headerName: "Full name",
+      headerName: "שם מלא",
       minWidth: 160,
       flex: 1,
       valueGetter: (params) => `${params.row.first_name || ""} ${params.row.last_name || ""}`,
     },
+    {
+      field: "building",
+      headerName: "בניין",
+      minWidth: 60,
+      flex: 1,
+      valueGetter: (params) => `${params.row.room ? params.row.room.building.buildingName : ""}`,
+    },
+    {
+      field: "room",
+      headerName: "חדר",
+      minWidth: 60,
+      flex: 1,
+      valueGetter: (params) => `${params.row.room ? params.row.room.number : ""}`,
+    },
   ];
+
+  const updateAttendance = async (ids, isInSchool) => {
+    try {
+      const response = await api.post("/update-attendance/", {
+        ids: ids,
+        is_in_school: isInSchool,
+      });
+
+      console.log(response.data.message);
+    } catch (error) {
+      console.error("Error updating attendance:", error);
+      // Handle error appropriately
+    }
+  };
 
   return (
     <div style={{ height: "100%", width: "100%" }}>
@@ -63,10 +94,37 @@ export const TeamStudentTable = (props) => {
             sortModel: [{ field: "events", sort: "desc" }],
           },
         }}
-        // pageSizeOptions={[15, 30]}
-        // checkboxSelection
+        pageSizeOptions={[15, 30]}
+        checkboxSelection
         slots={{ toolbar: GridToolbarQuickFilter }}
+        onRowSelectionModelChange={(newRowSelectionModel) => {
+          setRowSelectionModel(newRowSelectionModel);
+        }}
+        localeText={{
+          columnsPanelTextFieldLabel: "Custom Find Column",
+          columnsPanelTextFieldPlaceholder: "Custom Column Title",
+        }}
       />
+      {rowSelectionModel.length > 0 && (
+        <>
+          <Button
+            size="small"
+            variant="contained"
+            color="secondary"
+            onClick={() => updateAttendance(rowSelectionModel, false)}
+          >
+            לא נוכחים
+          </Button>
+          <Button
+            size="small"
+            variant="contained"
+            color="primary"
+            onClick={() => updateAttendance(rowSelectionModel, true)}
+          >
+            נוכחים
+          </Button>
+        </>
+      )}
     </div>
   );
 };

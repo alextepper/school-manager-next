@@ -14,6 +14,7 @@ import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
 import { TeamProfile } from "src/sections/team/team-profile";
 import { TeamProfileDetails } from "src/sections/team/team-profile-details";
 import api from "src/utils/api";
+import { BuildingProfile } from "src/sections/building/building-profile";
 
 const Page = () => {
   const loggedUserProfile = JSON.parse(localStorage.getItem("user")).profile;
@@ -66,10 +67,10 @@ const Page = () => {
                 <Grid container spacing={3}>
                   {profile && (
                     <>
-                      {/* <Grid item xs={12} md={6} lg={4}>
-                        <TeamProfile team={profile} loggedUserProfile={loggedUserProfile} />
+                      <Grid item xs={12}>
+                        <BuildingProfile building={profile} loggedUserProfile={loggedUserProfile} />
                       </Grid>
-                      <Grid item xs={12} md={6} lg={8}>
+                      {/*<Grid item xs={12} md={6} lg={8}>
                         <TeamProfileDetails team={profile} />
                       </Grid> */}
                     </>

@@ -11,7 +11,7 @@ export const TeamProfileDetails = (team) => {
 
   return (
     <Card>
-      <CardHeader title="Students" />
+      <CardHeader title="חניכים" />
 
       <TeamStudentTable items={data} />
     </Card>

@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { Avatar, Badge } from "@mui/material";
-import { DataGrid, GridToolbar, GridToolbarQuickFilter } from "@mui/x-data-grid";
+import { Avatar, Badge, Button } from "@mui/material";
+import { DataGrid, GridToolbarQuickFilter } from "@mui/x-data-grid";
 import { getInitials } from "src/utils/get-initials";
 import { deepOrange, deepPurple } from "@mui/material/colors";
 import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
 import api from "src/utils/api";
-import { set } from "nprogress";
 
 export const StudentTable = ({ search }) => {
   const router = useRouter();
@@ -78,11 +77,13 @@ export const StudentTable = ({ search }) => {
   ];
   const [rows, setRows] = useState([]);
   const [paginationModel, setPaginationModel] = useState({
-    pageSize: 35,
+    pageSize: 15,
     page: 0,
   });
   const [rowCount, setRowCount] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [rowSelectionModel, setRowSelectionModel] = useState([]);
+
   useEffect(() => {
     let active = true;
     const is_in_school = search === "attending" ? "True" : "False";
@@ -110,6 +111,20 @@ export const StudentTable = ({ search }) => {
     };
   }, [paginationModel]);
 
+  const updateAttendance = async (ids, isInSchool) => {
+    try {
+      const response = await api.post("/update-attendance/", {
+        ids: ids,
+        is_in_school: isInSchool,
+      });
+
+      console.log(response.data.message);
+    } catch (error) {
+      console.error("Error updating attendance:", error);
+      // Handle error appropriately
+    }
+  };
+
   return (
     <div style={{ height: "100%", width: "100%" }}>
       <DataGrid
@@ -124,32 +139,31 @@ export const StudentTable = ({ search }) => {
         paginationModel={paginationModel}
         onPaginationModelChange={setPaginationModel}
         slots={{ toolbar: GridToolbarQuickFilter }}
-        // checkboxSelection
+        checkboxSelection
+        onRowSelectionModelChange={(newRowSelectionModel) => {
+          setRowSelectionModel(newRowSelectionModel);
+        }}
       />
-      {/* <DataGrid
-        // disableColumnMenu
-        // onRowClick={(params) => getTheProfile(params.row.id)}
-        rows={items}
-        columns={columns}
-        // initialState={{
-        //   sorting: {
-        //     sortModel: [{ field: "events", sort: "desc" }],
-        //   },
-        // }}
-        pageSizeOptions={[5, 30]}
-        // slots={{ toolbar: GridToolbarQuickFilter }}
-        // checkboxSelection
-
-        pageSize={15}
-        rowCount={count}
-        // pagination
-        paginationMode="server"
-        // onPageChange={handlePageChange}
-        // page={page - 1}
-      /> */}
-      {/* <button onClick={() => sendSelectedIDsToServer(selectedIDs)}>
-        Send selected IDs to server
-      </button> */}
+      {rowSelectionModel.length > 0 && (
+        <>
+          <Button
+            size="small"
+            variant="contained"
+            color="secondary"
+            onClick={() => updateAttendance(rowSelectionModel, false)}
+          >
+            לא נוכחים
+          </Button>
+          <Button
+            size="small"
+            variant="contained"
+            color="primary"
+            onClick={() => updateAttendance(rowSelectionModel, true)}
+          >
+            נוכחים
+          </Button>
+        </>
+      )}
     </div>
   );
 };

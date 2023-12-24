@@ -1,5 +1,16 @@
 import PropTypes from "prop-types";
-import { Avatar, Badge, Box, Card, CardContent, Divider, Stack, Typography } from "@mui/material";
+import {
+  Avatar,
+  Badge,
+  Box,
+  Card,
+  CardContent,
+  CardHeader,
+  CardMedia,
+  Divider,
+  Stack,
+  Typography,
+} from "@mui/material";
 import styled from "@emotion/styled";
 import { useRouter } from "next/router";
 
@@ -47,29 +58,20 @@ export const BuildingCard = (props) => {
         height: "100%",
       }}
     >
-      <CardContent>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            pb: 3,
-          }}
-        >
-          <div onClick={() => getTheBuilding(building.id)}>
-            <Avatar
-              src={building.avatar}
-              alt={building.buildingName}
-              sx={{ width: 80, height: 80 }}
-            >
-              {building.buildingName}
-            </Avatar>
-          </div>
-        </Box>
-        <Typography align="center" gutterBottom variant="h5">
-          {building.buildingName}
-        </Typography>
-        {/* <Typography align="center">({team.attendance_counter})</Typography> */}
-      </CardContent>
+      <div onClick={() => getTheBuilding(building.id)}>
+        <CardMedia sx={{ height: 150 }} image={building.avatar} />
+      </div>
+      <CardHeader
+        title={<Typography variant="h3">{building.buildingName}</Typography>}
+        subheader={
+          building.teams ? (
+            <Typography variant="h6">{building.teams.map((team) => team).join(", ")}</Typography>
+          ) : (
+            ""
+          )
+        }
+      />
+
       <Box sx={{ flexGrow: 1 }} />
       <Divider />
       <Stack

@@ -12,6 +12,7 @@ import {
   OutlinedInput,
   Checkbox,
   ListItemText,
+  CircularProgress,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import api from "src/utils/api";
@@ -22,9 +23,9 @@ export const StaffProfileDetails = ({ user, loggedUserProfile }) => {
   const [profile, setProfile] = useState(user);
   const [profileUpdate, setProfileUpdate] = useState({ gender: profile.gender });
   const [isEditMode, setIsEditMode] = useState(false);
-  const [buildingList, setBuildingList] = useState([]);
   const [teams, setTeams] = useState([]);
   const [selectedTeams, setSelectedTeams] = useState(profile.team.map((t) => t.id) || []);
+  const [isLoading, setIsLoading] = useState(false);
   const validBirthday = profile.birthday ? dayjs(profile.birthday).toDate() : null;
 
   const handleDateChange = (date) => {
@@ -48,40 +49,33 @@ export const StaffProfileDetails = ({ user, loggedUserProfile }) => {
     setProfileUpdate({ ...profileUpdate, [name]: value });
   };
 
-  const handleBuildingChange = async (event) => {
-    const selectedBuilding = event.target.value;
-    setBuilding(selectedBuilding);
-    setRoomList(selectedBuilding.rooms);
-  };
-
   const toggleEditMode = async () => {
-    if (buildingList.length == 0) {
+    if (teams.length == 0) {
+      setIsLoading(true);
       try {
-        const buildings = await api.get("/buildings/");
         const teams = await api.get("/teams/");
-        setBuildingList(buildings.data.results);
         setTeams(teams.data.results);
+        setIsLoading(false);
       } catch (err) {
         console.log(err);
       }
     }
-    console.log(buildingList);
     setIsEditMode(!isEditMode);
   };
 
   const saveProfile = async () => {
+    setIsLoading(true);
     try {
       const profileUpdateWithTeams = {
         ...profileUpdate,
-        team_ids: selectedTeams, // Array of selected team IDs
+        team_ids: selectedTeams,
       };
-      // Update with your API endpoint and adjust accordingly
       const response = await api.patch(`/staff-profile/${profile.id}/`, profileUpdateWithTeams);
       console.log("Profile updated:", response.data);
-      setIsEditMode(false); // Exit edit mode after saving
+      setIsEditMode(false);
+      setIsLoading(false);
     } catch (error) {
       console.error("Error updating profile:", error);
-      // Handle error appropriately
     }
   };
 
@@ -237,13 +231,14 @@ export const StaffProfileDetails = ({ user, loggedUserProfile }) => {
           </Select>
         </Grid> */}
       </Grid>
+
       <CardActions sx={{ justifyContent: "flex-end" }}>
         <Button variant="contained" onClick={toggleEditMode}>
-          <EditIcon />
+          {isLoading ? <CircularProgress color="info" size={"1.5rem"} /> : <EditIcon />}
         </Button>
-        {isEditMode ? (
+        {isEditMode && !isLoading ? (
           <Button variant="contained" onClick={saveProfile}>
-            Save details
+            {isLoading ? <CircularProgress color="info" size={"1.5rem"} /> : "Save details"}
           </Button>
         ) : (
           ""

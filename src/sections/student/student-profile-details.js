@@ -9,6 +9,7 @@ import {
   Select,
   MenuItem,
   InputLabel,
+  CircularProgress,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import api from "src/utils/api";
@@ -26,6 +27,7 @@ export const StudentProfileDetails = ({ user, loggedUserProfile }) => {
   const [roomList, setRoomList] = useState([]);
   const [building, setBuilding] = useState(profile.room ? profile.room.building : {});
   const [teams, setTeams] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const validBirthday = profile.birthday ? dayjs(profile.birthday).toDate() : null;
 
   const handleDateChange = (date) => {
@@ -47,6 +49,7 @@ export const StudentProfileDetails = ({ user, loggedUserProfile }) => {
   };
 
   const toggleEditMode = async () => {
+    setIsLoading(true);
     if (buildingList.length == 0) {
       try {
         const buildings = await api.get("/buildings/");
@@ -57,11 +60,12 @@ export const StudentProfileDetails = ({ user, loggedUserProfile }) => {
         console.log(err);
       }
     }
-    console.log(buildingList);
+    setIsLoading(false);
     setIsEditMode(!isEditMode);
   };
 
   const saveProfile = async () => {
+    setIsLoading(true);
     try {
       // Update with your API endpoint and adjust accordingly
       const response = await api.patch(`/student-profile/${profile.id}/`, profileUpdate);
@@ -71,6 +75,7 @@ export const StudentProfileDetails = ({ user, loggedUserProfile }) => {
       console.error("Error updating profile:", error);
       // Handle error appropriately
     }
+    setIsLoading(false);
   };
 
   return (
@@ -242,11 +247,11 @@ export const StudentProfileDetails = ({ user, loggedUserProfile }) => {
       </Grid>
       <CardActions sx={{ justifyContent: "flex-end" }}>
         <Button variant="contained" onClick={toggleEditMode}>
-          <EditIcon />
+          {isLoading ? <CircularProgress color="info" size={"1.5rem"} /> : <EditIcon />}
         </Button>
-        {isEditMode ? (
+        {isEditMode && !isLoading ? (
           <Button variant="contained" onClick={saveProfile}>
-            שמור{/* {t("Save")} */}
+            {isLoading ? <CircularProgress color="info" size={"1.5rem"} /> : "Save details"}
           </Button>
         ) : (
           ""

@@ -8,20 +8,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import api from "src/utils/api";
 
 const Page = () => {
-  const [data, setData] = useState([]); // State for storing fetched data
-  const [page, setPage] = useState(1);
-  const [rowCount, setRowCount] = useState(0);
   const { t } = useTranslation("common");
-
-  useEffect(() => {
-    const fetchStudentList = async () => {
-      const response = await api.get(`/student-profiles?limit=15&page=${page}`);
-      setData(response.data.results);
-      setRowCount(response.data.count);
-    };
-
-    fetchStudentList();
-  }, [page]);
 
   return (
     <>
