@@ -28,10 +28,12 @@ const App = (props) => {
   const { i18n } = useTranslation();
 
   useEffect(() => {
-    const storedLanguage = localStorage.getItem("language");
-    if (storedLanguage) {
-      document.dir = storedLanguage === "he" ? "rtl" : "ltr";
+    let storedLanguage = localStorage.getItem("language");
+    if (!storedLanguage) {
+      storedLanguage = "he";
+      localStorage.setItem("language", storedLanguage);
     }
+    document.dir = storedLanguage === "he" ? "rtl" : "ltr";
   }, []);
 
   return (
