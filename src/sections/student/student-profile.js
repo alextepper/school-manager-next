@@ -215,18 +215,22 @@ export const StudentProfile = ({ user, loggedUserProfile }) => {
                       sx={{ cursor: "pointer" }}
                       key={staff.id}
                     >
-                      <StyledBadge
-                        overlap="circular"
-                        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-                        variant="dot"
-                        invisible={!staff.is_on_shift}
-                      >
-                        <Avatar
-                          alt={staff.first_name}
-                          src={staff.avatar}
-                          sx={{ width: 35, height: 35 }}
-                        />
-                      </StyledBadge>
+                      <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                        <StyledBadge
+                          overlap="circular"
+                          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                          variant="dot"
+                          invisible={!staff.is_on_shift}
+                        >
+                          <Avatar
+                            alt={staff.first_name}
+                            src={staff.avatar}
+                            sx={{ width: 35, height: 35 }}
+                          />
+                        </StyledBadge>
+                      </Box>
+
+                      <Typography variant="body2">{staff.first_name}</Typography>
                     </div>
                   );
                 })

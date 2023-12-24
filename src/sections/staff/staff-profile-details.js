@@ -238,7 +238,7 @@ export const StaffProfileDetails = ({ user, loggedUserProfile }) => {
         </Button>
         {isEditMode && !isLoading ? (
           <Button variant="contained" onClick={saveProfile}>
-            {isLoading ? <CircularProgress color="info" size={"1.5rem"} /> : "Save details"}
+            {isLoading ? <CircularProgress color="info" size={"1.5rem"} /> : "שמור"}
           </Button>
         ) : (
           ""

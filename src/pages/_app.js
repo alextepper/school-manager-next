@@ -11,6 +11,7 @@ import { useNProgress } from "src/hooks/use-nprogress";
 import { createTheme } from "src/theme";
 import { createEmotionCache } from "src/utils/create-emotion-cache";
 import "simplebar-react/dist/simplebar.min.css";
+import "./App.css";
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -23,18 +24,18 @@ const App = (props) => {
 
   const getLayout = Component.getLayout ?? ((page) => page);
 
-  const theme = createTheme();
-
   const { i18n } = useTranslation();
 
-  useEffect(() => {
-    let storedLanguage = localStorage.getItem("language");
-    if (!storedLanguage) {
-      storedLanguage = "he";
-      localStorage.setItem("language", storedLanguage);
-    }
-    document.dir = storedLanguage === "he" ? "rtl" : "ltr";
-  }, []);
+  let storedLanguage = localStorage.getItem("language");
+  if (!storedLanguage) {
+    storedLanguage = "he";
+    localStorage.setItem("language", storedLanguage);
+  }
+  document.dir = storedLanguage === "he" ? "rtl" : "ltr";
+
+  const theme = createTheme({
+    direction: storedLanguage === "he" ? "rtl" : "ltr", // Set the direction here
+  });
 
   return (
     <CacheProvider value={emotionCache}>

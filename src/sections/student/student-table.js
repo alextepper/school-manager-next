@@ -87,7 +87,7 @@ export const StudentTable = ({ search }) => {
   useEffect(() => {
     let active = true;
     const is_in_school = search === "attending" ? "True" : "False";
-    const url = search ? `student-profiles?is_in_school=${is_in_school}&` : "student-profiles?";
+    const url = search ? `student-profiles/?is_in_school=${is_in_school}&` : "student-profiles?";
 
     (async () => {
       setLoading(true);
@@ -142,6 +142,11 @@ export const StudentTable = ({ search }) => {
         checkboxSelection
         onRowSelectionModelChange={(newRowSelectionModel) => {
           setRowSelectionModel(newRowSelectionModel);
+        }}
+        slotProps={{
+          pagination: {
+            labelRowsPerPage: "שורות בעמוד:",
+          },
         }}
       />
       {rowSelectionModel.length > 0 && (

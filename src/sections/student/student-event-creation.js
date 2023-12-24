@@ -51,6 +51,7 @@ export const StudentEventCreation = ({ user, loggedUserProfile }) => {
       });
 
       console.log("Event created successfully:", response.data);
+      setEventData(initialEventData);
       // Handle the response, e.g., updating state, redirecting, showing a message
     } catch (error) {
       console.error("Error creating event:", error.response ? error.response.data : error.message);

@@ -1,0 +1,23 @@
+/* App.css */
+
+/* This will affect the whole app */
+* {
+    scrollbar-width: 5px;
+    scrollbar-color: rgba(107, 61, 215, 0.7) transparent;
+}
+
+/* For Chrome, Safari and Opera */
+*::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+*::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: rgba(107, 61, 215, 0.7);
+    border-radius: 20px;
+    border: transparent;
+}
