@@ -104,6 +104,12 @@ export const TeamStudentTable = (props) => {
           columnsPanelTextFieldLabel: "Custom Find Column",
           columnsPanelTextFieldPlaceholder: "Custom Column Title",
         }}
+        slotProps={{
+          pagination: {
+            labelRowsPerPage: "שורות בעמוד:",
+            sx: { direction: "ltr" },
+          },
+        }}
       />
       {rowSelectionModel.length > 0 && (
         <>

@@ -119,6 +119,9 @@ export const StudentTable = ({ search }) => {
       });
 
       console.log(response.data.message);
+
+      // Reload the page on success
+      window.location.reload();
     } catch (error) {
       console.error("Error updating attendance:", error);
       // Handle error appropriately
@@ -146,6 +149,7 @@ export const StudentTable = ({ search }) => {
         slotProps={{
           pagination: {
             labelRowsPerPage: "שורות בעמוד:",
+            sx: { direction: "ltr" },
           },
         }}
       />

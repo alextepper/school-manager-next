@@ -48,7 +48,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          {profile ? profile.first_name : ""} {profile ? profile.last_name : ""} | Staff
+          {profile ? profile.first_name : ""} {profile ? profile.last_name : ""} | צוות
         </title>
       </Head>
       <Backdrop sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>

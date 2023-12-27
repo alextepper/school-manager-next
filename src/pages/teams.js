@@ -48,7 +48,7 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>{t("Teams")} | Devias Kit</title>
+        <title>{t("Teams")} | RKZ</title>
       </Head>
       <Box
         component="main"

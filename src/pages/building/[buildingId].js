@@ -15,6 +15,7 @@ import { TeamProfile } from "src/sections/team/team-profile";
 import { TeamProfileDetails } from "src/sections/team/team-profile-details";
 import api from "src/utils/api";
 import { BuildingProfile } from "src/sections/building/building-profile";
+import { RoomCard } from "src/sections/room/room-card";
 
 const Page = () => {
   const loggedUserProfile = JSON.parse(localStorage.getItem("user")).profile;
@@ -49,7 +50,7 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>{profile ? profile.teamName : ""} | Team</title>
+        <title>{profile ? profile.teamName : ""} | בניין</title>
       </Head>
       <Backdrop sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>
         <CircularProgress color="inherit" />
@@ -70,9 +71,11 @@ const Page = () => {
                       <Grid item xs={12}>
                         <BuildingProfile building={profile} loggedUserProfile={loggedUserProfile} />
                       </Grid>
-                      {/*<Grid item xs={12} md={6} lg={8}>
-                        <TeamProfileDetails team={profile} />
-                      </Grid> */}
+                      {profile.rooms.map((room) => (
+                        <Grid item xs={12} sm={6} md={4} lg={3} key={room.id}>
+                          <RoomCard room={room} />
+                        </Grid>
+                      ))}
                     </>
                   )}
                 </Grid>

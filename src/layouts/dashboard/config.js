@@ -46,7 +46,7 @@ export const useSidebarItems = () => {
     },
     {
       // title: t("Attending"),
-      title: "נמצאים בכפר",
+      title: "נוכחים בכפר",
       path: "/attending",
       icon: (
         <SvgIcon fontSize="small">

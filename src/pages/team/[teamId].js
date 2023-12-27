@@ -48,7 +48,7 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>{profile ? profile.teamName : ""} | Team</title>
+        <title>{profile ? profile.teamName : ""} | קבוצה</title>
       </Head>
       <Backdrop sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>
         <CircularProgress color="inherit" />
