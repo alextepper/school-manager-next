@@ -43,7 +43,7 @@ const Page = () => {
           py: 8,
         }}
       >
-        <Container maxWidth="xl">
+        {/* <Container maxWidth="xl">
           <Grid container spacing={3}>
             <Grid xs={12} sm={6} lg={3}>
               <OverviewBudget difference={12} positive sx={{ height: "100%" }} value="$24k" />
@@ -189,7 +189,7 @@ const Page = () => {
               />
             </Grid>
           </Grid>
-        </Container>
+        </Container> */}
       </Box>
     </>
   );

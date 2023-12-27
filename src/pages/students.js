@@ -5,7 +5,6 @@ import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
 import { StudentTable } from "src/sections/student/student-table";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import api from "src/utils/api";
 
 const Page = () => {
   const { t } = useTranslation("common");

@@ -24,18 +24,18 @@ const App = (props) => {
 
   const getLayout = Component.getLayout ?? ((page) => page);
 
+  const theme = createTheme();
+
   const { i18n } = useTranslation();
 
-  let storedLanguage = localStorage.getItem("language");
-  if (!storedLanguage) {
-    storedLanguage = "he";
-    localStorage.setItem("language", storedLanguage);
-  }
-  document.dir = storedLanguage === "he" ? "rtl" : "ltr";
-
-  const theme = createTheme({
-    direction: storedLanguage === "he" ? "rtl" : "ltr", // Set the direction here
-  });
+  useEffect(() => {
+    let storedLanguage = localStorage.getItem("language");
+    if (!storedLanguage) {
+      storedLanguage = "he";
+      localStorage.setItem("language", storedLanguage);
+    }
+    document.dir = storedLanguage === "he" ? "rtl" : "ltr";
+  }, []);
 
   return (
     <CacheProvider value={emotionCache}>

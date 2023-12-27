@@ -17,7 +17,8 @@ import { EventList } from "src/sections/event/event-list";
 import axios from "axios";
 
 const Page = () => {
-  const loggedUserProfile = JSON.parse(localStorage.getItem("user")).profile;
+  const loggedUserProfile =
+    typeof window !== "undefined" ? JSON.parse(localStorage.getItem("user")).profile : null;
   const router = useRouter();
   const { profileId } = router.query;
   const [profile, setProfile] = useState(null);
