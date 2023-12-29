@@ -215,7 +215,8 @@ export const StudentProfileDetails = ({ user, loggedUserProfile }) => {
           </TextField>
         </Grid>
         <Grid item xs={12} md={6}>
-          <Select
+          <TextField
+            select
             fullWidth
             labelId="חדר" //{t("Room")}
             id="room"
@@ -223,7 +224,7 @@ export const StudentProfileDetails = ({ user, loggedUserProfile }) => {
             name="room"
             label="Room"
             onChange={handleProfileChange}
-            inputProps={{
+            InputProps={{
               readOnly: !isEditMode,
             }}
           >
@@ -242,7 +243,7 @@ export const StudentProfileDetails = ({ user, loggedUserProfile }) => {
                 </MenuItem>
               );
             })}
-          </Select>
+          </TextField>
         </Grid>
       </Grid>
       <CardActions sx={{ justifyContent: "flex-end" }}>

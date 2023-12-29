@@ -8,6 +8,7 @@ import { getInitials } from "src/utils/get-initials";
 import { useEffect, useState } from "react";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
+import ReactCountryFlag from "react-country-flag";
 
 const SIDE_NAV_WIDTH = 280;
 const TOP_NAV_HEIGHT = 64;
@@ -72,10 +73,13 @@ export const TopNav = (props) => {
           <Stack alignItems="center" direction="row" spacing={2}>
             {/* <IconButton onClick={() => handleLanguageChange("en")} aria-label="Switch to English">
               EN
-            </IconButton>
-            <IconButton onClick={() => handleLanguageChange("he")} aria-label="Switch to Hebrew">
-              HE
             </IconButton> */}
+
+            <IconButton onClick={() => handleLanguageChange("he")} aria-label="Switch to Hebrew">
+              <Box sx={{ width: 40, height: 40, borderRadius: "50%", overflow: "hidden" }}>
+                <ReactCountryFlag countryCode="IL" svg style={{ width: "100%", height: "100%" }} />
+              </Box>
+            </IconButton>
 
             <Avatar
               onClick={accountPopover.handleOpen}

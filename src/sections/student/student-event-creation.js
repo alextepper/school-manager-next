@@ -26,6 +26,8 @@ const initialEventData = {
 export const StudentEventCreation = ({ user, loggedUserProfile }) => {
   const { t } = useTranslation();
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [eventData, setEventData] = useState({
     ...initialEventData,
     giver: loggedUserProfile.id,
@@ -63,9 +65,11 @@ export const StudentEventCreation = ({ user, loggedUserProfile }) => {
     setEventData({ ...eventData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    createEvent(eventData);
+    setIsSubmitting(true);
+    await createEvent(eventData);
+    setIsSubmitting(false);
   };
 
   return (
@@ -123,7 +127,13 @@ export const StudentEventCreation = ({ user, loggedUserProfile }) => {
                 />
               </Grid>
               <Grid item xs={12} md={2} sx={{ pt: 1.5, pb: 0, alignContent: "bottom" }}>
-                <Button type="submit" variant="contained" color="primary" fullWidth>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                  disabled={isSubmitting}
+                >
                   שמור{/* {t("Save")} */}
                 </Button>
               </Grid>

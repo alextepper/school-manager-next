@@ -62,11 +62,7 @@ const Page = () => {
               <Stack spacing={1}>
                 <Typography variant="h4">{t("Teams")}</Typography>
               </Stack>
-              <div>
-                <Button variant="contained" onClick={() => setOpenDialog(true)}>
-                  {t("Add")}
-                </Button>
-              </div>
+
               <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
                 <DialogContent>
                   <TeamCreationForm setOpenDialog={setOpenDialog} />
@@ -75,7 +71,7 @@ const Page = () => {
             </Stack>
             <Grid container spacing={3}>
               {data.map((team) => (
-                <Grid xs={12} sm={4} md={3} key={team.id}>
+                <Grid xs={6} sm={4} md={3} key={team.id} sx={{ p: [0.2, 0.5, 1, 2] }}>
                   <TeamCard team={team} />
                 </Grid>
               ))}
@@ -89,6 +85,13 @@ const Page = () => {
               <Pagination count={3} size="small" />
             </Box> */}
           </Stack>
+          <Button
+            sx={{ ml: "0 !important" }}
+            variant="contained"
+            onClick={() => setOpenDialog(true)}
+          >
+            {t("Add")}
+          </Button>
         </Container>
       </Box>
     </>

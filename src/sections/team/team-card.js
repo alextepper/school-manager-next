@@ -57,12 +57,12 @@ export const TeamCard = (props) => {
         height: "100%",
       }}
     >
-      <CardContent>
+      <CardContent sx={{ p: 1 }}>
         <Box
           sx={{
             display: "flex",
             justifyContent: "center",
-            pb: 3,
+            pb: 1,
           }}
         >
           <div onClick={() => getTheTeam(team.id)}>

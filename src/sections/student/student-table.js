@@ -1,12 +1,28 @@
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { Avatar, Badge, Button } from "@mui/material";
+import { Avatar, Badge, Button, TextField } from "@mui/material";
 import { DataGrid, GridToolbarQuickFilter } from "@mui/x-data-grid";
 import { getInitials } from "src/utils/get-initials";
 import { deepOrange, deepPurple } from "@mui/material/colors";
 import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
 import api from "src/utils/api";
+
+function CustomToolbar() {
+  const [filterValue, setFilterValue] = useState("");
+
+  const handleFilterChange = (event) => {
+    setFilterValue(event.target.value);
+
+    // Call your API with the filter value
+    // This is just a placeholder, replace with your actual API call
+    fetch(`/api/your-endpoint?filter=${event.target.value}`);
+  };
+
+  return (
+    <TextField size="small" value={filterValue} onChange={handleFilterChange} placeholder="חפש" />
+  );
+}
 
 export const StudentTable = ({ search }) => {
   const router = useRouter();
@@ -25,10 +41,10 @@ export const StudentTable = ({ search }) => {
     // },
     {
       field: "is_in_school",
-      headerName: "",
+      headerName: t("Attending"),
       flex: 1,
-      minWidth: 60,
-      maxWidth: 60,
+      minWidth: 50,
+      maxWidth: 50,
       renderCell: (params) => {
         return (
           <Badge
@@ -55,25 +71,25 @@ export const StudentTable = ({ search }) => {
     {
       field: "fullName",
       headerName: t("Full Name"),
-      minWidth: 160,
+      minWidth: 120,
       flex: 1,
       valueGetter: (params) => `${params.row.first_name || ""} ${params.row.last_name || ""}`,
     },
-    {
-      field: "teams",
-      headerName: t("Team"),
-      minWidth: 90,
-      flex: 1,
-      valueGetter: (params) => `${params.row.team ? params.row.team.teamName : ""}`,
-    },
-    {
-      field: "building",
-      headerName: t("Building"),
-      minWidth: 60,
-      flex: 1,
-      valueGetter: (params) => `${params.row.room ? params.row.room.building.buildingName : ""}`,
-    },
-    { field: "grade", headerName: t("Grade"), flex: 1, minWidth: 60 },
+    // {
+    //   field: "teams",
+    //   headerName: t("Team"),
+    //   minWidth: 90,
+    //   flex: 1,
+    //   valueGetter: (params) => `${params.row.team ? params.row.team.teamName : ""}`,
+    // },
+    // {
+    //   field: "building",
+    //   headerName: t("Building"),
+    //   minWidth: 60,
+    //   flex: 1,
+    //   valueGetter: (params) => `${params.row.room ? params.row.room.building.buildingName : ""}`,
+    // },
+    { field: "grade", headerName: t("Grade"), flex: 1, minWidth: 50 },
   ];
   const [rows, setRows] = useState([]);
   const [paginationModel, setPaginationModel] = useState({
@@ -147,6 +163,9 @@ export const StudentTable = ({ search }) => {
           setRowSelectionModel(newRowSelectionModel);
         }}
         slotProps={{
+          checkboxSelection: { sx: { maxWidth: 40, minWidth: 40 } },
+
+          GridToolbarQuickFilter: { placeholder: "ltr" },
           pagination: {
             labelRowsPerPage: "שורות בעמוד:",
             sx: { direction: "ltr" },
