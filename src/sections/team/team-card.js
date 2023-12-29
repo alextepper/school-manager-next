@@ -96,6 +96,8 @@ export const TeamCard = (props) => {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
+                justifyContent: "center", // Add this line
+                m: "0 !important",
               }}
             >
               <StyledBadge

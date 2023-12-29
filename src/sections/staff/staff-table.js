@@ -41,14 +41,14 @@ export const StaffTable = (props) => {
 
     {
       field: "fullName",
-      headerName: "Full name",
+      headerName: "שם מלא",
       minWidth: 160,
       flex: 1,
       valueGetter: (params) => `${params.row.first_name || ""} ${params.row.last_name || ""}`,
     },
     {
       field: "teams",
-      headerName: "Team",
+      headerName: "קבוצה",
       minWidth: 90,
       flex: 1,
       valueGetter: (params) => params.row.team.map((team) => `${team ? team.teamName : ""}`),
@@ -70,7 +70,15 @@ export const StaffTable = (props) => {
             sortModel: [{ field: "is_on_shift", sort: "desc" }],
           },
         }}
+        pagination
         pageSizeOptions={[5, 10, 15]}
+        slotProps={{
+          GridToolbarQuickFilter: { placeholder: "ltr" },
+          pagination: {
+            labelRowsPerPage: "שורות בעמוד:",
+            sx: { direction: "ltr" },
+          },
+        }}
         // checkboxSelection
       />
     </div>

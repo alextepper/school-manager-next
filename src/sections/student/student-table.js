@@ -163,8 +163,6 @@ export const StudentTable = ({ search }) => {
           setRowSelectionModel(newRowSelectionModel);
         }}
         slotProps={{
-          checkboxSelection: { sx: { maxWidth: 40, minWidth: 40 } },
-
           GridToolbarQuickFilter: { placeholder: "ltr" },
           pagination: {
             labelRowsPerPage: "שורות בעמוד:",

@@ -70,7 +70,7 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>Login | Devias Kit</title>
+        <title>עזור אישי | RKZ-Solutions</title>
       </Head>
       <Box
         sx={{
@@ -91,14 +91,15 @@ const Page = () => {
         >
           <div>
             <Stack spacing={1} sx={{ mb: 3 }}>
-              <Typography variant="h4">Login</Typography>
+              <Typography variant="h4">קניסה לחשבון</Typography>
               <Typography color="text.secondary" variant="body2">
-                Don&apos;t have an account? Contact your Instructor.
+                אין עדיין לך חשבון? תפנה למדריך שלך
+                {/* Don&apos;t have an account? Contact your Instructor. */}
               </Typography>
             </Stack>
             <Tabs onChange={handleMethodChange} sx={{ mb: 3 }} value={showPasswordReset}>
-              <Tab label="Email" value={false} />
-              <Tab label="Forgot password" value={true} />
+              <Tab sx={{ mx: 2 }} label="קניסה" value={false} />
+              <Tab sx={{ mx: 2 }} label="איפוס סיסמה" value={true} />
             </Tabs>
             {!showPasswordReset && (
               <form noValidate onSubmit={formik.handleSubmit}>
@@ -107,7 +108,7 @@ const Page = () => {
                     error={!!(formik.touched.email && formik.errors.email)}
                     fullWidth
                     helperText={formik.touched.email && formik.errors.email}
-                    label="Email Address"
+                    label="אימייל"
                     name="email"
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
@@ -118,7 +119,7 @@ const Page = () => {
                     error={!!(formik.touched.password && formik.errors.password)}
                     fullWidth
                     helperText={formik.touched.password && formik.errors.password}
-                    label="Password"
+                    label="סיסמה"
                     name="password"
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
@@ -132,7 +133,7 @@ const Page = () => {
                   </Typography>
                 )}
                 <Button fullWidth size="large" sx={{ mt: 3 }} type="submit" variant="contained">
-                  Continue
+                  להמשיך
                 </Button>
               </form>
             )}
@@ -140,7 +141,7 @@ const Page = () => {
               <form noValidate onSubmit={handlePasswordResetSubmit}>
                 <TextField
                   fullWidth
-                  label="Email Address"
+                  label="אימייל"
                   name="resetEmail"
                   value={resetEmail}
                   onChange={(e) => setResetEmail(e.target.value)}
@@ -153,7 +154,7 @@ const Page = () => {
                   </Typography>
                 )}
                 <Button fullWidth size="large" sx={{ mt: 3 }} type="submit" variant="contained">
-                  Reset Password
+                  לאפס סיסמה
                 </Button>
               </form>
             )}

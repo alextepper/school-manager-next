@@ -32,7 +32,7 @@ export const AccountPopover = (props) => {
           px: 2,
         }}
       >
-        <Typography variant="overline">Account</Typography>
+        <Typography variant="overline">חשבון</Typography>
         <Typography color="text.secondary" variant="body2">
           {user}
         </Typography>
@@ -48,7 +48,7 @@ export const AccountPopover = (props) => {
           },
         }}
       >
-        <MenuItem onClick={handleSignOut}>Sign out</MenuItem>
+        <MenuItem onClick={handleSignOut}>לצאת</MenuItem>
       </MenuList>
     </Popover>
   );
