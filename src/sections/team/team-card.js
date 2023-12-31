@@ -45,8 +45,8 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 export const TeamCard = (props) => {
   const { team } = props;
   const router = useRouter();
-  const getTheTeam = (teamId) => {
-    router.push("/team/" + teamId);
+  const getThePage = (url) => {
+    router.push(url);
   };
 
   return (
@@ -65,7 +65,7 @@ export const TeamCard = (props) => {
             pb: 1,
           }}
         >
-          <div onClick={() => getTheTeam(team.id)}>
+          <div onClick={() => getThePage("/team/" + teamId)}>
             <Avatar src={team.avatar} alt={team.teamName} sx={{ width: 80, height: 80 }}>
               {team.teamName}
             </Avatar>

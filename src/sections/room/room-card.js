@@ -1,10 +1,13 @@
 import PropTypes from "prop-types";
-import { Card, CardContent, Typography } from "@mui/material";
+import { Button, Card, CardContent, Link, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 
 export const RoomCard = (props) => {
   const { room } = props;
   const router = useRouter();
+  const getThePage = (url) => {
+    router.push(url);
+  };
   const getTheRoom = (roomId) => {
     router.push("/room/" + roomId);
   };
@@ -22,8 +25,19 @@ export const RoomCard = (props) => {
         <Typography variant="h5">חדר: {room.number}</Typography>
         <Typography variant="h6">{room.gender === "male" ? "בנים" : "בנות"}</Typography>
         <Typography variant="body1">
-          {room.students_count}/{room.bed_count}
+          {room.students.length}/{room.bed_count}
         </Typography>
+        {room.students.map((student) => (
+          <Button
+            variant="contained"
+            size="small"
+            onClick={() => getThePage("/profile/" + student.id)}
+            to={`/profile/${student.id}`}
+            key={student.id}
+          >
+            {student.first_name}
+          </Button>
+        ))}
 
         {/* <Typography variant="body1">Students Count: {room.students_count}</Typography> */}
       </CardContent>
