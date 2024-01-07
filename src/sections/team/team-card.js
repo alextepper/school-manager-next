@@ -65,7 +65,7 @@ export const TeamCard = (props) => {
             pb: 1,
           }}
         >
-          <div onClick={() => getThePage("/team/" + teamId)}>
+          <div onClick={() => getThePage("/team/" + team.id)}>
             <Avatar src={team.avatar} alt={team.teamName} sx={{ width: 80, height: 80 }}>
               {team.teamName}
             </Avatar>

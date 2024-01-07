@@ -46,13 +46,13 @@ export const StaffTable = (props) => {
       flex: 1,
       valueGetter: (params) => `${params.row.first_name || ""} ${params.row.last_name || ""}`,
     },
-    {
-      field: "teams",
-      headerName: "קבוצה",
-      minWidth: 90,
-      flex: 1,
-      valueGetter: (params) => params.row.team.map((team) => `${team ? team.teamName : ""}`),
-    },
+    // {
+    //   field: "teams",
+    //   headerName: "קבוצה",
+    //   minWidth: 90,
+    //   flex: 1,
+    //   valueGetter: (params) => params.row.team.map((team) => `${team ? team.teamName : ""}`),
+    // },
   ];
 
   return (

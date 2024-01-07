@@ -13,6 +13,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  IconButton,
 } from "@mui/material";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
 import { useEffect, useState } from "react";
@@ -22,6 +23,7 @@ import TeamCreationForm from "src/sections/team/team-creation-form";
 import { Close } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 const Page = () => {
   const { t } = useTranslation();
@@ -59,8 +61,11 @@ const Page = () => {
         <Container maxWidth="xl">
           <Stack spacing={3}>
             <Stack direction="row" justifyContent="space-between" spacing={4}>
-              <Stack spacing={1}>
+              <Stack direction="row" spacing={1}>
                 <Typography variant="h4">{t("Teams")}</Typography>
+                <IconButton color="primary" onClick={() => setOpenDialog(true)}>
+                  <AddCircleOutlineIcon />
+                </IconButton>
               </Stack>
 
               <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
@@ -85,13 +90,13 @@ const Page = () => {
               <Pagination count={3} size="small" />
             </Box> */}
           </Stack>
-          <Button
+          {/* <Button
             sx={{ ml: "0 !important" }}
             variant="contained"
             onClick={() => setOpenDialog(true)}
           >
             {t("Add")}
-          </Button>
+          </Button> */}
         </Container>
       </Box>
     </>

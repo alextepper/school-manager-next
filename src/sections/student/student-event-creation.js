@@ -83,7 +83,7 @@ export const StudentEventCreation = ({ user, loggedUserProfile }) => {
               <TextField
                 select
                 size="small"
-                sx={{ m: 1, minWidth: 80 }}
+                sx={{ mr: 1, minWidth: 80 }}
                 label="ניקוד" //{t("Score")}
                 name="score"
                 value={eventData.score}
@@ -97,7 +97,7 @@ export const StudentEventCreation = ({ user, loggedUserProfile }) => {
               <TextField
                 select
                 size="small"
-                sx={{ m: 1, minWidth: 80 }}
+                sx={{ mr: 1, minWidth: 80 }}
                 label="תחום" //{t("Area")}
                 name="area"
                 value={eventData.area}

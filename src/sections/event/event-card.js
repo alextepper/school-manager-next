@@ -62,9 +62,7 @@ export default function EventCard({ event }) {
         action={<Avatar sx={{ bgcolor: deepPurple[500] }}>{event.score}</Avatar>}
       />
       <CardContent sx={{ pt: 1, pb: 0 }}>
-        <Typography variant="body2" sx={{ direction: "ltr" }}>
-          {event.description}
-        </Typography>
+        <Typography variant="body2">{event.description}</Typography>
       </CardContent>
     </Card>
   );

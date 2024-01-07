@@ -115,6 +115,7 @@ export const TeamProfile = ({ team, loggedUserProfile }) => {
                     alignItems: "center",
                     display: "flex",
                     flexDirection: "column",
+                    m: "0 !important",
                   }}
                 >
                   <StyledBadge

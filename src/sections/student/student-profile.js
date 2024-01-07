@@ -129,7 +129,7 @@ export const StudentProfile = ({ user, loggedUserProfile }) => {
                 >
                   {getInitials(`${profile.first_name} ${profile.last_name}`)}
                 </Avatar>
-                <Fab
+                {/* <Fab
                   onClick={() => like(profile.id)}
                   size="small"
                   sx={{
@@ -148,7 +148,7 @@ export const StudentProfile = ({ user, loggedUserProfile }) => {
                     <FavoriteBorderIcon sx={{ fontSize: "20px" }} />
                   )}
                   {likes}
-                </Fab>
+                </Fab> */}
               </Box>
             </Badge>
           </>

@@ -8,6 +8,7 @@ import XCircleIcon from "@heroicons/react/24/solid/XCircleIcon";
 import { SvgIcon } from "@mui/material";
 import EngineeringIcon from "@mui/icons-material/Engineering";
 import Diversity3Icon from "@mui/icons-material/Diversity3";
+import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import FeedIcon from "@mui/icons-material/Feed";
 import { useTranslation } from "react-i18next";
 
@@ -76,6 +77,16 @@ export const useSidebarItems = () => {
     },
     {
       // title: t("Teams"),
+      title: "רכב כפר",
+      path: "/car",
+      icon: (
+        <SvgIcon fontSize="small">
+          <DirectionsCarIcon />
+        </SvgIcon>
+      ),
+    },
+    {
+      // title: t("Teams"),
       title: "מבנים",
       path: "/buildings",
       icon: (
@@ -127,7 +138,11 @@ export const useSidebarItems = () => {
 
   if (loggedUserProfile.role === "student") {
     items = items.filter(
-      (item) => item.path !== "/settings" && item.path !== "/attending" && item.path !== "/absent"
+      (item) =>
+        item.path !== "/settings" &&
+        item.path !== "/attending" &&
+        item.path !== "/absent" &&
+        item.path !== "/car"
     );
   }
   return items;

@@ -105,9 +105,7 @@ export const StaffProfile = ({ user, loggedUserProfile }) => {
             <Typography gutterBottom variant="h6" sx={{ mr: 2 }}>
               {profile.first_name} {profile.last_name}
               <IconButton
-                disabled={
-                  loggedUserProfile.role == "staff" || profile.phone_number == "" || disabled
-                }
+                disabled={!(loggedUserProfile.role == "staff" || profile.phone_number == "")}
                 href={`tel: ${profile ? profile.phone_number : ""}`}
               >
                 <PhoneEnabled color="success" />
