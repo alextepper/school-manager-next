@@ -24,6 +24,7 @@ export const EventList = ({ user }) => {
   }, [page]);
 
   const handleScroll = () => {
+    if (loading) return;
     if (
       window.innerHeight + document.documentElement.scrollTop !==
       document.documentElement.offsetHeight

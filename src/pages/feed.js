@@ -2,32 +2,29 @@ import { useEffect, useState } from "react";
 import Head from "next/head";
 import { Box, Card, Container, Stack, SvgIcon, Typography } from "@mui/material";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
-import { CustomersSearch } from "src/sections/customer/customers-search";
-import { StudentTable } from "src/sections/student/student-table";
-import api from "src/utils/api";
 import { EventList } from "src/sections/event/event-list";
 
 const Page = () => {
-  const [data, setData] = useState([]); // State for storing fetched data
+  // const [data, setData] = useState([]); // State for storing fetched data
 
-  useEffect(() => {
-    const fetchStudentList = async () => {
-      try {
-        const response = await api.get(`/student-profiles`);
-        setData(response.data.results); // Set fetched data to state
-      } catch (err) {
-        console.error("Error fetching student profiles:", err);
-        // Handle error appropriately
-      }
-    };
+  // useEffect(() => {
+  //   const fetchStudentList = async () => {
+  //     try {
+  //       const response = await api.get(`/student-profiles`);
+  //       setData(response.data.results); // Set fetched data to state
+  //     } catch (err) {
+  //       console.error("Error fetching student profiles:", err);
+  //       // Handle error appropriately
+  //     }
+  //   };
 
-    fetchStudentList();
-  }, []);
+  //   fetchStudentList();
+  // }, []);
 
   return (
     <>
       <Head>
-        <title>Feed | Devias Kit</title>
+        <title>חדשות | RKZ Solutions</title>
       </Head>
       <Box
         component="main"
