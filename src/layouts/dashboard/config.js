@@ -26,15 +26,15 @@ export const useSidebarItems = () => {
     //     </SvgIcon>
     //   ),
     // },
-    // {
-    //   title: "Feed",
-    //   path: "/feed",
-    //   icon: (
-    //     <SvgIcon fontSize="small">
-    //       <FeedIcon />
-    //     </SvgIcon>
-    //   ),
-    // },
+    {
+      title: "חדשות",
+      path: "/feed",
+      icon: (
+        <SvgIcon fontSize="small">
+          <FeedIcon />
+        </SvgIcon>
+      ),
+    },
     {
       // title: t("Students"),
       title: "חניכים",

@@ -29,11 +29,13 @@ export const RoomCard = (props) => {
         </Typography>
         {room.students.map((student) => (
           <Button
+            color={student.is_in_school ? "success" : "error"}
             variant="contained"
             size="small"
             onClick={() => getThePage("/profile/" + student.id)}
             to={`/profile/${student.id}`}
             key={student.id}
+            sx={{ m: 1 }}
           >
             {student.first_name}
           </Button>

@@ -210,9 +210,15 @@ export const StudentProfile = ({ user, loggedUserProfile }) => {
             {profile.team
               ? profile.team.staff.map((staff) => {
                   return (
-                    <div
+                    <Stack
                       onClick={() => getThePage("/staff/" + staff.id)}
-                      sx={{ cursor: "pointer" }}
+                      sx={{
+                        cursor: "pointer",
+                        alignItems: "center",
+                        display: "flex",
+                        flexDirection: "column",
+                        m: "0 !important",
+                      }}
                       key={staff.id}
                     >
                       <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
@@ -225,13 +231,13 @@ export const StudentProfile = ({ user, loggedUserProfile }) => {
                           <Avatar
                             alt={staff.first_name}
                             src={staff.avatar}
-                            sx={{ width: 35, height: 35 }}
+                            sx={{ width: 45, height: 45 }}
                           />
                         </StyledBadge>
                       </Box>
 
                       <Typography variant="body2">{staff.first_name}</Typography>
-                    </div>
+                    </Stack>
                   );
                 })
               : ""}

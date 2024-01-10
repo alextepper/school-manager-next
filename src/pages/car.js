@@ -8,6 +8,7 @@ import {
   Grid,
   Typography,
   IconButton,
+  MenuItem,
 } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
@@ -36,11 +37,11 @@ const Page = () => {
   const [newCarUse, setNewCarUse] = useState({
     start_time: new Date(),
     end_time: new Date(),
-    start_mileage: "",
-    end_mileage: "",
+    // start_mileage: "",
+    // end_mileage: "",
     area: "",
     destination: "",
-    purpose: "",
+    // purpose: "",
     user: loggedUserProfile.id, // replace with actual logged user profile id
     car: 1,
   });
@@ -49,7 +50,10 @@ const Page = () => {
     const fetchCarUses = async () => {
       try {
         const response = await api.get("/car-use/list/");
-        setCarUses(response.data.results);
+        const sortedResults = response.data.results.sort(
+          (a, b) => new Date(b.start_time) - new Date(a.start_time)
+        );
+        setCarUses(sortedResults);
       } catch (error) {
         console.error("Failed to fetch car uses", error);
       }
@@ -112,10 +116,22 @@ const Page = () => {
 
       console.log(response.data);
       // You can update the state or do anything with the returned data here
-      setCarUses((prevCarUses) => [...prevCarUses, response.data]);
+      setCarUses((prevCarUses) => [response.data, ...prevCarUses]);
       handleCreateClose();
     } catch (error) {
       console.error("There was a problem with the axios operation: ", error);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (window.confirm("Are you sure you want to delete?")) {
+      try {
+        await api.delete(`car-use/update/${selectedRow.id}/`);
+        setCarUses(carUses.filter((item) => item.id !== selectedRow.id));
+        handleClose();
+      } catch (error) {
+        console.error("Failed to delete car use", error);
+      }
     }
   };
 
@@ -188,6 +204,9 @@ const Page = () => {
   return (
     // ...
     <>
+      <Head>
+        <title>רכב כפר | RKZ</title>
+      </Head>
       <Box>
         <Container maxWidth="xl" sx={{ px: { xs: 0.5, sm: 3 } }}>
           <Stack spacing={3}>
@@ -206,12 +225,14 @@ const Page = () => {
               pageSize={5}
               pagination
               onRowClick={handleClickOpen}
-              sortModel={[
-                {
-                  field: "start_time",
-                  sort: "asc",
+              slotProps={{
+                GridToolbarQuickFilter: { placeholder: "ltr" },
+                pagination: {
+                  labelRowsPerPage: "שורות בעמוד:",
+                  sx: { direction: "ltr" },
                 },
-              ]}
+              }}
+              initialState={{ sortModel: [{ field: "date", sort: "asc" }] }}
             />
             <Dialog open={open} onClose={handleClose}>
               <DialogContent>
@@ -233,6 +254,8 @@ const Page = () => {
                         onChange={(date) => setRowForChange({ ...rowForChange, start_time: date })}
                         renderInput={(params) => <TextField {...params} fullWidth />}
                         maxDateTime={rowForChange.start_time}
+                        sx={{ direction: "ltr" }}
+                        slotProps={{ popper: { sx: { direction: "ltr" } } }}
                       />
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -243,6 +266,8 @@ const Page = () => {
                         value={new Date(rowForChange.end_time || selectedRow.end_time)}
                         onChange={(date) => setRowForChange({ ...rowForChange, end_time: date })}
                         renderInput={(params) => <TextField {...params} fullWidth />}
+                        sx={{ direction: "ltr" }}
+                        slotProps={{ popper: { sx: { direction: "ltr" } } }}
                       />
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -297,7 +322,7 @@ const Page = () => {
                 )}
               </DialogContent>
               <DialogActions>
-                <Button onClick={handleClose}>Cancel</Button>
+                <Button onClick={handleClose}>ביטול</Button>
                 <Button
                   onClick={() => {
                     if (window.confirm("Are you sure you want to save?")) {
@@ -305,7 +330,10 @@ const Page = () => {
                     }
                   }}
                 >
-                  Save
+                  שמירה
+                </Button>
+                <Button variant="contained" color="secondary" onClick={handleDelete}>
+                  מחק
                 </Button>
               </DialogActions>
             </Dialog>
@@ -320,23 +348,25 @@ const Page = () => {
               </Grid> */}
                   <Grid item xs={12} sm={6}>
                     <DateTimePicker
+                      sx={{ direction: "ltr" }}
                       ampm={false}
                       label="התחלה"
                       value={newCarUse.start_time}
                       format="dd/MM/yy HH:mm"
                       onChange={(date) => setNewCarUse({ ...newCarUse, start_time: date })}
-                      renderInput={(params) => <TextField {...params} fullWidth />}
+                      slotProps={{ popper: { sx: { direction: "ltr" } } }}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <DateTimePicker
+                      sx={{ direction: "ltr" }}
                       ampm={false}
                       label="סיום"
                       value={newCarUse.end_time}
                       format="dd/MM/yy HH:mm"
                       onChange={(date) => setNewCarUse({ ...newCarUse, end_time: date })}
-                      renderInput={(params) => <TextField {...params} fullWidth />}
                       minDateTime={newCarUse.start_time}
+                      slotProps={{ popper: { sx: { direction: "ltr" } } }}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -359,17 +389,25 @@ const Page = () => {
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <TextField
-                      label="תחום"
+                      select
+                      label={!newCarUse.area ? "תחום" : "תחום"}
                       value={newCarUse.area}
                       onChange={(e) => setNewCarUse({ ...newCarUse, area: e.target.value })}
                       fullWidth
-                    />
+                      error={!newCarUse.area}
+                    >
+                      <MenuItem value="הדרכה">הדרכה</MenuItem>
+                      <MenuItem value="רפואה">רפואה</MenuItem>
+                      <MenuItem value="סוציאלי">שרות סוציאלי</MenuItem>
+                      <MenuItem value="אחר">אחר</MenuItem>
+                    </TextField>
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <TextField
                       label="יעד"
                       value={newCarUse.destination}
                       onChange={(e) => setNewCarUse({ ...newCarUse, destination: e.target.value })}
+                      error={!newCarUse.destination}
                       fullWidth
                     />
                   </Grid>
@@ -384,8 +422,8 @@ const Page = () => {
                 </Grid>
               </DialogContent>
               <DialogActions>
-                <Button onClick={handleCreateClose}>Cancel</Button>
-                <Button onClick={handleCreate}>Create</Button>
+                <Button onClick={handleCreateClose}>ביטול</Button>
+                <Button onClick={handleCreate}>שמירה</Button>
               </DialogActions>
             </Dialog>
           </Stack>
