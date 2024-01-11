@@ -217,15 +217,16 @@ export const StudentProfileDetails = ({ user, loggedUserProfile }) => {
           </TextField>
         </Grid>
         <Grid item xs={12} md={6}>
-          <Select
+          <TextField
+            select
             fullWidth
             labelId="חדר" //{t("Room")}
             id="room"
             value={profile.room || ""}
             name="room"
-            label="Room"
+            label="חדר"
             onChange={handleProfileChange}
-            inputProps={{
+            InputProps={{
               readOnly: !isEditMode,
             }}
           >
@@ -233,18 +234,14 @@ export const StudentProfileDetails = ({ user, loggedUserProfile }) => {
               <MenuItem value={profile.room} key={profile.room.id}>
                 {profile.room.number}
               </MenuItem>
-            ) : (
-              ""
-            )}
+            ) : null}
 
-            {roomList.map((room) => {
-              return (
-                <MenuItem value={room.id} key={room.id}>
-                  {room.number}
-                </MenuItem>
-              );
-            })}
-          </Select>
+            {roomList.map((room) => (
+              <MenuItem value={room.id} key={room.id}>
+                {room.number}
+              </MenuItem>
+            ))}
+          </TextField>
         </Grid>
       </Grid>
       <CardActions sx={{ justifyContent: "flex-end" }}>

@@ -139,6 +139,7 @@ const Page = () => {
     {
       field: "user",
       headerName: "משתמש",
+      sortable: false,
       minWidth: 100,
       flex: 1,
       valueGetter: (params) => {
@@ -149,6 +150,7 @@ const Page = () => {
     {
       field: "date",
       headerName: "תאריך",
+      sortable: false,
       minWidth: 80,
       flex: 1,
       valueGetter: (params) => {
@@ -164,6 +166,7 @@ const Page = () => {
     {
       field: "start_time",
       headerName: "התחלה",
+      sortable: false,
       minWidth: 60,
       flex: 1,
       valueGetter: (params) => {
@@ -179,6 +182,7 @@ const Page = () => {
     {
       field: "end_time",
       headerName: "סיום",
+      sortable: false,
       minWidth: 60,
       flex: 1,
       valueGetter: (params) => {
@@ -194,8 +198,8 @@ const Page = () => {
 
     // { field: "start_mileage", headerName: "Start Mileage", minWidth: 100 },
     // { field: "end_mileage", headerName: "End Mileage", minWidth: 100 },
-    { field: "area", headerName: "תחום", minWidth: 100, flex: 1 },
-    { field: "destination", headerName: "יעד", minWidth: 100, flex: 1 },
+    { field: "area", headerName: "תחום", minWidth: 100, sortable: false, flex: 1 },
+    { field: "destination", headerName: "יעד", minWidth: 100, sortable: false, flex: 1 },
     // { field: "purpose", headerName: "Purpose", minWidth: 200 },
   ];
 
@@ -225,14 +229,26 @@ const Page = () => {
               pageSize={5}
               pagination
               onRowClick={handleClickOpen}
+              sx={{
+                ".MuiDataGrid-cell": {
+                  px: "2px !important",
+                  fontSize: "1.1em",
+                },
+                ".MuiDataGrid-columnHeader": {
+                  px: "2px !important",
+                  fontSize: "1.1em",
+                },
+              }}
               slotProps={{
+                ColumnHeader: { sx: { p: "0px !impornant" } },
+
                 GridToolbarQuickFilter: { placeholder: "ltr" },
                 pagination: {
                   labelRowsPerPage: "שורות בעמוד:",
                   sx: { direction: "ltr" },
                 },
               }}
-              initialState={{ sortModel: [{ field: "date", sort: "asc" }] }}
+              // initialState={{ sortModel: [{ field: "date", sort: "asc" }] }}
             />
             <Dialog open={open} onClose={handleClose}>
               <DialogContent>
