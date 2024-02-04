@@ -178,7 +178,7 @@ const Page = () => {
               {getInitials(`${user.first_name} ${user.last_name}`)}
             </Avatar>
             <Typography variant="body2" align="center">
-              {user.first_name}
+              {user ? user.first_name : ""}
             </Typography>
           </Box>
         );

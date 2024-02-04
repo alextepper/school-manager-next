@@ -35,7 +35,7 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>Activities | Devias Kit</title>
+        <title>חוגים/פרויקטים | Devias Kit</title>
       </Head>
       <Box
         component="main"
@@ -47,7 +47,7 @@ const Page = () => {
           <Stack spacing={3}>
             <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">Activities</Typography>
+                <Typography variant="h4">חוגים/פרויקטים</Typography>
               </Stack>
               <div>
                 <Button

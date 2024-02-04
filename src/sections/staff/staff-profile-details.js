@@ -53,7 +53,7 @@ export const StaffProfileDetails = ({ user, loggedUserProfile }) => {
     if (teams.length == 0) {
       setIsLoading(true);
       try {
-        const teams = await api.get("/teams/");
+        const teams = await api.get("/teams-simple/");
         setTeams(teams.data.results);
         setIsLoading(false);
       } catch (err) {

@@ -105,15 +105,15 @@ export const useSidebarItems = () => {
         </SvgIcon>
       ),
     },
-    // {
-    //   title: "Activities",
-    //   path: "/activities",
-    //   icon: (
-    //     <SvgIcon fontSize="small">
-    //       <EngineeringIcon />
-    //     </SvgIcon>
-    //   ),
-    // },
+    {
+      title: "חוגים/פרויקטים",
+      path: "/activities",
+      icon: (
+        <SvgIcon fontSize="small">
+          <EngineeringIcon />
+        </SvgIcon>
+      ),
+    },
 
     {
       // title: t("Settings"),

@@ -52,8 +52,8 @@ export const StudentProfileDetails = ({ user, loggedUserProfile }) => {
     setIsLoading(true);
     if (buildingList.length == 0) {
       try {
-        const buildings = await api.get("/buildings/");
-        const teams = await api.get("/teams/");
+        const buildings = await api.get("/buildings-simple/");
+        const teams = await api.get("/teams-simple/");
         setBuildingList(buildings.data.results);
         setTeams(teams.data.results);
       } catch (err) {
