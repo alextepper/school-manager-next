@@ -89,6 +89,7 @@ api.interceptors.response.use(
         return api(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError, null);
+        localStorage.removeItem("user"); // Delete the user from local storage
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;

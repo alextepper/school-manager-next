@@ -26,55 +26,55 @@ export const useSidebarItems = () => {
     //     </SvgIcon>
     //   ),
     // },
-    {
-      title: "חדשות",
-      path: "/feed",
-      icon: (
-        <SvgIcon fontSize="small">
-          <FeedIcon />
-        </SvgIcon>
-      ),
-    },
-    {
-      // title: t("Students"),
-      title: "חניכים",
-      path: "/students",
-      icon: (
-        <SvgIcon fontSize="small">
-          <UsersIcon />
-        </SvgIcon>
-      ),
-    },
-    {
-      // title: t("Attending"),
-      title: "נוכחים בכפר",
-      path: "/attending",
-      icon: (
-        <SvgIcon fontSize="small">
-          <UserPlusIcon />
-        </SvgIcon>
-      ),
-    },
-    {
-      // title: t("Attending"),
-      title: "חסרים",
-      path: "/absent",
-      icon: (
-        <SvgIcon fontSize="small">
-          <PersonRemoveIcon />
-        </SvgIcon>
-      ),
-    },
-    {
-      // title: t("Teams"),
-      title: "קבוצות",
-      path: "/teams",
-      icon: (
-        <SvgIcon fontSize="small">
-          <Diversity3Icon />
-        </SvgIcon>
-      ),
-    },
+    // {
+    //   title: "חדשות",
+    //   path: "/feed",
+    //   icon: (
+    //     <SvgIcon fontSize="small">
+    //       <FeedIcon />
+    //     </SvgIcon>
+    //   ),
+    // },
+    // {
+    //   // title: t("Students"),
+    //   title: "חניכים",
+    //   path: "/students",
+    //   icon: (
+    //     <SvgIcon fontSize="small">
+    //       <UsersIcon />
+    //     </SvgIcon>
+    //   ),
+    // },
+    // {
+    //   // title: t("Attending"),
+    //   title: "נוכחים בכפר",
+    //   path: "/attending",
+    //   icon: (
+    //     <SvgIcon fontSize="small">
+    //       <UserPlusIcon />
+    //     </SvgIcon>
+    //   ),
+    // },
+    // {
+    //   // title: t("Attending"),
+    //   title: "חסרים",
+    //   path: "/absent",
+    //   icon: (
+    //     <SvgIcon fontSize="small">
+    //       <PersonRemoveIcon />
+    //     </SvgIcon>
+    //   ),
+    // },
+    // {
+    //   // title: t("Teams"),
+    //   title: "קבוצות",
+    //   path: "/teams",
+    //   icon: (
+    //     <SvgIcon fontSize="small">
+    //       <Diversity3Icon />
+    //     </SvgIcon>
+    //   ),
+    // },
     {
       // title: t("Teams"),
       title: "רכב כפר",

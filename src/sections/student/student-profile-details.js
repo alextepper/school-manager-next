@@ -190,7 +190,7 @@ export const StudentProfileDetails = ({ user, loggedUserProfile }) => {
             value={validBirthday}
             onChange={handleDateChange}
             readOnly={!isEditMode}
-            sx={{ direction: "ltr" }}
+            sx={{ direction: "ltr", width: "100%" }}
             slotProps={{ popper: { sx: { direction: "ltr" } } }}
           />
         </Grid>

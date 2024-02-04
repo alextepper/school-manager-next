@@ -9,6 +9,10 @@ import {
   Typography,
   IconButton,
   MenuItem,
+  Avatar,
+  Card,
+  CardHeader,
+  Collapse,
 } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
@@ -19,8 +23,10 @@ import api from "src/utils/api";
 import Head from "next/head";
 import { Box, Container, Stack } from "@mui/system";
 
-import { DataGrid } from "@mui/x-data-grid";
-import { DateTimePicker } from "@mui/x-date-pickers";
+import { DataGrid, GridExpandMoreIcon } from "@mui/x-data-grid";
+import { DateTimePicker, MobileDateTimePicker } from "@mui/x-date-pickers";
+import { deepPurple } from "@mui/material/colors";
+import { getInitials } from "src/utils/get-initials";
 
 // ...
 
@@ -29,11 +35,14 @@ import { DateTimePicker } from "@mui/x-date-pickers";
 const Page = () => {
   const loggedUserProfile = JSON.parse(localStorage.getItem("user")).profile;
   const [carUses, setCarUses] = useState([]);
+  const [futureCarUses, setFutureCarUses] = useState([]);
+  const [pastCarUses, setPastCarUses] = useState([]);
   const [open, setOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [staff, setStaff] = useState([]);
   const [rowForChange, setRowForChange] = useState({});
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
+  const [expanded, setExpanded] = useState(false);
   const [newCarUse, setNewCarUse] = useState({
     start_time: new Date(),
     end_time: new Date(),
@@ -70,6 +79,17 @@ const Page = () => {
     fetchStaff();
     fetchCarUses();
   }, []);
+
+  useEffect(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const future = carUses.filter((carUse) => new Date(carUse.start_time) >= today);
+    const past = carUses.filter((carUse) => new Date(carUse.start_time) < today);
+
+    setFutureCarUses(future);
+    setPastCarUses(past);
+  }, [carUses]);
 
   const handleClickOpen = (params) => {
     setSelectedRow(params.row);
@@ -138,15 +158,39 @@ const Page = () => {
   const columns = [
     {
       field: "user",
-      headerName: "משתמש",
-      sortable: false,
-      minWidth: 100,
+      headerName: "",
       flex: 1,
-      valueGetter: (params) => {
+      maxWidth: 40,
+
+      renderCell: (params) => {
         const user = staff.find((staffMember) => staffMember.id === params.row.user);
-        return user ? `${user.first_name} ${user.last_name}` : "";
+        return (
+          <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+            <Avatar
+              sx={{ bgcolor: deepPurple[500] }}
+              src={user.avatar}
+              alt={getInitials(`${user.first_name} ${user.last_name}`)}
+            >
+              {getInitials(`${user.first_name} ${user.last_name}`)}
+            </Avatar>
+            <Typography variant="body2" align="center">
+              {user.first_name}
+            </Typography>
+          </Box>
+        );
       },
     },
+    // {
+    //   field: "user",
+    //   headerName: "משתמש",
+    //   sortable: false,
+    //   minWidth: 100,
+    //   flex: 1,
+    //   valueGetter: (params) => {
+    //     const user = staff.find((staffMember) => staffMember.id === params.row.user);
+    //     return user ? `${user.first_name} ${user.last_name}` : "";
+    //   },
+    // },
     {
       field: "date",
       headerName: "תאריך",
@@ -203,10 +247,11 @@ const Page = () => {
     // { field: "purpose", headerName: "Purpose", minWidth: 200 },
   ];
 
-  // ...
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+  };
 
   return (
-    // ...
     <>
       <Head>
         <title>רכב כפר | RKZ</title>
@@ -222,34 +267,94 @@ const Page = () => {
                 </IconButton>
               </Stack>
             </Stack>
-            <DataGrid
-              disableColumnMenu
-              rows={carUses}
-              columns={columns}
-              pageSize={5}
-              pagination
-              onRowClick={handleClickOpen}
-              sx={{
-                ".MuiDataGrid-cell": {
-                  px: "2px !important",
-                  fontSize: "1.1em",
-                },
-                ".MuiDataGrid-columnHeader": {
-                  px: "2px !important",
-                  fontSize: "1.1em",
-                },
-              }}
-              slotProps={{
-                ColumnHeader: { sx: { p: "0px !impornant" } },
+            <Card>
+              <DataGrid
+                disableColumnMenu
+                rows={futureCarUses}
+                columns={columns}
+                rowHeight={70}
+                pageSize={5}
+                pagination
+                onRowClick={handleClickOpen}
+                sx={{
+                  ".MuiDataGrid-cell": {
+                    px: "2px !important",
+                    fontSize: "1.1em",
+                  },
+                  ".MuiDataGrid-columnHeader": {
+                    px: "2px !important",
+                    fontSize: "1.1em",
+                  },
+                }}
+                slotProps={{
+                  ColumnHeader: { sx: { p: "0px !impornant" } },
 
-                GridToolbarQuickFilter: { placeholder: "ltr" },
-                pagination: {
-                  labelRowsPerPage: "שורות בעמוד:",
-                  sx: { direction: "ltr" },
-                },
-              }}
-              // initialState={{ sortModel: [{ field: "date", sort: "asc" }] }}
-            />
+                  GridToolbarQuickFilter: { placeholder: "ltr" },
+                  pagination: {
+                    labelRowsPerPage: "שורות בעמוד:",
+                    sx: { direction: "ltr" },
+                  },
+                }}
+                initialState={{
+                  pagination: { paginationModel: { pageSize: 10 } },
+                }}
+                pageSizeOptions={[5, 10, 25]}
+                // initialState={{ sortModel: [{ field: "date", sort: "asc" }] }}
+              />
+            </Card>
+
+            <Card>
+              <CardHeader
+                sx={{ p: 1 }}
+                title="היסטוריה"
+                onClick={handleExpandClick}
+                action={
+                  <IconButton
+                    onClick={handleExpandClick}
+                    aria-expanded={expanded}
+                    aria-label="show more"
+                  >
+                    <GridExpandMoreIcon />
+                  </IconButton>
+                }
+              />
+              <Collapse in={expanded} timeout="auto" unmountOnExit>
+                <DataGrid
+                  disableColumnMenu
+                  rows={pastCarUses}
+                  columns={columns}
+                  rowHeight={70}
+                  pageSize={5}
+                  pagination
+                  onRowClick={handleClickOpen}
+                  sx={{
+                    ".MuiDataGrid-cell": {
+                      px: "2px !important",
+                      fontSize: "1.1em",
+                    },
+                    ".MuiDataGrid-columnHeader": {
+                      px: "2px !important",
+                      fontSize: "1.1em",
+                    },
+                  }}
+                  slotProps={{
+                    ColumnHeader: { sx: { p: "0px !impornant" } },
+
+                    GridToolbarQuickFilter: { placeholder: "ltr" },
+                    pagination: {
+                      labelRowsPerPage: "שורות בעמוד:",
+                      sx: { direction: "ltr" },
+                    },
+                  }}
+                  initialState={{
+                    pagination: { paginationModel: { pageSize: 25 } },
+                  }}
+                  pageSizeOptions={[5, 10, 25]}
+                  // initialState={{ sortModel: [{ field: "date", sort: "asc" }] }}
+                />
+              </Collapse>
+            </Card>
+
             <Dialog open={open} onClose={handleClose}>
               <DialogContent>
                 {/* Render the fields of the selected row here */}
@@ -270,8 +375,10 @@ const Page = () => {
                         onChange={(date) => setRowForChange({ ...rowForChange, start_time: date })}
                         renderInput={(params) => <TextField {...params} fullWidth />}
                         maxDateTime={rowForChange.start_time}
-                        sx={{ direction: "ltr" }}
-                        slotProps={{ popper: { sx: { direction: "ltr" } } }}
+                        sx={{ direction: "ltr", width: "100%" }}
+                        slotProps={{
+                          layout: { sx: { direction: "ltr" } },
+                        }}
                       />
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -282,8 +389,10 @@ const Page = () => {
                         value={new Date(rowForChange.end_time || selectedRow.end_time)}
                         onChange={(date) => setRowForChange({ ...rowForChange, end_time: date })}
                         renderInput={(params) => <TextField {...params} fullWidth />}
-                        sx={{ direction: "ltr" }}
-                        slotProps={{ popper: { sx: { direction: "ltr" } } }}
+                        sx={{ direction: "ltr", width: "100%" }}
+                        slotProps={{
+                          layout: { sx: { direction: "ltr" } },
+                        }}
                       />
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -364,25 +473,29 @@ const Page = () => {
               </Grid> */}
                   <Grid item xs={12} sm={6}>
                     <DateTimePicker
-                      sx={{ direction: "ltr" }}
                       ampm={false}
                       label="התחלה"
                       value={newCarUse.start_time}
                       format="dd/MM/yy HH:mm"
                       onChange={(date) => setNewCarUse({ ...newCarUse, start_time: date })}
-                      slotProps={{ popper: { sx: { direction: "ltr" } } }}
+                      sx={{ direction: "ltr", width: "100%" }}
+                      slotProps={{
+                        layout: { sx: { direction: "ltr" } },
+                      }}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <DateTimePicker
-                      sx={{ direction: "ltr" }}
                       ampm={false}
                       label="סיום"
                       value={newCarUse.end_time}
                       format="dd/MM/yy HH:mm"
                       onChange={(date) => setNewCarUse({ ...newCarUse, end_time: date })}
                       minDateTime={newCarUse.start_time}
-                      slotProps={{ popper: { sx: { direction: "ltr" } } }}
+                      sx={{ direction: "ltr", width: "100%" }}
+                      slotProps={{
+                        layout: { sx: { direction: "ltr" } },
+                      }}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
