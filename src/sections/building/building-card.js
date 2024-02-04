@@ -99,7 +99,3 @@ export const BuildingCard = (props) => {
     </Card>
   );
 };
-
-BuildingCard.propTypes = {
-  buliding: PropTypes.object.isRequired,
-};

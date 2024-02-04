@@ -155,6 +155,10 @@ const Page = () => {
     }
   };
 
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+  };
+
   const columns = [
     {
       field: "user",
@@ -168,7 +172,7 @@ const Page = () => {
           <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
             <Avatar
               sx={{ bgcolor: deepPurple[500] }}
-              src={user.avatar}
+              src={user ? user.avatar : ""}
               alt={getInitials(`${user.first_name} ${user.last_name}`)}
             >
               {getInitials(`${user.first_name} ${user.last_name}`)}
@@ -246,10 +250,6 @@ const Page = () => {
     { field: "destination", headerName: "יעד", minWidth: 100, sortable: false, flex: 1 },
     // { field: "purpose", headerName: "Purpose", minWidth: 200 },
   ];
-
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
 
   return (
     <>

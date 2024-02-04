@@ -98,7 +98,7 @@ const Page = () => {
               </Typography>
             </Stack>
             <Tabs onChange={handleMethodChange} sx={{ mb: 3 }} value={showPasswordReset}>
-              <Tab sx={{ mx: 2 }} label="קניסה" value={false} />
+              <Tab sx={{ mx: 2 }} label="כניסה" value={false} />
               <Tab sx={{ mx: 2 }} label="איפוס סיסמה" value={true} />
             </Tabs>
             {!showPasswordReset && (
