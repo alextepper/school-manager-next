@@ -75,21 +75,28 @@ export const StudentTable = ({ search }) => {
       flex: 1,
       valueGetter: (params) => `${params.row.first_name || ""} ${params.row.last_name || ""}`,
     },
-    // {
-    //   field: "teams",
-    //   headerName: t("Team"),
-    //   minWidth: 90,
-    //   flex: 1,
-    //   valueGetter: (params) => `${params.row.team ? params.row.team.teamName : ""}`,
-    // },
-    // {
-    //   field: "building",
-    //   headerName: t("Building"),
-    //   minWidth: 60,
-    //   flex: 1,
-    //   valueGetter: (params) => `${params.row.room ? params.row.room.building.buildingName : ""}`,
-    // },
-    { field: "grade", headerName: t("Grade"), flex: 1, minWidth: 50 },
+    {
+      field: "teams",
+      headerName: t("Team"),
+      minWidth: 60,
+      flex: 1,
+      valueGetter: (params) => `${params.row.teamName || ""}`,
+    },
+    {
+      field: "building",
+      headerName: t("Building"),
+      minWidth: 60,
+      flex: 1,
+      valueGetter: (params) => `${params.row.buildingName || ""}`,
+    },
+    {
+      field: "room",
+      headerName: t("Room"),
+      minWidth: 20,
+      flex: 1,
+      valueGetter: (params) => `${params.row.roomNumber || ""}`,
+    },
+    // { field: "grade", headerName: t("Grade"), flex: 1, minWidth: 50 },
   ];
   const [rows, setRows] = useState([]);
   const [paginationModel, setPaginationModel] = useState({

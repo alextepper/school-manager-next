@@ -49,8 +49,8 @@ export const StudentProfile = ({ user, loggedUserProfile }) => {
   const { t } = useTranslation();
   const [profile, setProfile] = useState(user);
   const [avatar, setAvatar] = useState(profile.avatar);
-  const [likes, setLikes] = useState(profile.likes.length);
-  const [liked, setLiked] = useState(profile.likes.includes(loggedUserProfile.id));
+  // const [likes, setLikes] = useState(profile.likes.length);
+  // const [liked, setLiked] = useState(profile.likes.includes(loggedUserProfile.id));
   const [expanded, setExpanded] = useState(false);
   const [expandedMovements, setExpandedMovements] = useState(false);
   const router = useRouter();
