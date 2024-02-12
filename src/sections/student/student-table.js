@@ -100,7 +100,7 @@ export const StudentTable = ({ search }) => {
   ];
   const [rows, setRows] = useState([]);
   const [paginationModel, setPaginationModel] = useState({
-    pageSize: 15,
+    pageSize: 50,
     page: 0,
   });
   const [rowCount, setRowCount] = useState(0);

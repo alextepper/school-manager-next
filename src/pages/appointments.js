@@ -28,43 +28,36 @@ import { DateTimePicker, MobileDateTimePicker } from "@mui/x-date-pickers";
 import { deepPurple } from "@mui/material/colors";
 import { getInitials } from "src/utils/get-initials";
 
-// ...
-
-// ...
-
 const Page = () => {
   const loggedUserProfile = JSON.parse(localStorage.getItem("user")).profile;
-  const [carUses, setCarUses] = useState([]);
-  const [futureCarUses, setFutureCarUses] = useState([]);
-  const [pastCarUses, setPastCarUses] = useState([]);
+  const [appointments, setAppointments] = useState([]);
+  const [futureAppointments, setFutureAppointments] = useState([]);
+  const [pastAppointments, setPastAppointments] = useState([]);
   const [open, setOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [staff, setStaff] = useState([]);
   const [rowForChange, setRowForChange] = useState({});
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [expanded, setExpanded] = useState(false);
-  const [newCarUse, setNewCarUse] = useState({
-    start_time: new Date(),
-    end_time: new Date(),
-    // start_mileage: "",
-    // end_mileage: "",
-    area: "",
+  const [newAppointment, setNewAppointment] = useState({
+    time: new Date(),
+    student: "",
+    staff: "",
     destination: "",
-    // purpose: "",
-    user: loggedUserProfile.id, // replace with actual logged user profile id
-    car: 1,
+    comments: "",
+    complete: false,
   });
 
   useEffect(() => {
-    const fetchCarUses = async () => {
+    const fetchAppointments = async () => {
       try {
-        const response = await api.get("/car-use/list/");
+        const response = await api.get("/appointments/");
         const sortedResults = response.data.results.sort(
-          (a, b) => new Date(b.start_time) - new Date(a.start_time)
+          (a, b) => new Date(b.time) - new Date(a.time)
         );
-        setCarUses(sortedResults);
+        setAppointments(sortedResults);
       } catch (error) {
-        console.error("Failed to fetch car uses", error);
+        console.error("Failed to fetch appointments", error);
       }
     };
     const fetchStaff = async () => {
@@ -77,19 +70,19 @@ const Page = () => {
     };
 
     fetchStaff();
-    fetchCarUses();
+    fetchAppointments();
   }, []);
 
   useEffect(() => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    const future = carUses.filter((carUse) => new Date(carUse.start_time) >= today);
-    const past = carUses.filter((carUse) => new Date(carUse.start_time) < today);
+    const future = appointments.filter((appointment) => new Date(appointment.time) >= today);
+    const past = appointments.filter((appointment) => new Date(appointment.time) < today);
 
-    setFutureCarUses(future);
-    setPastCarUses(past);
-  }, [carUses]);
+    setFutureAppointments(future);
+    setPastAppointments(past);
+  }, [appointments]);
 
   const handleClickOpen = (params) => {
     setSelectedRow(params.row);
@@ -98,25 +91,27 @@ const Page = () => {
 
   const handleClose = () => {
     setOpen(false);
+    setRowForChange([]);
   };
 
   const handleSave = async () => {
     try {
-      const response = await api.patch(`car-use/update/${selectedRow.id}/`, rowForChange);
+      const response = await api.patch(`appointments/${selectedRow.id}/`, rowForChange);
 
       if (response.status !== 200) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      // Update the carUses state with the updated row
-      setCarUses((prevCarUses) =>
-        prevCarUses.map((carUse) =>
-          carUse.id === selectedRow.id ? { ...carUse, ...rowForChange } : carUse
+      // Update the appointments state with the updated row
+      setAppointments((prevAppointments) =>
+        prevAppointments.map((appointment) =>
+          appointment.id === selectedRow.id ? { ...appointment, ...rowForChange } : appointment
         )
       );
 
       // Close the dialog
       setOpen(false);
+      setRowForChange([]);
     } catch (error) {
       console.error("There was a problem with the axios operation:", error);
     }
@@ -128,15 +123,16 @@ const Page = () => {
 
   const handleCreateClose = () => {
     setCreateDialogOpen(false);
+    setRowForChange([]);
   };
 
   const handleCreate = async () => {
     try {
-      const response = await api.post("car-use/create/", newCarUse);
+      const response = await api.post("appointments/", newAppointment);
 
       console.log(response.data);
       // You can update the state or do anything with the returned data here
-      setCarUses((prevCarUses) => [response.data, ...prevCarUses]);
+      setAppointments((prevAppointments) => [response.data, ...prevAppointments]);
       handleCreateClose();
     } catch (error) {
       console.error("There was a problem with the axios operation: ", error);
@@ -146,8 +142,8 @@ const Page = () => {
   const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete?")) {
       try {
-        await api.delete(`car-use/update/${selectedRow.id}/`);
-        setCarUses(carUses.filter((item) => item.id !== selectedRow.id));
+        await api.delete(`appointments/${selectedRow.id}/`);
+        setAppointments(appointments.filter((item) => item.id !== selectedRow.id));
         handleClose();
       } catch (error) {
         console.error("Failed to delete car use", error);
@@ -159,42 +155,46 @@ const Page = () => {
     setExpanded(!expanded);
   };
 
-  const columns = [
-    {
-      field: "user",
-      headerName: "",
-      flex: 1,
-      maxWidth: 40,
+  const handleStaffChange = (event) => {
+    setStaff(event.target.value);
+  };
 
-      renderCell: (params) => {
-        const user = staff.find((staffMember) => staffMember.id === params.row.user);
-        return (
-          <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-            <Avatar
-              sx={{ bgcolor: deepPurple[500] }}
-              src={user ? user.avatar : ""}
-              alt={getInitials(`${user.first_name} ${user.last_name}`)}
-            >
-              {getInitials(`${user.first_name} ${user.last_name}`)}
-            </Avatar>
-            <Typography variant="body2" align="center">
-              {user ? user.first_name : ""}
-            </Typography>
-          </Box>
-        );
-      },
-    },
+  const columns = [
     // {
     //   field: "user",
-    //   headerName: "משתמש",
-    //   sortable: false,
-    //   minWidth: 100,
+    //   headerName: "",
     //   flex: 1,
-    //   valueGetter: (params) => {
+    //   maxWidth: 40,
+
+    //   renderCell: (params) => {
     //     const user = staff.find((staffMember) => staffMember.id === params.row.user);
-    //     return user ? `${user.first_name} ${user.last_name}` : "";
+    //     return (
+    //       <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+    //         <Avatar
+    //           sx={{ bgcolor: deepPurple[500] }}
+    //           src={user ? user.avatar : ""}
+    //           alt={getInitials(`${user.first_name} ${user.last_name}`)}
+    //         >
+    //           {getInitials(`${user.first_name} ${user.last_name}`)}
+    //         </Avatar>
+    //         <Typography variant="body2" align="center">
+    //           {user ? user.first_name : ""}
+    //         </Typography>
+    //       </Box>
+    //     );
     //   },
     // },
+    {
+      field: "user",
+      headerName: "צוות",
+      sortable: false,
+      minWidth: 100,
+      flex: 1,
+      valueGetter: (params) => {
+        const user = staff.find((staffMember) => staffMember.id === params.row.staff);
+        return user ? `${user.first_name} ${user.last_name}` : "";
+      },
+    },
     {
       field: "date",
       headerName: "תאריך",
@@ -202,7 +202,7 @@ const Page = () => {
       minWidth: 80,
       flex: 1,
       valueGetter: (params) => {
-        const date = new Date(params.row.start_time);
+        const date = new Date(params.row.time);
         const formatter = new Intl.DateTimeFormat("en-GB", {
           day: "2-digit",
           month: "2-digit",
@@ -212,13 +212,13 @@ const Page = () => {
       },
     },
     {
-      field: "start_time",
+      field: "time",
       headerName: "התחלה",
       sortable: false,
       minWidth: 60,
       flex: 1,
       valueGetter: (params) => {
-        const date = new Date(params.row.start_time);
+        const date = new Date(params.row.time);
         const formatter = new Intl.DateTimeFormat("en-GB", {
           hour: "2-digit",
           minute: "2-digit",
@@ -227,50 +227,30 @@ const Page = () => {
         return formatter.format(date);
       },
     },
-    {
-      field: "end_time",
-      headerName: "סיום",
-      sortable: false,
-      minWidth: 60,
-      flex: 1,
-      valueGetter: (params) => {
-        const date = new Date(params.row.end_time);
-        const formatter = new Intl.DateTimeFormat("en-GB", {
-          hour: "2-digit",
-          minute: "2-digit",
-          hour12: false,
-        });
-        return formatter.format(date);
-      },
-    },
-
-    // { field: "start_mileage", headerName: "Start Mileage", minWidth: 100 },
-    // { field: "end_mileage", headerName: "End Mileage", minWidth: 100 },
-    // { field: "area", headerName: "תחום", minWidth: 100, sortable: false, flex: 1 },
-    { field: "destination", headerName: "יעד", minWidth: 100, sortable: false, flex: 1 },
-    // { field: "purpose", headerName: "Purpose", minWidth: 200 },
+    { field: "student", headerName: "חניך", minWidth: 100, sortable: false, flex: 1 },
+    { field: "destination", headerName: "כתובת", minWidth: 100, sortable: false, flex: 1 },
   ];
 
   return (
     <>
       <Head>
-        <title>רכב כפר | RKZ</title>
+        <title> תורים למרפאה | RKZ</title>
       </Head>
       <Box>
         <Container maxWidth="xl" sx={{ px: { xs: 0.5, sm: 3 } }}>
           <Stack spacing={3}>
             <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack direction="row" textAlign="center" spacing={1}>
-                <Typography variant="h4">נסיעות ברכב</Typography>
+                <Typography variant="h4"> תורים למרפאה </Typography>
                 <IconButton color="primary" onClick={handleCreateOpen}>
                   <AddCircleOutlineIcon />
                 </IconButton>
               </Stack>
             </Stack>
-            <Card>
+            <Card sx={{ px: 0.5 }}>
               <DataGrid
                 disableColumnMenu
-                rows={futureCarUses}
+                rows={futureAppointments}
                 columns={columns}
                 rowHeight={70}
                 pageSize={5}
@@ -303,7 +283,7 @@ const Page = () => {
               />
             </Card>
 
-            <Card>
+            <Card sx={{ px: 0.5 }}>
               <CardHeader
                 sx={{ p: 1 }}
                 title="היסטוריה"
@@ -321,7 +301,7 @@ const Page = () => {
               <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <DataGrid
                   disableColumnMenu
-                  rows={pastCarUses}
+                  rows={pastAppointments}
                   columns={columns}
                   rowHeight={70}
                   pageSize={5}
@@ -357,12 +337,40 @@ const Page = () => {
 
             <Dialog open={open} onClose={handleClose}>
               <DialogContent>
-                {/* Render the fields of the selected row here */}
                 {selectedRow && (
                   <Grid container spacing={2}>
-                    {/* <Grid item xs={12}>
-                <TextField label="User" defaultValue={selectedRow.user} fullWidth />
-              </Grid> */}
+                    <Grid item xs={12}>
+                      <TextField
+                        select
+                        label="Staff"
+                        value={rowForChange.staff || selectedRow.staff}
+                        onChange={(e) =>
+                          setRowForChange({ ...rowForChange, staff: e.target.value })
+                        }
+                        fullWidth
+                      >
+                        {staff.map((staffMember) => (
+                          <MenuItem key={staffMember.id} value={staffMember.id}>
+                            <Avatar
+                              src={staffMember.avatar}
+                              alt={`${staffMember.first_name} ${staffMember.last_name}`}
+                              sx={{ ml: 1 }}
+                            />
+                            {staffMember.first_name} {staffMember.last_name}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        label="תלמיד"
+                        value={newAppointment.student}
+                        onChange={(e) =>
+                          setNewAppointment({ ...newAppointment, student: e.target.value })
+                        }
+                        fullWidth
+                      />
+                    </Grid>
                     {/* <Grid item xs={12}>
                 <TextField label="Date" defaultValue={selectedRow.date} fullWidth />
               </Grid> */}
@@ -370,58 +378,16 @@ const Page = () => {
                       <DateTimePicker
                         ampm={false}
                         label="התחלה"
-                        value={new Date(rowForChange.start_time || selectedRow.start_time)}
+                        value={new Date(rowForChange.time || selectedRow.time)}
                         format="dd/MM/yy HH:mm"
-                        onChange={(date) => setRowForChange({ ...rowForChange, start_time: date })}
+                        onChange={(date) => setRowForChange({ ...rowForChange, time: date })}
                         renderInput={(params) => <TextField {...params} fullWidth />}
-                        maxDateTime={rowForChange.start_time}
+                        maxDateTime={rowForChange.time}
                         sx={{ direction: "ltr", width: "100%" }}
                         slotProps={{
                           layout: { sx: { direction: "ltr" } },
                         }}
                       />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <DateTimePicker
-                        ampm={false}
-                        label="סיום"
-                        format="dd/MM/yy HH:mm"
-                        value={new Date(rowForChange.end_time || selectedRow.end_time)}
-                        onChange={(date) => setRowForChange({ ...rowForChange, end_time: date })}
-                        renderInput={(params) => <TextField {...params} fullWidth />}
-                        sx={{ direction: "ltr", width: "100%" }}
-                        slotProps={{
-                          layout: { sx: { direction: "ltr" } },
-                        }}
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <TextField
-                        label="ק''מ התחלה"
-                        defaultValue={rowForChange.start_mileage || selectedRow.start_mileage}
-                        onChange={(e) =>
-                          setRowForChange({ ...rowForChange, start_mileage: e.target.value })
-                        }
-                        fullWidth
-                      />{" "}
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <TextField
-                        label="ק''מ בסוף"
-                        defaultValue={rowForChange.end_mileage || selectedRow.end_mileage}
-                        onChange={(e) =>
-                          setRowForChange({ ...rowForChange, end_mileage: e.target.value })
-                        }
-                        fullWidth
-                      />{" "}
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <TextField
-                        label="תחום"
-                        defaultValue={rowForChange.area || selectedRow.area}
-                        onChange={(e) => setRowForChange({ ...rowForChange, area: e.target.value })}
-                        fullWidth
-                      />{" "}
                     </Grid>
                     <Grid item xs={12} sm={6}>
                       <TextField
@@ -436,9 +402,9 @@ const Page = () => {
                     <Grid item xs={12}>
                       <TextField
                         label="הארות"
-                        defaultValue={rowForChange.purpose || selectedRow.purpose}
+                        defaultValue={rowForChange.comments || selectedRow.comments}
                         onChange={(e) =>
-                          setRowForChange({ ...rowForChange, purpose: e.target.value })
+                          setRowForChange({ ...rowForChange, comments: e.target.value })
                         }
                         fullWidth
                       />{" "}
@@ -465,6 +431,38 @@ const Page = () => {
             <Dialog open={createDialogOpen} onClose={handleCreateClose}>
               <DialogContent>
                 <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <TextField
+                      select
+                      label="צוות"
+                      value={newAppointment.staff || ""}
+                      onChange={(e) =>
+                        setNewAppointment({ ...newAppointment, staff: e.target.value })
+                      }
+                      fullWidth
+                    >
+                      {staff.map((staffMember) => (
+                        <MenuItem key={staffMember.id} value={staffMember.id}>
+                          <Avatar
+                            src={staffMember.avatar}
+                            alt={`${staffMember.first_name} ${staffMember.last_name}`}
+                            sx={{ ml: 1 }}
+                          />
+                          {staffMember.first_name} {staffMember.last_name}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      label="תלמיד"
+                      value={newAppointment.student}
+                      onChange={(e) =>
+                        setNewAppointment({ ...newAppointment, student: e.target.value })
+                      }
+                      fullWidth
+                    />
+                  </Grid>
                   {/* <Grid item xs={12}>
                 <TextField label="User" defaultValue={selectedRow.user} fullWidth />
               </Grid> */}
@@ -475,76 +473,34 @@ const Page = () => {
                     <DateTimePicker
                       ampm={false}
                       label="התחלה"
-                      value={newCarUse.start_time}
+                      value={newAppointment.time}
                       format="dd/MM/yy HH:mm"
-                      onChange={(date) => setNewCarUse({ ...newCarUse, start_time: date })}
+                      onChange={(date) => setNewAppointment({ ...newAppointment, time: date })}
                       sx={{ direction: "ltr", width: "100%" }}
                       slotProps={{
                         layout: { sx: { direction: "ltr" } },
                       }}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <DateTimePicker
-                      ampm={false}
-                      label="סיום"
-                      value={newCarUse.end_time}
-                      format="dd/MM/yy HH:mm"
-                      onChange={(date) => setNewCarUse({ ...newCarUse, end_time: date })}
-                      minDateTime={newCarUse.start_time}
-                      sx={{ direction: "ltr", width: "100%" }}
-                      slotProps={{
-                        layout: { sx: { direction: "ltr" } },
-                      }}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      label="ק''מ התחלה"
-                      value={newCarUse.start_mileage}
-                      onChange={(e) =>
-                        setNewCarUse({ ...newCarUse, start_mileage: e.target.value })
-                      }
-                      fullWidth
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      label="ק''מ בסוף"
-                      value={newCarUse.end_mileage}
-                      onChange={(e) => setNewCarUse({ ...newCarUse, end_mileage: e.target.value })}
-                      fullWidth
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      select
-                      label={!newCarUse.area ? "תחום" : "תחום"}
-                      value={newCarUse.area}
-                      onChange={(e) => setNewCarUse({ ...newCarUse, area: e.target.value })}
-                      fullWidth
-                      error={!newCarUse.area}
-                    >
-                      <MenuItem value="הדרכה">הדרכה</MenuItem>
-                      <MenuItem value="רפואה">רפואה</MenuItem>
-                      <MenuItem value="סוציאלי">שרות סוציאלי</MenuItem>
-                      <MenuItem value="אחר">אחר</MenuItem>
-                    </TextField>
-                  </Grid>
+
                   <Grid item xs={12} sm={6}>
                     <TextField
                       label="יעד"
-                      value={newCarUse.destination}
-                      onChange={(e) => setNewCarUse({ ...newCarUse, destination: e.target.value })}
-                      error={!newCarUse.destination}
+                      value={newAppointment.destination}
+                      onChange={(e) =>
+                        setNewAppointment({ ...newAppointment, destination: e.target.value })
+                      }
+                      error={!newAppointment.destination}
                       fullWidth
                     />
                   </Grid>
                   <Grid item xs={12}>
                     <TextField
                       label="הארות"
-                      value={newCarUse.purpose}
-                      onChange={(e) => setNewCarUse({ ...newCarUse, purpose: e.target.value })}
+                      value={newAppointment.comments}
+                      onChange={(e) =>
+                        setNewAppointment({ ...newAppointment, comments: e.target.value })
+                      }
                       fullWidth
                     />
                   </Grid>

@@ -10,7 +10,9 @@ import EngineeringIcon from "@mui/icons-material/Engineering";
 import Diversity3Icon from "@mui/icons-material/Diversity3";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import FeedIcon from "@mui/icons-material/Feed";
+import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
 import { useTranslation } from "react-i18next";
+import { MedicalServices } from "@mui/icons-material";
 
 export const useSidebarItems = () => {
   const { t } = useTranslation();
@@ -82,6 +84,16 @@ export const useSidebarItems = () => {
       icon: (
         <SvgIcon fontSize="small">
           <DirectionsCarIcon />
+        </SvgIcon>
+      ),
+    },
+    {
+      // title: t("Teams"),
+      title: "תורים למרפאה",
+      path: "/appointments",
+      icon: (
+        <SvgIcon fontSize="small">
+          <MedicalServicesIcon />
         </SvgIcon>
       ),
     },
