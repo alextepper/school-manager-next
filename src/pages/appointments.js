@@ -365,7 +365,7 @@ const Page = () => {
                     <Grid item xs={12}>
                       <TextField
                         select
-                        label="Staff"
+                        label="צוות"
                         value={rowForChange.staff || selectedRow.staff}
                         onChange={(e) =>
                           setRowForChange({ ...rowForChange, staff: e.target.value })
@@ -387,9 +387,9 @@ const Page = () => {
                     <Grid item xs={12}>
                       <TextField
                         label="תלמיד"
-                        value={newAppointment.student}
+                        value={rowForChange.student || selectedRow.student}
                         onChange={(e) =>
-                          setNewAppointment({ ...newAppointment, student: e.target.value })
+                          setNewAppointment({ ...rowForChange, student: e.target.value })
                         }
                         fullWidth
                       />
@@ -414,7 +414,7 @@ const Page = () => {
                     </Grid>
                     <Grid item xs={12} sm={6}>
                       <TextField
-                        label="יעד"
+                        label="כתובת"
                         defaultValue={rowForChange.destination || selectedRow.destination}
                         onChange={(e) =>
                           setRowForChange({ ...rowForChange, destination: e.target.value })

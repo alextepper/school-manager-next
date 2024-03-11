@@ -42,7 +42,7 @@ const Page = () => {
   const [staff, setStaff] = useState([]);
   const [rowForChange, setRowForChange] = useState({});
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(futureCarUses.length == 0);
   const [newCarUse, setNewCarUse] = useState({
     start_time: new Date(),
     end_time: new Date(),
@@ -270,41 +270,43 @@ const Page = () => {
                 </IconButton>
               </Stack>
             </Stack>
-            <Card>
-              <DataGrid
-                disableColumnMenu
-                rows={futureCarUses}
-                columns={columns}
-                rowHeight={70}
-                pageSize={5}
-                pagination
-                onRowClick={handleClickOpen}
-                sx={{
-                  ".MuiDataGrid-cell": {
-                    px: "2px !important",
-                    fontSize: "1.1em",
-                  },
-                  ".MuiDataGrid-columnHeader": {
-                    px: "2px !important",
-                    fontSize: "1.1em",
-                  },
-                }}
-                slotProps={{
-                  ColumnHeader: { sx: { p: "0px !impornant" } },
+            {futureCarUses.length > 0 && (
+              <Card>
+                <DataGrid
+                  disableColumnMenu
+                  rows={futureCarUses}
+                  columns={columns}
+                  rowHeight={70}
+                  pageSize={5}
+                  pagination
+                  onRowClick={handleClickOpen}
+                  sx={{
+                    ".MuiDataGrid-cell": {
+                      px: "2px !important",
+                      fontSize: "1.1em",
+                    },
+                    ".MuiDataGrid-columnHeader": {
+                      px: "2px !important",
+                      fontSize: "1.1em",
+                    },
+                  }}
+                  slotProps={{
+                    ColumnHeader: { sx: { p: "0px !impornant" } },
 
-                  GridToolbarQuickFilter: { placeholder: "ltr" },
-                  pagination: {
-                    labelRowsPerPage: "שורות בעמוד:",
-                    sx: { direction: "ltr" },
-                  },
-                }}
-                initialState={{
-                  pagination: { paginationModel: { pageSize: 10 } },
-                }}
-                pageSizeOptions={[5, 10, 25]}
-                // initialState={{ sortModel: [{ field: "date", sort: "asc" }] }}
-              />
-            </Card>
+                    GridToolbarQuickFilter: { placeholder: "ltr" },
+                    pagination: {
+                      labelRowsPerPage: "שורות בעמוד:",
+                      sx: { direction: "ltr" },
+                    },
+                  }}
+                  initialState={{
+                    pagination: { paginationModel: { pageSize: 10 } },
+                  }}
+                  pageSizeOptions={[5, 10, 25]}
+                  // initialState={{ sortModel: [{ field: "date", sort: "asc" }] }}
+                />
+              </Card>
+            )}
 
             <Card>
               <CardHeader

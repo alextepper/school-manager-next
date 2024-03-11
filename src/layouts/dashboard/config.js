@@ -108,16 +108,16 @@ export const useSidebarItems = () => {
         </SvgIcon>
       ),
     },
-    {
-      // title: t("Teams"),
-      title: "מבנים",
-      path: "/buildings",
-      icon: (
-        <SvgIcon fontSize="small">
-          <HomeIcon />
-        </SvgIcon>
-      ),
-    },
+    // {
+    //   // title: t("Teams"),
+    //   title: "מבנים",
+    //   path: "/buildings",
+    //   icon: (
+    //     <SvgIcon fontSize="small">
+    //       <HomeIcon />
+    //     </SvgIcon>
+    //   ),
+    // },
     {
       // title: t("Staff"),
       title: "צוות",

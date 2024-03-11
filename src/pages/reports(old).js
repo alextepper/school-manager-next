@@ -13,8 +13,6 @@ import {
   Card,
   CardHeader,
   Collapse,
-  FormControlLabel,
-  Checkbox,
 } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
@@ -29,8 +27,6 @@ import { DataGrid, GridExpandMoreIcon } from "@mui/x-data-grid";
 import { DateTimePicker, MobileDateTimePicker } from "@mui/x-date-pickers";
 import { deepPurple } from "@mui/material/colors";
 import { getInitials } from "src/utils/get-initials";
-import CheckIcon from "@mui/icons-material/Check";
-import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
 
 const Page = () => {
   const loggedUserProfile = JSON.parse(localStorage.getItem("user")).profile;
@@ -80,10 +76,8 @@ const Page = () => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    const future = reports.filter(
-      (report) => new Date(report.date_of_creation) >= today || report.complete === false
-    );
-    const past = reports.filter((report) => new Date(report.date_of_creation) < today);
+    const future = reports.filter((report) => new Date(report.time) >= today);
+    const past = reports.filter((report) => new Date(report.time) < today);
 
     setFutureReports(future);
     setPastReports(past);
@@ -258,23 +252,9 @@ const Page = () => {
     // },
     // { field: "student", headerName: "חניך", minWidth: 100, sortable: false, flex: 1 },
     // { field: "destination", headerName: "כתובת", minWidth: 100, sortable: false, flex: 1 },
-
-    { field: "building", headerName: "מבנה", sortable: false, flex: 1 },
-    { field: "room", headerName: "חדר", sortable: false, flex: 1 },
-    { field: "comments", headerName: "הערות", minWidth: 100, sortable: false, flex: 2 },
-
-    {
-      field: "complete",
-      headerName: "בוצע",
-      sortable: false,
-      flex: 0.3,
-      renderCell: (params) =>
-        params.value ? (
-          <CheckIcon style={{ color: "green" }} />
-        ) : (
-          <HourglassEmptyIcon style={{ color: "red" }} />
-        ),
-    },
+    // { field: "building", headerName: "מבנה", minWidth: 100, sortable: false, flex: 1 },
+    // { field: "room", headerName: "חדר", minWidth: 100, sortable: false, flex: 1 },
+    // { field: "comments", headerName: "הערות", minWidth: 100, sortable: false, flex: 1 },
   ];
 
   return (
@@ -388,8 +368,8 @@ const Page = () => {
                     <Grid item xs={12}>
                       <TextField
                         select
-                        label="מדווח"
-                        value={rowForChange.staff || selectedRow.staff || ""}
+                        label="Staff"
+                        value={rowForChange.staff || selectedRow.staff}
                         onChange={(e) =>
                           setRowForChange({ ...rowForChange, staff: e.target.value })
                         }
@@ -409,73 +389,65 @@ const Page = () => {
                     </Grid>
                     <Grid item xs={12}>
                       <TextField
-                        label="בניין"
-                        value={rowForChange.building || selectedRow.building}
+                        label="תלמיד"
+                        value={newReport.student}
+                        onChange={(e) => setNewReport({ ...newReport, student: e.target.value })}
+                        fullWidth
+                      />
+                    </Grid>
+                    {/* <Grid item xs={12}>
+                <TextField label="Date" defaultValue={selectedRow.date} fullWidth />
+              </Grid> */}
+                    <Grid item xs={12} sm={6}>
+                      <DateTimePicker
+                        ampm={false}
+                        label="התחלה"
+                        value={new Date(rowForChange.time || selectedRow.time)}
+                        format="dd/MM/yy HH:mm"
+                        onChange={(date) => setRowForChange({ ...rowForChange, time: date })}
+                        renderInput={(params) => <TextField {...params} fullWidth />}
+                        maxDateTime={rowForChange.time}
+                        sx={{ direction: "ltr", width: "100%" }}
+                        slotProps={{
+                          layout: { sx: { direction: "ltr" } },
+                        }}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        label="יעד"
+                        defaultValue={rowForChange.destination || selectedRow.destination}
                         onChange={(e) =>
-                          setRowForChange({ ...rowForChange, building: e.target.value })
+                          setRowForChange({ ...rowForChange, destination: e.target.value })
                         }
                         fullWidth
-                      />
+                      />{" "}
                     </Grid>
                     <Grid item xs={12}>
                       <TextField
-                        label="חדר"
-                        value={rowForChange.room || selectedRow.room}
-                        onChange={(e) => setRowForChange({ ...rowForChange, room: e.target.value })}
-                        fullWidth
-                      />
-                    </Grid>
-
-                    <Grid item xs={12}>
-                      <TextField
-                        label="הערות"
-                        value={rowForChange.comments || selectedRow.comments}
+                        label="הארות"
+                        defaultValue={rowForChange.comments || selectedRow.comments}
                         onChange={(e) =>
                           setRowForChange({ ...rowForChange, comments: e.target.value })
                         }
                         fullWidth
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={rowForChange.complete || selectedRow.complete}
-                            onChange={(e) => {
-                              setRowForChange({ ...rowForChange, complete: e.target.checked });
-                              setSelectedRow({ ...selectedRow, complete: e.target.checked });
-                            }}
-                          />
-                        }
-                        label="בוצע"
-                      />
+                      />{" "}
                     </Grid>
                   </Grid>
                 )}
               </DialogContent>
               <DialogActions>
-                <Button variant="outlined" color="error" onClick={handleClose}>
-                  ביטול
-                </Button>
+                <Button onClick={handleClose}>ביטול</Button>
                 <Button
-                  variant="contained"
                   onClick={() => {
-                    if (window.confirm("רוצה לשמור?")) {
+                    if (window.confirm("Are you sure you want to save?")) {
                       handleSave();
                     }
                   }}
                 >
                   שמירה
                 </Button>
-                <Button
-                  variant="contained"
-                  color="error"
-                  onClick={() => {
-                    if (window.confirm("רוצה למחוק?")) {
-                      handleDelete();
-                    }
-                  }}
-                >
+                <Button variant="contained" color="secondary" onClick={handleDelete}>
                   מחק
                 </Button>
               </DialogActions>
@@ -486,7 +458,7 @@ const Page = () => {
                   <Grid item xs={12}>
                     <TextField
                       select
-                      label="מדווח"
+                      label="צוות"
                       value={newReport.staff || ""}
                       onChange={(e) => setNewReport({ ...newReport, staff: e.target.value })}
                       fullWidth
@@ -505,51 +477,54 @@ const Page = () => {
                   </Grid>
                   <Grid item xs={12}>
                     <TextField
-                      label="בניין"
-                      value={newReport.building}
-                      onChange={(e) => setNewReport({ ...newReport, building: e.target.value })}
+                      label="תלמיד"
+                      value={newReport.student}
+                      onChange={(e) => setNewReport({ ...newReport, student: e.target.value })}
                       fullWidth
                     />
                   </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      label="חדר"
-                      value={newReport.room}
-                      onChange={(e) => setNewReport({ ...newReport, room: e.target.value })}
-                      fullWidth
+                  {/* <Grid item xs={12}>
+                <TextField label="User" defaultValue={selectedRow.user} fullWidth />
+              </Grid> */}
+                  {/* <Grid item xs={12}>
+                <TextField label="Date" defaultValue={selectedRow.date} fullWidth />
+              </Grid> */}
+                  <Grid item xs={12} sm={6}>
+                    <DateTimePicker
+                      ampm={false}
+                      label="התחלה"
+                      value={newReport.time}
+                      format="dd/MM/yy HH:mm"
+                      onChange={(date) => setNewReport({ ...newReport, time: date })}
+                      sx={{ direction: "ltr", width: "100%" }}
+                      slotProps={{
+                        layout: { sx: { direction: "ltr" } },
+                      }}
                     />
                   </Grid>
 
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      label="יעד"
+                      value={newReport.destination}
+                      onChange={(e) => setNewReport({ ...newReport, destination: e.target.value })}
+                      error={!newReport.destination}
+                      fullWidth
+                    />
+                  </Grid>
                   <Grid item xs={12}>
                     <TextField
-                      label="הערות"
+                      label="הארות"
                       value={newReport.comments}
                       onChange={(e) => setNewReport({ ...newReport, comments: e.target.value })}
                       fullWidth
                     />
                   </Grid>
-                  {/* <Grid item xs={12}>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={newReport.complete}
-                          onChange={(e) =>
-                            setNewReport({ ...newReport, complete: e.target.checked })
-                          }
-                        />
-                      }
-                      label="Complete"
-                    />
-                  </Grid> */}
                 </Grid>
               </DialogContent>
               <DialogActions>
-                <Button variant="contained" color="error" onClick={handleCreateClose}>
-                  ביטול
-                </Button>
-                <Button sx={{ mx: 1 }} variant="contained" onClick={handleCreate}>
-                  שמירה
-                </Button>
+                <Button onClick={handleCreateClose}>ביטול</Button>
+                <Button onClick={handleCreate}>שמירה</Button>
               </DialogActions>
             </Dialog>
           </Stack>
