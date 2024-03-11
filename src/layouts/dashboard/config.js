@@ -13,6 +13,7 @@ import FeedIcon from "@mui/icons-material/Feed";
 import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
 import { useTranslation } from "react-i18next";
 import { MedicalServices } from "@mui/icons-material";
+import HandymanIcon from "@mui/icons-material/Handyman";
 
 export const useSidebarItems = () => {
   const { t } = useTranslation();
@@ -99,6 +100,16 @@ export const useSidebarItems = () => {
     },
     {
       // title: t("Teams"),
+      title: "דיווח ליקויים",
+      path: "/reports",
+      icon: (
+        <SvgIcon fontSize="small">
+          <HandymanIcon />
+        </SvgIcon>
+      ),
+    },
+    {
+      // title: t("Teams"),
       title: "מבנים",
       path: "/buildings",
       icon: (
@@ -117,15 +128,15 @@ export const useSidebarItems = () => {
         </SvgIcon>
       ),
     },
-    {
-      title: "חוגים/פרויקטים",
-      path: "/activities",
-      icon: (
-        <SvgIcon fontSize="small">
-          <EngineeringIcon />
-        </SvgIcon>
-      ),
-    },
+    // {
+    //   title: "חוגים/פרויקטים",
+    //   path: "/activities",
+    //   icon: (
+    //     <SvgIcon fontSize="small">
+    //       <EngineeringIcon />
+    //     </SvgIcon>
+    //   ),
+    // },
 
     {
       // title: t("Settings"),

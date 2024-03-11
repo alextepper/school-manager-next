@@ -164,20 +164,20 @@ const Page = () => {
       field: "user",
       headerName: "",
       flex: 1,
-      maxWidth: 40,
+      maxWidth: 50,
 
       renderCell: (params) => {
         const user = staff.find((staffMember) => staffMember.id === params.row.user);
         return (
           <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
             <Avatar
-              sx={{ bgcolor: deepPurple[500] }}
+              sx={{ bgcolor: deepPurple[500], mb: -0.5 }}
               src={user ? user.avatar : ""}
               alt={getInitials(`${user.first_name} ${user.last_name}`)}
             >
               {getInitials(`${user.first_name} ${user.last_name}`)}
             </Avatar>
-            <Typography variant="body2" align="center">
+            <Typography variant="caption" align="center">
               {user ? user.first_name : ""}
             </Typography>
           </Box>
@@ -201,14 +201,17 @@ const Page = () => {
       sortable: false,
       minWidth: 80,
       flex: 1,
-      valueGetter: (params) => {
+      renderCell: (params) => {
         const date = new Date(params.row.start_time);
-        const formatter = new Intl.DateTimeFormat("en-GB", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "2-digit",
-        });
-        return formatter.format(date);
+        const dayFormatter = new Intl.DateTimeFormat("he-IL", { day: "2-digit" });
+        const monthFormatter = new Intl.DateTimeFormat("he-IL", { month: "2-digit" });
+        const yearFormatter = new Intl.DateTimeFormat("he-IL", { year: "2-digit" });
+        const weekdayFormatter = new Intl.DateTimeFormat("he-IL", { weekday: "narrow" });
+        const formattedDay = dayFormatter.format(date);
+        const formattedMonth = monthFormatter.format(date);
+        const formattedYear = yearFormatter.format(date);
+        const formattedWeekday = weekdayFormatter.format(date);
+        return `${formattedDay}/${formattedMonth}/${formattedYear}(${formattedWeekday})`;
       },
     },
     {

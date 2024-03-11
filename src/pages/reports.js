@@ -27,37 +27,37 @@ import { DataGrid, GridExpandMoreIcon } from "@mui/x-data-grid";
 import { DateTimePicker, MobileDateTimePicker } from "@mui/x-date-pickers";
 import { deepPurple } from "@mui/material/colors";
 import { getInitials } from "src/utils/get-initials";
+import build from "next/dist/build";
 
 const Page = () => {
   const loggedUserProfile = JSON.parse(localStorage.getItem("user")).profile;
-  const [appointments, setAppointments] = useState([]);
-  const [futureAppointments, setFutureAppointments] = useState([]);
-  const [pastAppointments, setPastAppointments] = useState([]);
+  const [reports, setReports] = useState([]);
+  const [futureReports, setFutureReports] = useState([]);
+  const [pastReports, setPastReports] = useState([]);
   const [open, setOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [staff, setStaff] = useState([]);
   const [rowForChange, setRowForChange] = useState({});
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [expanded, setExpanded] = useState(false);
-  const [newAppointment, setNewAppointment] = useState({
-    time: new Date(),
-    student: "",
-    staff: "",
-    destination: "",
+  const [newReport, setNewReport] = useState({
+    room: "",
+    building: "",
+    staff: loggedUserProfile.id,
     comments: "",
     complete: false,
   });
 
   useEffect(() => {
-    const fetchAppointments = async () => {
+    const fetchReports = async () => {
       try {
-        const response = await api.get("/appointments/");
+        const response = await api.get("/fault-reports/");
         const sortedResults = response.data.results.sort(
           (a, b) => new Date(b.time) - new Date(a.time)
         );
-        setAppointments(sortedResults);
+        setReports(sortedResults);
       } catch (error) {
-        console.error("Failed to fetch appointments", error);
+        console.error("Failed to fetch reports", error);
       }
     };
     const fetchStaff = async () => {
@@ -70,19 +70,19 @@ const Page = () => {
     };
 
     fetchStaff();
-    fetchAppointments();
+    fetchReports();
   }, []);
 
   useEffect(() => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    const future = appointments.filter((appointment) => new Date(appointment.time) >= today);
-    const past = appointments.filter((appointment) => new Date(appointment.time) < today);
+    const future = reports.filter((report) => new Date(report.time) >= today);
+    const past = reports.filter((report) => new Date(report.time) < today);
 
-    setFutureAppointments(future);
-    setPastAppointments(past);
-  }, [appointments]);
+    setFutureReports(future);
+    setPastReports(past);
+  }, [reports]);
 
   const handleClickOpen = (params) => {
     setSelectedRow(params.row);
@@ -96,16 +96,16 @@ const Page = () => {
 
   const handleSave = async () => {
     try {
-      const response = await api.patch(`appointments/${selectedRow.id}/`, rowForChange);
+      const response = await api.patch(`fault-reports/${selectedRow.id}/`, rowForChange);
 
       if (response.status !== 200) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      // Update the appointments state with the updated row
-      setAppointments((prevAppointments) =>
-        prevAppointments.map((appointment) =>
-          appointment.id === selectedRow.id ? { ...appointment, ...rowForChange } : appointment
+      // Update the reports state with the updated row
+      setReports((prevReports) =>
+        prevReports.map((report) =>
+          report.id === selectedRow.id ? { ...report, ...rowForChange } : report
         )
       );
 
@@ -128,11 +128,11 @@ const Page = () => {
 
   const handleCreate = async () => {
     try {
-      const response = await api.post("appointments/", newAppointment);
+      const response = await api.post("fault-reports/", newReport);
 
       console.log(response.data);
       // You can update the state or do anything with the returned data here
-      setAppointments((prevAppointments) => [response.data, ...prevAppointments]);
+      setReports((prevReports) => [response.data, ...prevReports]);
       handleCreateClose();
     } catch (error) {
       console.error("There was a problem with the axios operation: ", error);
@@ -142,8 +142,8 @@ const Page = () => {
   const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete?")) {
       try {
-        await api.delete(`appointments/${selectedRow.id}/`);
-        setAppointments(appointments.filter((item) => item.id !== selectedRow.id));
+        await api.delete(`fault-reports/${selectedRow.id}/`);
+        setReports(reports.filter((item) => item.id !== selectedRow.id));
         handleClose();
       } catch (error) {
         console.error("Failed to delete car use", error);
@@ -186,9 +186,10 @@ const Page = () => {
     // },
     {
       field: "user",
-      headerName: "",
+      headerName: "מדווח",
       flex: 1,
-      maxWidth: 50,
+      maxWidth: 60,
+      sortable: false,
 
       renderCell: (params) => {
         const user = staff.find((staffMember) => staffMember.id === params.row.staff);
@@ -222,49 +223,52 @@ const Page = () => {
       minWidth: 80,
       flex: 1,
       renderCell: (params) => {
-        const date = new Date(params.row.time);
+        const date = new Date(params.row.date_of_creation);
         const dayFormatter = new Intl.DateTimeFormat("he-IL", { day: "2-digit" });
         const monthFormatter = new Intl.DateTimeFormat("he-IL", { month: "2-digit" });
         const yearFormatter = new Intl.DateTimeFormat("he-IL", { year: "2-digit" });
-        const weekdayFormatter = new Intl.DateTimeFormat("he-IL", { weekday: "narrow" });
+        // const weekdayFormatter = new Intl.DateTimeFormat("he-IL", { weekday: "narrow" });
         const formattedDay = dayFormatter.format(date);
         const formattedMonth = monthFormatter.format(date);
         const formattedYear = yearFormatter.format(date);
-        const formattedWeekday = weekdayFormatter.format(date);
-        return `${formattedDay}/${formattedMonth}/${formattedYear}(${formattedWeekday})`;
+        // const formattedWeekday = weekdayFormatter.format(date);
+        return `${formattedDay}/${formattedMonth}/${formattedYear}`;
       },
     },
-    {
-      field: "time",
-      headerName: "התחלה",
-      sortable: false,
-      minWidth: 60,
-      flex: 1,
-      valueGetter: (params) => {
-        const date = new Date(params.row.time);
-        const formatter = new Intl.DateTimeFormat("en-GB", {
-          hour: "2-digit",
-          minute: "2-digit",
-          hour12: false,
-        });
-        return formatter.format(date);
-      },
-    },
-    { field: "student", headerName: "חניך", minWidth: 100, sortable: false, flex: 1 },
-    { field: "destination", headerName: "כתובת", minWidth: 100, sortable: false, flex: 1 },
+    // {
+    //   field: "time",
+    //   headerName: "התחלה",
+    //   sortable: false,
+    //   minWidth: 60,
+    //   flex: 1,
+    //   valueGetter: (params) => {
+    //     const date = new Date(params.row.date_of_creation);
+    //     const formatter = new Intl.DateTimeFormat("en-GB", {
+    //       hour: "2-digit",
+    //       minute: "2-digit",
+    //       hour12: false,
+    //     });
+    //     return formatter.format(date);
+    //   },
+    // },
+    // { field: "student", headerName: "חניך", minWidth: 100, sortable: false, flex: 1 },
+    // { field: "destination", headerName: "כתובת", minWidth: 100, sortable: false, flex: 1 },
+    // { field: "building", headerName: "מבנה", minWidth: 100, sortable: false, flex: 1 },
+    // { field: "room", headerName: "חדר", minWidth: 100, sortable: false, flex: 1 },
+    // { field: "comments", headerName: "הערות", minWidth: 100, sortable: false, flex: 1 },
   ];
 
   return (
     <>
       <Head>
-        <title> תורים למרפאה | RKZ</title>
+        <title> דיווח ליקויים | RKZ</title>
       </Head>
       <Box>
         <Container maxWidth="xl" sx={{ px: { xs: 0.5, sm: 3 } }}>
           <Stack spacing={3}>
             <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack direction="row" textAlign="center" spacing={1}>
-                <Typography variant="h4"> תורים למרפאה </Typography>
+                <Typography variant="h4"> דיווח ליקויים </Typography>
                 <IconButton color="primary" onClick={handleCreateOpen}>
                   <AddCircleOutlineIcon />
                 </IconButton>
@@ -273,7 +277,7 @@ const Page = () => {
             <Card sx={{ px: 0.5 }}>
               <DataGrid
                 disableColumnMenu
-                rows={futureAppointments}
+                rows={futureReports}
                 columns={columns}
                 rowHeight={70}
                 pageSize={5}
@@ -324,7 +328,7 @@ const Page = () => {
               <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <DataGrid
                   disableColumnMenu
-                  rows={pastAppointments}
+                  rows={pastReports}
                   columns={columns}
                   rowHeight={70}
                   pageSize={5}
@@ -387,10 +391,8 @@ const Page = () => {
                     <Grid item xs={12}>
                       <TextField
                         label="תלמיד"
-                        value={newAppointment.student}
-                        onChange={(e) =>
-                          setNewAppointment({ ...newAppointment, student: e.target.value })
-                        }
+                        value={newReport.student}
+                        onChange={(e) => setNewReport({ ...newReport, student: e.target.value })}
                         fullWidth
                       />
                     </Grid>
@@ -458,10 +460,8 @@ const Page = () => {
                     <TextField
                       select
                       label="צוות"
-                      value={newAppointment.staff || ""}
-                      onChange={(e) =>
-                        setNewAppointment({ ...newAppointment, staff: e.target.value })
-                      }
+                      value={newReport.staff || ""}
+                      onChange={(e) => setNewReport({ ...newReport, staff: e.target.value })}
                       fullWidth
                     >
                       {staff.map((staffMember) => (
@@ -479,10 +479,8 @@ const Page = () => {
                   <Grid item xs={12}>
                     <TextField
                       label="תלמיד"
-                      value={newAppointment.student}
-                      onChange={(e) =>
-                        setNewAppointment({ ...newAppointment, student: e.target.value })
-                      }
+                      value={newReport.student}
+                      onChange={(e) => setNewReport({ ...newReport, student: e.target.value })}
                       fullWidth
                     />
                   </Grid>
@@ -496,9 +494,9 @@ const Page = () => {
                     <DateTimePicker
                       ampm={false}
                       label="התחלה"
-                      value={newAppointment.time}
+                      value={newReport.time}
                       format="dd/MM/yy HH:mm"
-                      onChange={(date) => setNewAppointment({ ...newAppointment, time: date })}
+                      onChange={(date) => setNewReport({ ...newReport, time: date })}
                       sx={{ direction: "ltr", width: "100%" }}
                       slotProps={{
                         layout: { sx: { direction: "ltr" } },
@@ -509,21 +507,17 @@ const Page = () => {
                   <Grid item xs={12} sm={6}>
                     <TextField
                       label="יעד"
-                      value={newAppointment.destination}
-                      onChange={(e) =>
-                        setNewAppointment({ ...newAppointment, destination: e.target.value })
-                      }
-                      error={!newAppointment.destination}
+                      value={newReport.destination}
+                      onChange={(e) => setNewReport({ ...newReport, destination: e.target.value })}
+                      error={!newReport.destination}
                       fullWidth
                     />
                   </Grid>
                   <Grid item xs={12}>
                     <TextField
                       label="הארות"
-                      value={newAppointment.comments}
-                      onChange={(e) =>
-                        setNewAppointment({ ...newAppointment, comments: e.target.value })
-                      }
+                      value={newReport.comments}
+                      onChange={(e) => setNewReport({ ...newReport, comments: e.target.value })}
                       fullWidth
                     />
                   </Grid>

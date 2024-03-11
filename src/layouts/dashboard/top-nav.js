@@ -85,6 +85,7 @@ export const TopNav = (props) => {
               onClick={accountPopover.handleOpen}
               ref={accountPopover.anchorRef}
               sx={{
+                mx: "0 !important",
                 cursor: "pointer",
                 height: 40,
                 width: 40,
